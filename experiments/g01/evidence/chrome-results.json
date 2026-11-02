@@ -1,0 +1,362 @@
+{
+  "channel": "chrome",
+  "x01": [
+    {
+      "id": "X01-01",
+      "expected": "RFC-style expected canonical bytes and Node/browser hash equal",
+      "status": "passed",
+      "actual": {
+        "canonical": "{\"a\":{\"b\":[true,null,\"null\",0,1e-7],\"ế\":\"Tiếng Việt\"},\"z\":3}",
+        "hash": "7921516a892fd931ddad5f2ecaf4a351d259832f84c7c170f76a99825f8d8865"
+      }
+    },
+    {
+      "id": "X01-02",
+      "expected": "Reject unsafe integer/nonfinite/undefined/lone surrogate before serialization",
+      "status": "passed",
+      "actual": {
+        "rejected": 9,
+        "rawUnsafeInteger": "rejected before parse"
+      }
+    },
+    {
+      "id": "X01-03",
+      "expected": "Typed strings, null tokens, source bytes, row/column IDs roundtrip",
+      "status": "passed",
+      "actual": {
+        "bytes": 305,
+        "sourceHash": "98b8a1f94bece63b0789f65976d63b7968802b8c4c6edc925e39f3b61574a31f",
+        "tableHash": "1b013e71f0c43930182619d8d49fd701aa27bebda862d8c58c97c53879c427a5",
+        "precision": [
+          "9007199254740993",
+          "1234567890.1234567890123456789"
+        ],
+        "rowIds": [
+          "00000000-0000-4000-8000-000000000001",
+          "00000000-0000-4000-8000-000000000002"
+        ]
+      }
+    },
+    {
+      "id": "X01-04",
+      "expected": "Concat/join preserve ordered multi-source row lineage",
+      "status": "passed",
+      "actual": {
+        "leftJoinRows": [
+          {
+            "rowId": "00000000-0000-4000-8000-0000000001f4",
+            "sources": [
+              "00000000-0000-4000-8000-000000000001",
+              "00000000-0000-4000-8000-000000000003"
+            ]
+          },
+          {
+            "rowId": "00000000-0000-4000-8000-0000000001f5",
+            "sources": [
+              "00000000-0000-4000-8000-000000000001",
+              "00000000-0000-4000-8000-000000000004"
+            ]
+          },
+          {
+            "rowId": "00000000-0000-4000-8000-0000000001f6",
+            "sources": [
+              "00000000-0000-4000-8000-000000000002"
+            ]
+          }
+        ],
+        "concatSourceOrder": [
+          "00000000-0000-4000-8000-000000000001",
+          "00000000-0000-4000-8000-000000000002",
+          "00000000-0000-4000-8000-000000000003",
+          "00000000-0000-4000-8000-000000000004"
+        ]
+      }
+    },
+    {
+      "id": "X01-05",
+      "expected": "CSR LE binary exact, invalid shape/index rejected, no densification",
+      "status": "passed",
+      "actual": {
+        "nnz": 3,
+        "denseAllowed": false,
+        "binaryBytes": 24,
+        "allocatedDense": false,
+        "logicalDenseCells": 200000
+      }
+    },
+    {
+      "id": "X01-06",
+      "expected": "20,000,000 byte input limit distinguished from larger valid artifact",
+      "status": "passed",
+      "actual": {
+        "sizes": [
+          19999999,
+          20000000,
+          20000001
+        ],
+        "accepted": [
+          true,
+          true,
+          false
+        ],
+        "exactBytesHash": "aded0ea9b4d06589b13d00bab483faf479d61ed5de21f1760aa7018a28e330e5",
+        "artifact21000000Allowed": true
+      }
+    }
+  ],
+  "x02": [
+    {
+      "id": "X02-01",
+      "expected": "Exactly one Web Lock writer across two pages",
+      "status": "passed",
+      "actual": {
+        "first": true,
+        "second": false
+      }
+    },
+    {
+      "id": "X02-02",
+      "expected": "Real IndexedDB abort does not publish version/history/outbox/head",
+      "status": "passed",
+      "actual": {
+        "aborted": true,
+        "version": null,
+        "history": null,
+        "outbox": null,
+        "head": "v1"
+      }
+    },
+    {
+      "id": "X02-03",
+      "expected": "Page close before commit leaves only staging, recovery marks interrupted and does not resume",
+      "status": "passed",
+      "actual": {
+        "interrupted": [
+          "interrupted"
+        ],
+        "resumed": false,
+        "head": "v1"
+      }
+    },
+    {
+      "id": "X02-04",
+      "expected": "Close after transaction commit before UI acknowledgement restores committed v2 with outbox/history",
+      "status": "passed",
+      "actual": {
+        "head": "v2",
+        "version": {
+          "id": "v2",
+          "complete": true
+        },
+        "history": {
+          "id": "v2",
+          "status": "succeeded"
+        },
+        "outbox": {
+          "id": "v2",
+          "synced": false
+        }
+      }
+    },
+    {
+      "id": "X02-05",
+      "expected": "Handoff increments fence; old writer cannot commit after release",
+      "status": "passed",
+      "actual": {
+        "oldFence": 3,
+        "newFence": 4,
+        "rejected": true
+      }
+    },
+    {
+      "id": "X02-06",
+      "expected": "Account generation invalidation rejects late result; dirty local blocks other-owner switch",
+      "status": "passed",
+      "actual": {
+        "generationRejected": true,
+        "ownerSwitchBlocked": true,
+        "scope": "prototype gate, not full authentication/logout UI"
+      }
+    },
+    {
+      "id": "X02-07",
+      "expected": "Sync gate and unsynced outbox survive page reload",
+      "status": "passed",
+      "actual": {
+        "gate": "awaitingUser",
+        "outboxCount": 2
+      }
+    },
+    {
+      "id": "X02-08",
+      "expected": "10 MiB IDB Blob and OPFS write/read hashes identical; byte orphan not published after page close",
+      "status": "passed",
+      "actual": {
+        "size": 10485760,
+        "hash": "16400e243e3bfb6c3ec3e4d6312d8cccc59c75ff57e5442003faa517f8356d9c",
+        "idbWriteMs": 12.699999999254942,
+        "opfsWriteMs": 29.399999998509884,
+        "opfsClosedAndVerified": true,
+        "estimate": {
+          "quota": 10753224878,
+          "usage": 15806638,
+          "usageDetails": {
+            "fileSystem": 10485934,
+            "indexedDB": 5320704
+          }
+        },
+        "persisted": false,
+        "orphan": {
+          "exists": true,
+          "published": false
+        }
+      }
+    },
+    {
+      "id": "X02-09",
+      "expected": "Browser-enforced small quota rejects real IndexedDB write and preserves head/outbox",
+      "status": "inconclusive",
+      "actual": {
+        "name": null,
+        "head": "v2",
+        "outboxCount": 2,
+        "browserEstimate": {
+          "quota": 10755322030,
+          "usage": 17903790,
+          "usageDetails": {
+            "fileSystem": 10485934,
+            "indexedDB": 7417856
+          }
+        },
+        "quotaOverrideBytes": 1024,
+        "attemptedWriteBytes": 2097152,
+        "physicalDiskExhausted": false,
+        "cdpUsage": {
+          "usage": 15806638,
+          "quota": 1024,
+          "overrideActive": true,
+          "usageBreakdown": [
+            {
+              "storageType": "file_systems",
+              "usage": 10485934
+            },
+            {
+              "storageType": "indexeddb",
+              "usage": 5320704
+            },
+            {
+              "storageType": "cache_storage",
+              "usage": 0
+            },
+            {
+              "storageType": "service_workers",
+              "usage": 0
+            }
+          ]
+        },
+        "inconclusive": true,
+        "reason": "Quota override did not induce the required browser error; no claim of actual quota-failure handling."
+      }
+    },
+    {
+      "id": "X02-12",
+      "expected": "Actual renderer crash before commit releases writer and recovers incomplete staging without publishing it",
+      "status": "passed",
+      "actual": {
+        "interrupted": [
+          "renderer-crash"
+        ],
+        "resumed": false,
+        "head": "v2",
+        "actualRendererCrash": true,
+        "wholeBrowserProcessKilled": false
+      }
+    },
+    {
+      "id": "X02-10",
+      "expected": "SW update waits while pages are controlled and unsynced outbox remains",
+      "status": "passed",
+      "actual": {
+        "waiting": true,
+        "waitingState": "installed",
+        "installingState": null,
+        "activeState": "activated",
+        "controlled": true,
+        "head": "v2",
+        "outboxCount": 2
+      }
+    },
+    {
+      "id": "X02-11",
+      "expected": "Browser network disabled: cached shell/modules reload and existing local data remain usable",
+      "status": "passed",
+      "actual": {
+        "offline": true,
+        "head": "v2",
+        "gate": "awaitingUser",
+        "outboxCount": 2,
+        "controlled": true
+      }
+    }
+  ],
+  "scale": [
+    {
+      "rows": 10000,
+      "cols": 50,
+      "sourceBytes": 1448446,
+      "jsonlBytes": 2038446,
+      "expansion": 1.4073331004400578,
+      "sourceHash": "7caa882e0e09388e0faa69cbbe5c30456e1ac904d3fa3fdd295c800ade0fae33",
+      "tableHash": "2ed3970d1472b0d798dcffd7a029d54255d5609e0d330148cf3583720051573d",
+      "generateMs": 33,
+      "parseMs": 18.799999997019768,
+      "encodeMs": 17.900000002235174,
+      "decodeMs": 119.19999999925494,
+      "heapBefore": null,
+      "heapAfter": null,
+      "explicitLargeRepresentations": [
+        "source Uint8Array",
+        "decoded CSV string/lines (temporary)",
+        "records arrays",
+        "JSONL Uint8Array",
+        "decoded records"
+      ],
+      "peakHeapMeasured": false
+    },
+    {
+      "rows": 50000,
+      "cols": 50,
+      "sourceBytes": 7242445,
+      "jsonlBytes": 10192445,
+      "expansion": 1.4073210083058967,
+      "sourceHash": "c32c8eb185dccb113d263f2adc0bbfb2b8e554d3d9599c68e1bbd9aa8af07443",
+      "tableHash": "a25fabc5e96e5d003d2b1513fc31ef92a6c5bcf986c849e2f9fad3476b0cb741",
+      "generateMs": 108.19999999925494,
+      "parseMs": 89.30000000074506,
+      "encodeMs": 100.10000000149012,
+      "decodeMs": 547.5,
+      "heapBefore": null,
+      "heapAfter": null,
+      "explicitLargeRepresentations": [
+        "source Uint8Array",
+        "decoded CSV string/lines (temporary)",
+        "records arrays",
+        "JSONL Uint8Array",
+        "decoded records"
+      ],
+      "peakHeapMeasured": false
+    }
+  ],
+  "externalRequests": [],
+  "consoleErrors": [],
+  "version": "156.0.8078.76",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.0.0 Safari/537.36",
+  "capabilities": {
+    "secureContext": true,
+    "webLocks": true,
+    "indexedDB": true,
+    "opfs": true,
+    "serviceWorker": true,
+    "memoryMeasurement": true
+  }
+}

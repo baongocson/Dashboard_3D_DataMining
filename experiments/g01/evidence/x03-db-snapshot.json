@@ -1,0 +1,799 @@
+{
+  "control": [
+    {
+      "_id": "activation",
+      "count": 100
+    }
+  ],
+  "users": [
+    {
+      "_id": "owner",
+      "email": "synthetic@example.invalid",
+      "epoch": 2,
+      "fence": 2,
+      "activated": true
+    },
+    {
+      "_id": "existing-0",
+      "email": "existing-0@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-1",
+      "email": "existing-1@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-2",
+      "email": "existing-2@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-3",
+      "email": "existing-3@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-4",
+      "email": "existing-4@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-5",
+      "email": "existing-5@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-6",
+      "email": "existing-6@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-7",
+      "email": "existing-7@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-8",
+      "email": "existing-8@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-9",
+      "email": "existing-9@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-10",
+      "email": "existing-10@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-11",
+      "email": "existing-11@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-12",
+      "email": "existing-12@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-13",
+      "email": "existing-13@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-14",
+      "email": "existing-14@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-15",
+      "email": "existing-15@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-16",
+      "email": "existing-16@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-17",
+      "email": "existing-17@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-18",
+      "email": "existing-18@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-19",
+      "email": "existing-19@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-20",
+      "email": "existing-20@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-21",
+      "email": "existing-21@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-22",
+      "email": "existing-22@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-23",
+      "email": "existing-23@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-24",
+      "email": "existing-24@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-25",
+      "email": "existing-25@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-26",
+      "email": "existing-26@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-27",
+      "email": "existing-27@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-28",
+      "email": "existing-28@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-29",
+      "email": "existing-29@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-30",
+      "email": "existing-30@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-31",
+      "email": "existing-31@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-32",
+      "email": "existing-32@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-33",
+      "email": "existing-33@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-34",
+      "email": "existing-34@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-35",
+      "email": "existing-35@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-36",
+      "email": "existing-36@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-37",
+      "email": "existing-37@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-38",
+      "email": "existing-38@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-39",
+      "email": "existing-39@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-40",
+      "email": "existing-40@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-41",
+      "email": "existing-41@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-42",
+      "email": "existing-42@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-43",
+      "email": "existing-43@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-44",
+      "email": "existing-44@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-45",
+      "email": "existing-45@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-46",
+      "email": "existing-46@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-47",
+      "email": "existing-47@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-48",
+      "email": "existing-48@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-49",
+      "email": "existing-49@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-50",
+      "email": "existing-50@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-51",
+      "email": "existing-51@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-52",
+      "email": "existing-52@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-53",
+      "email": "existing-53@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-54",
+      "email": "existing-54@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-55",
+      "email": "existing-55@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-56",
+      "email": "existing-56@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-57",
+      "email": "existing-57@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-58",
+      "email": "existing-58@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-59",
+      "email": "existing-59@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-60",
+      "email": "existing-60@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-61",
+      "email": "existing-61@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-62",
+      "email": "existing-62@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-63",
+      "email": "existing-63@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-64",
+      "email": "existing-64@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-65",
+      "email": "existing-65@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-66",
+      "email": "existing-66@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-67",
+      "email": "existing-67@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-68",
+      "email": "existing-68@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-69",
+      "email": "existing-69@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-70",
+      "email": "existing-70@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-71",
+      "email": "existing-71@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-72",
+      "email": "existing-72@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-73",
+      "email": "existing-73@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-74",
+      "email": "existing-74@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-75",
+      "email": "existing-75@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-76",
+      "email": "existing-76@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-77",
+      "email": "existing-77@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-78",
+      "email": "existing-78@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-79",
+      "email": "existing-79@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-80",
+      "email": "existing-80@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-81",
+      "email": "existing-81@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-82",
+      "email": "existing-82@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-83",
+      "email": "existing-83@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-84",
+      "email": "existing-84@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-85",
+      "email": "existing-85@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-86",
+      "email": "existing-86@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-87",
+      "email": "existing-87@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-88",
+      "email": "existing-88@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-89",
+      "email": "existing-89@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-90",
+      "email": "existing-90@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-91",
+      "email": "existing-91@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-92",
+      "email": "existing-92@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-93",
+      "email": "existing-93@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-94",
+      "email": "existing-94@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-95",
+      "email": "existing-95@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-96",
+      "email": "existing-96@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "existing-97",
+      "email": "existing-97@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    },
+    {
+      "_id": "ca",
+      "email": "ca@example.invalid",
+      "epoch": 1,
+      "fence": 0,
+      "activated": true
+    }
+  ],
+  "challenges": [
+    {
+      "_id": "ca",
+      "consumed": true
+    },
+    {
+      "_id": "cb",
+      "consumed": false
+    }
+  ],
+  "projects": [
+    {
+      "_id": "project",
+      "ownerId": "owner",
+      "state": "deleted",
+      "revision": 2,
+      "fence": 3,
+      "head": "v1"
+    },
+    {
+      "_id": "ledger-fail-project",
+      "state": "active",
+      "fence": 0
+    }
+  ],
+  "refs": [
+    {
+      "_id": "r1",
+      "projectId": "project",
+      "target": "source",
+      "strength": "hard"
+    },
+    {
+      "_id": "r-race",
+      "target": "race-source",
+      "strength": "hard"
+    }
+  ],
+  "artifacts": [
+    {
+      "_id": "table",
+      "ownerId": "owner",
+      "projectId": "project",
+      "hash": "dfd08cafb406515417dbf81f4e3cf3d814127288d9c0ade2b461301b9e186b60",
+      "size": 34,
+      "state": "ready"
+    }
+  ],
+  "versions": [
+    {
+      "_id": "v1",
+      "ownerId": "owner",
+      "projectId": "project",
+      "artifactId": "table",
+      "hash": "dfd08cafb406515417dbf81f4e3cf3d814127288d9c0ade2b461301b9e186b60"
+    }
+  ],
+  "steps": [
+    {
+      "_id": "v1",
+      "status": "succeeded",
+      "output": "v1"
+    }
+  ],
+  "receipts": [
+    {
+      "_id": "6ae86b09991f9176599c2424",
+      "ownerId": "owner",
+      "mutationId": "m1",
+      "payloadHash": "389e952dd421ae4b7721a40e1684ad2b3d38c5a9511c08af74138e1223649f27",
+      "entityId": "v1",
+      "artifactId": "table",
+      "outcome": "committed"
+    }
+  ],
+  "tombstones": [
+    {
+      "_id": "project",
+      "deleted": true,
+      "jobId": "d1"
+    }
+  ],
+  "server": [
+    {
+      "_id": "generation",
+      "maintenance": false,
+      "value": "after-restore"
+    }
+  ]
+}

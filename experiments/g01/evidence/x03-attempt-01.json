@@ -1,0 +1,177 @@
+{
+  "experiment": "X03",
+  "startedAt": "2026-11-02T10:46:57.178Z",
+  "environment": {
+    "node": "v24.15.0",
+    "os": "Windows_NT",
+    "release": "10.0.26200",
+    "arch": "x64",
+    "mongodbDriver": "7.8.0",
+    "mongodbMemoryServerCore": "11.3.0",
+    "requestedMongoVersion": "8.0.34",
+    "bindIp": "127.0.0.1",
+    "replicaSetMembers": 1,
+    "storageEngine": "wiredTiger",
+    "authEnabled": false,
+    "scope": "isolated synthetic loopback development only",
+    "binarySha256": "4c9e9764cbac5be8eb92733e23ce7f70b52f8ae84b6879b4d5cc010c90ec6082",
+    "buildInfo": "8.0.34",
+    "hello": {
+      "setName": "g01rs"
+    }
+  },
+  "tests": [
+    {
+      "id": "X03-01",
+      "expected": "Real replica set/WiredTiger and majority transaction deployment",
+      "status": "passed",
+      "actual": {
+        "version": "8.0.34",
+        "setName": "g01rs",
+        "storageEngine": "wiredTiger",
+        "singleMember": true
+      },
+      "durationMs": 11.972300000000132
+    },
+    {
+      "id": "X03-02",
+      "expected": "Two concurrent verifications from 99 active admit exactly one; consumed OTP cannot activate twice",
+      "status": "passed",
+      "actual": {
+        "counter": 100,
+        "outcomes": [
+          {
+            "status": "fulfilled",
+            "challenge": "ca"
+          },
+          {
+            "status": "rejected",
+            "reason": "ACCOUNT_LIMIT_REACHED"
+          }
+        ],
+        "replayRejected": true
+      },
+      "durationMs": 36.62079999999992
+    },
+    {
+      "id": "X03-03",
+      "expected": "Injected failure inside real transaction leaves no version/step/receipt/head/ready partial commit",
+      "status": "passed",
+      "actual": {
+        "rejected": true,
+        "versions": 0,
+        "steps": 0,
+        "receipts": 0,
+        "head": null,
+        "artifactState": "verifiedStaging"
+      },
+      "durationMs": 14.41859999999997
+    },
+    {
+      "id": "X03-04",
+      "expected": "Commit with verified byte/hash is atomic; lost response replay returns single logical result",
+      "status": "passed",
+      "actual": {
+        "acknowledgementLost": true,
+        "replayed": true,
+        "versionCount": 1,
+        "artifactHash": "dfd08cafb406515417dbf81f4e3cf3d814127288d9c0ade2b461301b9e186b60",
+        "receipt": {
+          "_id": "6ae86a22998dab23c7af1c5c",
+          "ownerId": "owner",
+          "mutationId": "m1",
+          "payloadHash": "389e952dd421ae4b7721a40e1684ad2b3d38c5a9511c08af74138e1223649f27",
+          "entityId": "v1",
+          "artifactId": "table",
+          "outcome": "committed"
+        }
+      },
+      "durationMs": 18.652700000000095
+    },
+    {
+      "id": "X03-05",
+      "expected": "Same mutation ID with different payload and bad byte hash are rejected",
+      "status": "passed",
+      "actual": {
+        "mismatch": true,
+        "badHash": true
+      },
+      "durationMs": 5.095400000000154
+    },
+    {
+      "id": "X03-06",
+      "expected": "Revocation between snapshot auth read and conditional fence write rejects stale transaction, including retry",
+      "status": "passed",
+      "actual": {
+        "accepted": false,
+        "reason": "SESSION_REVOKED",
+        "attempts": 2,
+        "epoch": 2,
+        "preRevocationVersionRetained": true
+      },
+      "durationMs": 18.673299999999927
+    },
+    {
+      "id": "X03-07",
+      "expected": "Hard-reference creation and deletion share project write fence: reference wins, deletion blocks",
+      "status": "passed",
+      "actual": {
+        "blocked": true,
+        "remainingHardReferences": 1
+      },
+      "durationMs": 8.62740000000008
+    },
+    {
+      "id": "X03-08",
+      "expected": "Actual concurrent snapshot reference race retries through project fence and blocks deletion",
+      "status": "passed",
+      "actual": {
+        "deleted": false,
+        "reason": "DEPENDENCY_EXISTS",
+        "attempts": 2
+      },
+      "durationMs": 20.774599999999964
+    },
+    {
+      "id": "X03-09",
+      "expected": "Child process exits after ledger fsync but before Mongo mark; recovery applies intent idempotently",
+      "status": "passed",
+      "actual": {
+        "childExitCode": 42,
+        "ledgerEntries": 1,
+        "ledgerSha256": "4cfce07f2881fc073c3a61c45bc257114e78bfb00d429f51ac1cf2c5a9c97968",
+        "projectDeleted": true,
+        "tombstones": 1,
+        "physicalPowerFailureTested": false
+      },
+      "durationMs": 85.53710000000001
+    },
+    {
+      "id": "X03-10",
+      "expected": "Restore old logical metadata fixture replays newer external ledger, changes generation and rejects old-client create",
+      "status": "passed",
+      "actual": {
+        "logicalMetadataFixtureRestore": true,
+        "physicalBackupRestoreTested": false,
+        "generation": "after-restore",
+        "oldClientCreateRejected": true,
+        "ledgerIndependentOfSnapshot": true
+      },
+      "durationMs": 21.400100000000066
+    },
+    {
+      "id": "X03-11",
+      "expected": "Missing/unwritable ledger path prevents deletion acknowledgement and keeps active resource",
+      "status": "passed",
+      "actual": {
+        "blocked": true,
+        "errorCode": "ENOENT",
+        "state": "active"
+      },
+      "durationMs": 4.373299999999972
+    }
+  ],
+  "events": [],
+  "finishedAt": "2026-11-02T10:46:59.652Z",
+  "processesStopped": true
+}

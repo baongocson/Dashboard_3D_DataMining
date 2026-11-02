@@ -1,0 +1,17 @@
+{
+  "source": "https://fastdl.mongodb.org/windows/mongodb-windows-x86_64-8.0.34.zip",
+  "member": {
+    "name": "mongodb-win32-x86_64-windows-8.0.34/bin/mongod.exe",
+    "method": 8,
+    "crc": 2809559624,
+    "compressed": 29926269,
+    "uncompressed": 77756416,
+    "offset": 37664
+  },
+  "fromExistingPartialDownload": true,
+  "zipMemberCrcVerified": true,
+  "sha256": "4c9e9764cbac5be8eb92733e23ce7f70b52f8ae84b6879b4d5cc010c90ec6082",
+  "bytes": 77756416,
+  "verifiedAt": "2026-11-02T10:46:32.406Z",
+  "fullArchiveChecksumVerified": false
+}

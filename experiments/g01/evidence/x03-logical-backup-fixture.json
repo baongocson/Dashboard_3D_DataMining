@@ -1,0 +1,11 @@
+{
+  "project": {
+    "_id": "project",
+    "ownerId": "owner",
+    "state": "active",
+    "revision": 2,
+    "fence": 2,
+    "head": "v1"
+  },
+  "artifactHash": "dfd08cafb406515417dbf81f4e3cf3d814127288d9c0ade2b461301b9e186b60"
+}

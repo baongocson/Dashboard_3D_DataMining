@@ -1,0 +1,1304 @@
+{
+  "experiment": "X01-X02",
+  "startedAt": "2026-11-02T10:52:44.208Z",
+  "environment": {
+    "node": "v24.15.0",
+    "os": "Windows_NT",
+    "release": "10.0.26200",
+    "arch": "x64",
+    "totalMemory": 16869052416,
+    "cpu": "12th Gen Intel(R) Core(TM) i5-12450H",
+    "logicalCPUs": 12,
+    "origin": "http://127.0.0.1:55437",
+    "synthetic": true,
+    "canonicalize": "5.1.0",
+    "playwright": "1.64.1"
+  },
+  "node": {
+    "x01": [
+      {
+        "id": "X01-01",
+        "expected": "RFC-style expected canonical bytes and Node/browser hash equal",
+        "status": "passed",
+        "actual": {
+          "canonical": "{\"a\":{\"b\":[true,null,\"null\",0,1e-7],\"ế\":\"Tiếng Việt\"},\"z\":3}",
+          "hash": "7921516a892fd931ddad5f2ecaf4a351d259832f84c7c170f76a99825f8d8865"
+        }
+      },
+      {
+        "id": "X01-02",
+        "expected": "Reject unsafe integer/nonfinite/undefined/lone surrogate before serialization",
+        "status": "passed",
+        "actual": {
+          "rejected": 9,
+          "rawUnsafeInteger": "rejected before parse"
+        }
+      },
+      {
+        "id": "X01-03",
+        "expected": "Typed strings, null tokens, source bytes, row/column IDs roundtrip",
+        "status": "passed",
+        "actual": {
+          "bytes": 305,
+          "sourceHash": "98b8a1f94bece63b0789f65976d63b7968802b8c4c6edc925e39f3b61574a31f",
+          "tableHash": "1b013e71f0c43930182619d8d49fd701aa27bebda862d8c58c97c53879c427a5",
+          "precision": [
+            "9007199254740993",
+            "1234567890.1234567890123456789"
+          ],
+          "rowIds": [
+            "00000000-0000-4000-8000-000000000001",
+            "00000000-0000-4000-8000-000000000002"
+          ]
+        }
+      },
+      {
+        "id": "X01-04",
+        "expected": "Concat/join preserve ordered multi-source row lineage",
+        "status": "passed",
+        "actual": {
+          "leftJoinRows": [
+            {
+              "rowId": "00000000-0000-4000-8000-0000000001f4",
+              "sources": [
+                "00000000-0000-4000-8000-000000000001",
+                "00000000-0000-4000-8000-000000000003"
+              ]
+            },
+            {
+              "rowId": "00000000-0000-4000-8000-0000000001f5",
+              "sources": [
+                "00000000-0000-4000-8000-000000000001",
+                "00000000-0000-4000-8000-000000000004"
+              ]
+            },
+            {
+              "rowId": "00000000-0000-4000-8000-0000000001f6",
+              "sources": [
+                "00000000-0000-4000-8000-000000000002"
+              ]
+            }
+          ],
+          "concatSourceOrder": [
+            "00000000-0000-4000-8000-000000000001",
+            "00000000-0000-4000-8000-000000000002",
+            "00000000-0000-4000-8000-000000000003",
+            "00000000-0000-4000-8000-000000000004"
+          ]
+        }
+      },
+      {
+        "id": "X01-05",
+        "expected": "CSR LE binary exact, invalid shape/index rejected, no densification",
+        "status": "passed",
+        "actual": {
+          "nnz": 3,
+          "denseAllowed": false,
+          "binaryBytes": 24,
+          "allocatedDense": false,
+          "logicalDenseCells": 200000
+        }
+      },
+      {
+        "id": "X01-06",
+        "expected": "20,000,000 byte input limit distinguished from larger valid artifact",
+        "status": "passed",
+        "actual": {
+          "sizes": [
+            19999999,
+            20000000,
+            20000001
+          ],
+          "accepted": [
+            true,
+            true,
+            false
+          ],
+          "exactBytesHash": "aded0ea9b4d06589b13d00bab483faf479d61ed5de21f1760aa7018a28e330e5",
+          "artifact21000000Allowed": true
+        }
+      }
+    ],
+    "scale": [
+      {
+        "rows": 10000,
+        "cols": 50,
+        "sourceBytes": 1448446,
+        "jsonlBytes": 2038446,
+        "expansion": 1.4073331004400578,
+        "sourceHash": "7caa882e0e09388e0faa69cbbe5c30456e1ac904d3fa3fdd295c800ade0fae33",
+        "tableHash": "2ed3970d1472b0d798dcffd7a029d54255d5609e0d330148cf3583720051573d",
+        "generateMs": 28.985299999999995,
+        "parseMs": 28.62209999999999,
+        "encodeMs": 19.914199999999994,
+        "decodeMs": 155.04749999999996,
+        "heapBefore": null,
+        "heapAfter": null,
+        "explicitLargeRepresentations": [
+          "source Uint8Array",
+          "decoded CSV string/lines (temporary)",
+          "records arrays",
+          "JSONL Uint8Array",
+          "decoded records"
+        ],
+        "peakHeapMeasured": false,
+        "nodeMemoryBefore": {
+          "rss": 154488832,
+          "heapTotal": 80855040,
+          "heapUsed": 44538120,
+          "external": 24005787,
+          "arrayBuffers": 20033766
+        },
+        "nodeMemoryAfter": {
+          "rss": 180736000,
+          "heapTotal": 123322368,
+          "heapUsed": 60840752,
+          "external": 10979214,
+          "arrayBuffers": 3520293
+        }
+      },
+      {
+        "rows": 50000,
+        "cols": 50,
+        "sourceBytes": 7242445,
+        "jsonlBytes": 10192445,
+        "expansion": 1.4073210083058967,
+        "sourceHash": "c32c8eb185dccb113d263f2adc0bbfb2b8e554d3d9599c68e1bbd9aa8af07443",
+        "tableHash": "a25fabc5e96e5d003d2b1513fc31ef92a6c5bcf986c849e2f9fad3476b0cb741",
+        "generateMs": 147.41730000000007,
+        "parseMs": 119.34759999999994,
+        "encodeMs": 97.55330000000004,
+        "decodeMs": 740.1176,
+        "heapBefore": null,
+        "heapAfter": null,
+        "explicitLargeRepresentations": [
+          "source Uint8Array",
+          "decoded CSV string/lines (temporary)",
+          "records arrays",
+          "JSONL Uint8Array",
+          "decoded records"
+        ],
+        "peakHeapMeasured": false,
+        "nodeMemoryBefore": {
+          "rss": 180736000,
+          "heapTotal": 123322368,
+          "heapUsed": 60841240,
+          "external": 10979214,
+          "arrayBuffers": 3520293
+        },
+        "nodeMemoryAfter": {
+          "rss": 353144832,
+          "heapTotal": 264372224,
+          "heapUsed": 100768096,
+          "external": 24927244,
+          "arrayBuffers": 17468025
+        }
+      }
+    ]
+  },
+  "browsers": [
+    {
+      "channel": "chrome",
+      "x01": [
+        {
+          "id": "X01-01",
+          "expected": "RFC-style expected canonical bytes and Node/browser hash equal",
+          "status": "passed",
+          "actual": {
+            "canonical": "{\"a\":{\"b\":[true,null,\"null\",0,1e-7],\"ế\":\"Tiếng Việt\"},\"z\":3}",
+            "hash": "7921516a892fd931ddad5f2ecaf4a351d259832f84c7c170f76a99825f8d8865"
+          }
+        },
+        {
+          "id": "X01-02",
+          "expected": "Reject unsafe integer/nonfinite/undefined/lone surrogate before serialization",
+          "status": "passed",
+          "actual": {
+            "rejected": 9,
+            "rawUnsafeInteger": "rejected before parse"
+          }
+        },
+        {
+          "id": "X01-03",
+          "expected": "Typed strings, null tokens, source bytes, row/column IDs roundtrip",
+          "status": "passed",
+          "actual": {
+            "bytes": 305,
+            "sourceHash": "98b8a1f94bece63b0789f65976d63b7968802b8c4c6edc925e39f3b61574a31f",
+            "tableHash": "1b013e71f0c43930182619d8d49fd701aa27bebda862d8c58c97c53879c427a5",
+            "precision": [
+              "9007199254740993",
+              "1234567890.1234567890123456789"
+            ],
+            "rowIds": [
+              "00000000-0000-4000-8000-000000000001",
+              "00000000-0000-4000-8000-000000000002"
+            ]
+          }
+        },
+        {
+          "id": "X01-04",
+          "expected": "Concat/join preserve ordered multi-source row lineage",
+          "status": "passed",
+          "actual": {
+            "leftJoinRows": [
+              {
+                "rowId": "00000000-0000-4000-8000-0000000001f4",
+                "sources": [
+                  "00000000-0000-4000-8000-000000000001",
+                  "00000000-0000-4000-8000-000000000003"
+                ]
+              },
+              {
+                "rowId": "00000000-0000-4000-8000-0000000001f5",
+                "sources": [
+                  "00000000-0000-4000-8000-000000000001",
+                  "00000000-0000-4000-8000-000000000004"
+                ]
+              },
+              {
+                "rowId": "00000000-0000-4000-8000-0000000001f6",
+                "sources": [
+                  "00000000-0000-4000-8000-000000000002"
+                ]
+              }
+            ],
+            "concatSourceOrder": [
+              "00000000-0000-4000-8000-000000000001",
+              "00000000-0000-4000-8000-000000000002",
+              "00000000-0000-4000-8000-000000000003",
+              "00000000-0000-4000-8000-000000000004"
+            ]
+          }
+        },
+        {
+          "id": "X01-05",
+          "expected": "CSR LE binary exact, invalid shape/index rejected, no densification",
+          "status": "passed",
+          "actual": {
+            "nnz": 3,
+            "denseAllowed": false,
+            "binaryBytes": 24,
+            "allocatedDense": false,
+            "logicalDenseCells": 200000
+          }
+        },
+        {
+          "id": "X01-06",
+          "expected": "20,000,000 byte input limit distinguished from larger valid artifact",
+          "status": "passed",
+          "actual": {
+            "sizes": [
+              19999999,
+              20000000,
+              20000001
+            ],
+            "accepted": [
+              true,
+              true,
+              false
+            ],
+            "exactBytesHash": "aded0ea9b4d06589b13d00bab483faf479d61ed5de21f1760aa7018a28e330e5",
+            "artifact21000000Allowed": true
+          }
+        }
+      ],
+      "x02": [
+        {
+          "id": "X02-01",
+          "expected": "Exactly one Web Lock writer across two pages",
+          "status": "passed",
+          "actual": {
+            "first": true,
+            "second": false
+          }
+        },
+        {
+          "id": "X02-02",
+          "expected": "Real IndexedDB abort does not publish version/history/outbox/head",
+          "status": "passed",
+          "actual": {
+            "aborted": true,
+            "version": null,
+            "history": null,
+            "outbox": null,
+            "head": "v1"
+          }
+        },
+        {
+          "id": "X02-03",
+          "expected": "Page close before commit leaves only staging, recovery marks interrupted and does not resume",
+          "status": "passed",
+          "actual": {
+            "interrupted": [
+              "interrupted"
+            ],
+            "resumed": false,
+            "head": "v1"
+          }
+        },
+        {
+          "id": "X02-04",
+          "expected": "Close after transaction commit before UI acknowledgement restores committed v2 with outbox/history",
+          "status": "passed",
+          "actual": {
+            "head": "v2",
+            "version": {
+              "id": "v2",
+              "complete": true
+            },
+            "history": {
+              "id": "v2",
+              "status": "succeeded"
+            },
+            "outbox": {
+              "id": "v2",
+              "synced": false
+            }
+          }
+        },
+        {
+          "id": "X02-05",
+          "expected": "Handoff increments fence; old writer cannot commit after release",
+          "status": "passed",
+          "actual": {
+            "oldFence": 3,
+            "newFence": 4,
+            "rejected": true
+          }
+        },
+        {
+          "id": "X02-06",
+          "expected": "Account generation invalidation rejects late result; dirty local blocks other-owner switch",
+          "status": "passed",
+          "actual": {
+            "generationRejected": true,
+            "ownerSwitchBlocked": true,
+            "scope": "prototype gate, not full authentication/logout UI"
+          }
+        },
+        {
+          "id": "X02-07",
+          "expected": "Sync gate and unsynced outbox survive page reload",
+          "status": "passed",
+          "actual": {
+            "gate": "awaitingUser",
+            "outboxCount": 2
+          }
+        },
+        {
+          "id": "X02-08",
+          "expected": "10 MiB IDB Blob and OPFS write/read hashes identical; byte orphan not published after page close",
+          "status": "passed",
+          "actual": {
+            "size": 10485760,
+            "hash": "16400e243e3bfb6c3ec3e4d6312d8cccc59c75ff57e5442003faa517f8356d9c",
+            "idbWriteMs": 12.699999999254942,
+            "opfsWriteMs": 29.399999998509884,
+            "opfsClosedAndVerified": true,
+            "estimate": {
+              "quota": 10753224878,
+              "usage": 15806638,
+              "usageDetails": {
+                "fileSystem": 10485934,
+                "indexedDB": 5320704
+              }
+            },
+            "persisted": false,
+            "orphan": {
+              "exists": true,
+              "published": false
+            }
+          }
+        },
+        {
+          "id": "X02-09",
+          "expected": "Browser-enforced small quota rejects real IndexedDB write and preserves head/outbox",
+          "status": "inconclusive",
+          "actual": {
+            "name": null,
+            "head": "v2",
+            "outboxCount": 2,
+            "browserEstimate": {
+              "quota": 10755322030,
+              "usage": 17903790,
+              "usageDetails": {
+                "fileSystem": 10485934,
+                "indexedDB": 7417856
+              }
+            },
+            "quotaOverrideBytes": 1024,
+            "attemptedWriteBytes": 2097152,
+            "physicalDiskExhausted": false,
+            "cdpUsage": {
+              "usage": 15806638,
+              "quota": 1024,
+              "overrideActive": true,
+              "usageBreakdown": [
+                {
+                  "storageType": "file_systems",
+                  "usage": 10485934
+                },
+                {
+                  "storageType": "indexeddb",
+                  "usage": 5320704
+                },
+                {
+                  "storageType": "cache_storage",
+                  "usage": 0
+                },
+                {
+                  "storageType": "service_workers",
+                  "usage": 0
+                }
+              ]
+            },
+            "inconclusive": true,
+            "reason": "Quota override did not induce the required browser error; no claim of actual quota-failure handling."
+          }
+        },
+        {
+          "id": "X02-12",
+          "expected": "Actual renderer crash before commit releases writer and recovers incomplete staging without publishing it",
+          "status": "passed",
+          "actual": {
+            "interrupted": [
+              "renderer-crash"
+            ],
+            "resumed": false,
+            "head": "v2",
+            "actualRendererCrash": true,
+            "wholeBrowserProcessKilled": false
+          }
+        },
+        {
+          "id": "X02-10",
+          "expected": "SW update waits while pages are controlled and unsynced outbox remains",
+          "status": "passed",
+          "actual": {
+            "waiting": true,
+            "waitingState": "installed",
+            "installingState": null,
+            "activeState": "activated",
+            "controlled": true,
+            "head": "v2",
+            "outboxCount": 2
+          }
+        },
+        {
+          "id": "X02-11",
+          "expected": "Browser network disabled: cached shell/modules reload and existing local data remain usable",
+          "status": "passed",
+          "actual": {
+            "offline": true,
+            "head": "v2",
+            "gate": "awaitingUser",
+            "outboxCount": 2,
+            "controlled": true
+          }
+        }
+      ],
+      "scale": [
+        {
+          "rows": 10000,
+          "cols": 50,
+          "sourceBytes": 1448446,
+          "jsonlBytes": 2038446,
+          "expansion": 1.4073331004400578,
+          "sourceHash": "7caa882e0e09388e0faa69cbbe5c30456e1ac904d3fa3fdd295c800ade0fae33",
+          "tableHash": "2ed3970d1472b0d798dcffd7a029d54255d5609e0d330148cf3583720051573d",
+          "generateMs": 33,
+          "parseMs": 18.799999997019768,
+          "encodeMs": 17.900000002235174,
+          "decodeMs": 119.19999999925494,
+          "heapBefore": null,
+          "heapAfter": null,
+          "explicitLargeRepresentations": [
+            "source Uint8Array",
+            "decoded CSV string/lines (temporary)",
+            "records arrays",
+            "JSONL Uint8Array",
+            "decoded records"
+          ],
+          "peakHeapMeasured": false
+        },
+        {
+          "rows": 50000,
+          "cols": 50,
+          "sourceBytes": 7242445,
+          "jsonlBytes": 10192445,
+          "expansion": 1.4073210083058967,
+          "sourceHash": "c32c8eb185dccb113d263f2adc0bbfb2b8e554d3d9599c68e1bbd9aa8af07443",
+          "tableHash": "a25fabc5e96e5d003d2b1513fc31ef92a6c5bcf986c849e2f9fad3476b0cb741",
+          "generateMs": 108.19999999925494,
+          "parseMs": 89.30000000074506,
+          "encodeMs": 100.10000000149012,
+          "decodeMs": 547.5,
+          "heapBefore": null,
+          "heapAfter": null,
+          "explicitLargeRepresentations": [
+            "source Uint8Array",
+            "decoded CSV string/lines (temporary)",
+            "records arrays",
+            "JSONL Uint8Array",
+            "decoded records"
+          ],
+          "peakHeapMeasured": false
+        }
+      ],
+      "externalRequests": [],
+      "consoleErrors": [],
+      "version": "156.0.8078.76",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.0.0 Safari/537.36",
+      "capabilities": {
+        "secureContext": true,
+        "webLocks": true,
+        "indexedDB": true,
+        "opfs": true,
+        "serviceWorker": true,
+        "memoryMeasurement": true
+      }
+    },
+    {
+      "channel": "msedge",
+      "x01": [
+        {
+          "id": "X01-01",
+          "expected": "RFC-style expected canonical bytes and Node/browser hash equal",
+          "status": "passed",
+          "actual": {
+            "canonical": "{\"a\":{\"b\":[true,null,\"null\",0,1e-7],\"ế\":\"Tiếng Việt\"},\"z\":3}",
+            "hash": "7921516a892fd931ddad5f2ecaf4a351d259832f84c7c170f76a99825f8d8865"
+          }
+        },
+        {
+          "id": "X01-02",
+          "expected": "Reject unsafe integer/nonfinite/undefined/lone surrogate before serialization",
+          "status": "passed",
+          "actual": {
+            "rejected": 9,
+            "rawUnsafeInteger": "rejected before parse"
+          }
+        },
+        {
+          "id": "X01-03",
+          "expected": "Typed strings, null tokens, source bytes, row/column IDs roundtrip",
+          "status": "passed",
+          "actual": {
+            "bytes": 305,
+            "sourceHash": "98b8a1f94bece63b0789f65976d63b7968802b8c4c6edc925e39f3b61574a31f",
+            "tableHash": "1b013e71f0c43930182619d8d49fd701aa27bebda862d8c58c97c53879c427a5",
+            "precision": [
+              "9007199254740993",
+              "1234567890.1234567890123456789"
+            ],
+            "rowIds": [
+              "00000000-0000-4000-8000-000000000001",
+              "00000000-0000-4000-8000-000000000002"
+            ]
+          }
+        },
+        {
+          "id": "X01-04",
+          "expected": "Concat/join preserve ordered multi-source row lineage",
+          "status": "passed",
+          "actual": {
+            "leftJoinRows": [
+              {
+                "rowId": "00000000-0000-4000-8000-0000000001f4",
+                "sources": [
+                  "00000000-0000-4000-8000-000000000001",
+                  "00000000-0000-4000-8000-000000000003"
+                ]
+              },
+              {
+                "rowId": "00000000-0000-4000-8000-0000000001f5",
+                "sources": [
+                  "00000000-0000-4000-8000-000000000001",
+                  "00000000-0000-4000-8000-000000000004"
+                ]
+              },
+              {
+                "rowId": "00000000-0000-4000-8000-0000000001f6",
+                "sources": [
+                  "00000000-0000-4000-8000-000000000002"
+                ]
+              }
+            ],
+            "concatSourceOrder": [
+              "00000000-0000-4000-8000-000000000001",
+              "00000000-0000-4000-8000-000000000002",
+              "00000000-0000-4000-8000-000000000003",
+              "00000000-0000-4000-8000-000000000004"
+            ]
+          }
+        },
+        {
+          "id": "X01-05",
+          "expected": "CSR LE binary exact, invalid shape/index rejected, no densification",
+          "status": "passed",
+          "actual": {
+            "nnz": 3,
+            "denseAllowed": false,
+            "binaryBytes": 24,
+            "allocatedDense": false,
+            "logicalDenseCells": 200000
+          }
+        },
+        {
+          "id": "X01-06",
+          "expected": "20,000,000 byte input limit distinguished from larger valid artifact",
+          "status": "passed",
+          "actual": {
+            "sizes": [
+              19999999,
+              20000000,
+              20000001
+            ],
+            "accepted": [
+              true,
+              true,
+              false
+            ],
+            "exactBytesHash": "aded0ea9b4d06589b13d00bab483faf479d61ed5de21f1760aa7018a28e330e5",
+            "artifact21000000Allowed": true
+          }
+        }
+      ],
+      "x02": [
+        {
+          "id": "X02-01",
+          "expected": "Exactly one Web Lock writer across two pages",
+          "status": "passed",
+          "actual": {
+            "first": true,
+            "second": false
+          }
+        },
+        {
+          "id": "X02-02",
+          "expected": "Real IndexedDB abort does not publish version/history/outbox/head",
+          "status": "passed",
+          "actual": {
+            "aborted": true,
+            "version": null,
+            "history": null,
+            "outbox": null,
+            "head": "v1"
+          }
+        },
+        {
+          "id": "X02-03",
+          "expected": "Page close before commit leaves only staging, recovery marks interrupted and does not resume",
+          "status": "passed",
+          "actual": {
+            "interrupted": [
+              "interrupted"
+            ],
+            "resumed": false,
+            "head": "v1"
+          }
+        },
+        {
+          "id": "X02-04",
+          "expected": "Close after transaction commit before UI acknowledgement restores committed v2 with outbox/history",
+          "status": "passed",
+          "actual": {
+            "head": "v2",
+            "version": {
+              "id": "v2",
+              "complete": true
+            },
+            "history": {
+              "id": "v2",
+              "status": "succeeded"
+            },
+            "outbox": {
+              "id": "v2",
+              "synced": false
+            }
+          }
+        },
+        {
+          "id": "X02-05",
+          "expected": "Handoff increments fence; old writer cannot commit after release",
+          "status": "passed",
+          "actual": {
+            "oldFence": 3,
+            "newFence": 4,
+            "rejected": true
+          }
+        },
+        {
+          "id": "X02-06",
+          "expected": "Account generation invalidation rejects late result; dirty local blocks other-owner switch",
+          "status": "passed",
+          "actual": {
+            "generationRejected": true,
+            "ownerSwitchBlocked": true,
+            "scope": "prototype gate, not full authentication/logout UI"
+          }
+        },
+        {
+          "id": "X02-07",
+          "expected": "Sync gate and unsynced outbox survive page reload",
+          "status": "passed",
+          "actual": {
+            "gate": "awaitingUser",
+            "outboxCount": 2
+          }
+        },
+        {
+          "id": "X02-08",
+          "expected": "10 MiB IDB Blob and OPFS write/read hashes identical; byte orphan not published after page close",
+          "status": "passed",
+          "actual": {
+            "size": 10485760,
+            "hash": "16400e243e3bfb6c3ec3e4d6312d8cccc59c75ff57e5442003faa517f8356d9c",
+            "idbWriteMs": 6.199999999254942,
+            "opfsWriteMs": 27.900000002235174,
+            "opfsClosedAndVerified": true,
+            "estimate": {
+              "quota": 10753224878,
+              "usage": 15806638,
+              "usageDetails": {
+                "fileSystem": 10485934,
+                "indexedDB": 5320704
+              }
+            },
+            "persisted": false,
+            "orphan": {
+              "exists": true,
+              "published": false
+            }
+          }
+        },
+        {
+          "id": "X02-09",
+          "expected": "Browser-enforced small quota rejects real IndexedDB write and preserves head/outbox",
+          "status": "inconclusive",
+          "actual": {
+            "name": null,
+            "head": "v2",
+            "outboxCount": 2,
+            "browserEstimate": {
+              "quota": 10755322030,
+              "usage": 17903790,
+              "usageDetails": {
+                "fileSystem": 10485934,
+                "indexedDB": 7417856
+              }
+            },
+            "quotaOverrideBytes": 1024,
+            "attemptedWriteBytes": 2097152,
+            "physicalDiskExhausted": false,
+            "cdpUsage": {
+              "usage": 15806638,
+              "quota": 1024,
+              "overrideActive": true,
+              "usageBreakdown": [
+                {
+                  "storageType": "file_systems",
+                  "usage": 10485934
+                },
+                {
+                  "storageType": "indexeddb",
+                  "usage": 5320704
+                },
+                {
+                  "storageType": "cache_storage",
+                  "usage": 0
+                },
+                {
+                  "storageType": "service_workers",
+                  "usage": 0
+                }
+              ]
+            },
+            "inconclusive": true,
+            "reason": "Quota override did not induce the required browser error; no claim of actual quota-failure handling."
+          }
+        },
+        {
+          "id": "X02-12",
+          "expected": "Actual renderer crash before commit releases writer and recovers incomplete staging without publishing it",
+          "status": "passed",
+          "actual": {
+            "interrupted": [
+              "renderer-crash"
+            ],
+            "resumed": false,
+            "head": "v2",
+            "actualRendererCrash": true,
+            "wholeBrowserProcessKilled": false
+          }
+        },
+        {
+          "id": "X02-10",
+          "expected": "SW update waits while pages are controlled and unsynced outbox remains",
+          "status": "passed",
+          "actual": {
+            "waiting": true,
+            "waitingState": "installed",
+            "installingState": null,
+            "activeState": "activated",
+            "controlled": true,
+            "head": "v2",
+            "outboxCount": 2
+          }
+        },
+        {
+          "id": "X02-11",
+          "expected": "Browser network disabled: cached shell/modules reload and existing local data remain usable",
+          "status": "passed",
+          "actual": {
+            "offline": true,
+            "head": "v2",
+            "gate": "awaitingUser",
+            "outboxCount": 2,
+            "controlled": true
+          }
+        }
+      ],
+      "scale": [
+        {
+          "rows": 10000,
+          "cols": 50,
+          "sourceBytes": 1448446,
+          "jsonlBytes": 2038446,
+          "expansion": 1.4073331004400578,
+          "sourceHash": "7caa882e0e09388e0faa69cbbe5c30456e1ac904d3fa3fdd295c800ade0fae33",
+          "tableHash": "2ed3970d1472b0d798dcffd7a029d54255d5609e0d330148cf3583720051573d",
+          "generateMs": 33.900000002235174,
+          "parseMs": 21.199999999254942,
+          "encodeMs": 18.399999998509884,
+          "decodeMs": 134.90000000223517,
+          "heapBefore": null,
+          "heapAfter": null,
+          "explicitLargeRepresentations": [
+            "source Uint8Array",
+            "decoded CSV string/lines (temporary)",
+            "records arrays",
+            "JSONL Uint8Array",
+            "decoded records"
+          ],
+          "peakHeapMeasured": false
+        },
+        {
+          "rows": 50000,
+          "cols": 50,
+          "sourceBytes": 7242445,
+          "jsonlBytes": 10192445,
+          "expansion": 1.4073210083058967,
+          "sourceHash": "c32c8eb185dccb113d263f2adc0bbfb2b8e554d3d9599c68e1bbd9aa8af07443",
+          "tableHash": "a25fabc5e96e5d003d2b1513fc31ef92a6c5bcf986c849e2f9fad3476b0cb741",
+          "generateMs": 116.39999999850988,
+          "parseMs": 98.60000000149012,
+          "encodeMs": 104.39999999850988,
+          "decodeMs": 626.6999999992549,
+          "heapBefore": null,
+          "heapAfter": null,
+          "explicitLargeRepresentations": [
+            "source Uint8Array",
+            "decoded CSV string/lines (temporary)",
+            "records arrays",
+            "JSONL Uint8Array",
+            "decoded records"
+          ],
+          "peakHeapMeasured": false
+        }
+      ],
+      "externalRequests": [],
+      "consoleErrors": [],
+      "version": "156.0.4314.58",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.0.0 Safari/537.36 Edg/156.0.0.0",
+      "capabilities": {
+        "secureContext": true,
+        "webLocks": true,
+        "indexedDB": true,
+        "opfs": true,
+        "serviceWorker": true,
+        "memoryMeasurement": true
+      }
+    }
+  ],
+  "finishedAt": "2026-11-02T10:52:55.756Z",
+  "serverRequests": [
+    {
+      "path": "/",
+      "at": "2026-11-02T10:52:46.147Z"
+    },
+    {
+      "path": "/probe.mjs",
+      "at": "2026-11-02T10:52:46.161Z"
+    },
+    {
+      "path": "/canonicalize.mjs",
+      "at": "2026-11-02T10:52:46.167Z"
+    },
+    {
+      "path": "/shared.mjs",
+      "at": "2026-11-02T10:52:46.168Z"
+    },
+    {
+      "path": "/scale-worker.mjs",
+      "at": "2026-11-02T10:52:46.221Z"
+    },
+    {
+      "path": "/shared.mjs",
+      "at": "2026-11-02T10:52:46.227Z"
+    },
+    {
+      "path": "/scale-worker.mjs",
+      "at": "2026-11-02T10:52:46.423Z"
+    },
+    {
+      "path": "/shared.mjs",
+      "at": "2026-11-02T10:52:46.429Z"
+    },
+    {
+      "path": "/",
+      "at": "2026-11-02T10:52:47.312Z"
+    },
+    {
+      "path": "/probe.mjs",
+      "at": "2026-11-02T10:52:47.329Z"
+    },
+    {
+      "path": "/canonicalize.mjs",
+      "at": "2026-11-02T10:52:47.338Z"
+    },
+    {
+      "path": "/shared.mjs",
+      "at": "2026-11-02T10:52:47.339Z"
+    },
+    {
+      "path": "/",
+      "at": "2026-11-02T10:52:47.477Z"
+    },
+    {
+      "path": "/probe.mjs",
+      "at": "2026-11-02T10:52:47.492Z"
+    },
+    {
+      "path": "/canonicalize.mjs",
+      "at": "2026-11-02T10:52:47.499Z"
+    },
+    {
+      "path": "/shared.mjs",
+      "at": "2026-11-02T10:52:47.500Z"
+    },
+    {
+      "path": "/",
+      "at": "2026-11-02T10:52:47.568Z"
+    },
+    {
+      "path": "/probe.mjs",
+      "at": "2026-11-02T10:52:47.581Z"
+    },
+    {
+      "path": "/canonicalize.mjs",
+      "at": "2026-11-02T10:52:47.587Z"
+    },
+    {
+      "path": "/shared.mjs",
+      "at": "2026-11-02T10:52:47.589Z"
+    },
+    {
+      "path": "/",
+      "at": "2026-11-02T10:52:47.682Z"
+    },
+    {
+      "path": "/probe.mjs",
+      "at": "2026-11-02T10:52:47.698Z"
+    },
+    {
+      "path": "/canonicalize.mjs",
+      "at": "2026-11-02T10:52:47.705Z"
+    },
+    {
+      "path": "/shared.mjs",
+      "at": "2026-11-02T10:52:47.706Z"
+    },
+    {
+      "path": "/",
+      "at": "2026-11-02T10:52:47.868Z"
+    },
+    {
+      "path": "/probe.mjs",
+      "at": "2026-11-02T10:52:47.883Z"
+    },
+    {
+      "path": "/canonicalize.mjs",
+      "at": "2026-11-02T10:52:47.890Z"
+    },
+    {
+      "path": "/shared.mjs",
+      "at": "2026-11-02T10:52:47.891Z"
+    },
+    {
+      "path": "/",
+      "at": "2026-11-02T10:52:47.962Z"
+    },
+    {
+      "path": "/probe.mjs",
+      "at": "2026-11-02T10:52:47.976Z"
+    },
+    {
+      "path": "/canonicalize.mjs",
+      "at": "2026-11-02T10:52:47.982Z"
+    },
+    {
+      "path": "/shared.mjs",
+      "at": "2026-11-02T10:52:47.982Z"
+    },
+    {
+      "path": "/sw.js",
+      "at": "2026-11-02T10:52:48.147Z"
+    },
+    {
+      "path": "/",
+      "at": "2026-11-02T10:52:48.159Z"
+    },
+    {
+      "path": "/probe.mjs",
+      "at": "2026-11-02T10:52:48.159Z"
+    },
+    {
+      "path": "/shared.mjs",
+      "at": "2026-11-02T10:52:48.161Z"
+    },
+    {
+      "path": "/canonicalize.mjs",
+      "at": "2026-11-02T10:52:48.165Z"
+    },
+    {
+      "path": "/",
+      "at": "2026-11-02T10:52:48.179Z"
+    },
+    {
+      "path": "/probe.mjs",
+      "at": "2026-11-02T10:52:48.197Z"
+    },
+    {
+      "path": "/canonicalize.mjs",
+      "at": "2026-11-02T10:52:48.204Z"
+    },
+    {
+      "path": "/shared.mjs",
+      "at": "2026-11-02T10:52:48.204Z"
+    },
+    {
+      "path": "/favicon.ico",
+      "at": "2026-11-02T10:52:48.215Z"
+    },
+    {
+      "path": "/sw.js",
+      "at": "2026-11-02T10:52:49.888Z"
+    },
+    {
+      "path": "/",
+      "at": "2026-11-02T10:52:49.940Z"
+    },
+    {
+      "path": "/probe.mjs",
+      "at": "2026-11-02T10:52:49.940Z"
+    },
+    {
+      "path": "/shared.mjs",
+      "at": "2026-11-02T10:52:49.941Z"
+    },
+    {
+      "path": "/canonicalize.mjs",
+      "at": "2026-11-02T10:52:49.952Z"
+    },
+    {
+      "path": "/",
+      "at": "2026-11-02T10:52:51.302Z"
+    },
+    {
+      "path": "/probe.mjs",
+      "at": "2026-11-02T10:52:51.346Z"
+    },
+    {
+      "path": "/canonicalize.mjs",
+      "at": "2026-11-02T10:52:51.355Z"
+    },
+    {
+      "path": "/shared.mjs",
+      "at": "2026-11-02T10:52:51.356Z"
+    },
+    {
+      "path": "/scale-worker.mjs",
+      "at": "2026-11-02T10:52:51.415Z"
+    },
+    {
+      "path": "/shared.mjs",
+      "at": "2026-11-02T10:52:51.424Z"
+    },
+    {
+      "path": "/scale-worker.mjs",
+      "at": "2026-11-02T10:52:51.640Z"
+    },
+    {
+      "path": "/shared.mjs",
+      "at": "2026-11-02T10:52:51.647Z"
+    },
+    {
+      "path": "/",
+      "at": "2026-11-02T10:52:52.641Z"
+    },
+    {
+      "path": "/probe.mjs",
+      "at": "2026-11-02T10:52:52.658Z"
+    },
+    {
+      "path": "/canonicalize.mjs",
+      "at": "2026-11-02T10:52:52.664Z"
+    },
+    {
+      "path": "/shared.mjs",
+      "at": "2026-11-02T10:52:52.664Z"
+    },
+    {
+      "path": "/",
+      "at": "2026-11-02T10:52:52.800Z"
+    },
+    {
+      "path": "/probe.mjs",
+      "at": "2026-11-02T10:52:52.821Z"
+    },
+    {
+      "path": "/canonicalize.mjs",
+      "at": "2026-11-02T10:52:52.828Z"
+    },
+    {
+      "path": "/shared.mjs",
+      "at": "2026-11-02T10:52:52.829Z"
+    },
+    {
+      "path": "/",
+      "at": "2026-11-02T10:52:52.907Z"
+    },
+    {
+      "path": "/probe.mjs",
+      "at": "2026-11-02T10:52:52.925Z"
+    },
+    {
+      "path": "/canonicalize.mjs",
+      "at": "2026-11-02T10:52:52.934Z"
+    },
+    {
+      "path": "/shared.mjs",
+      "at": "2026-11-02T10:52:52.934Z"
+    },
+    {
+      "path": "/",
+      "at": "2026-11-02T10:52:52.995Z"
+    },
+    {
+      "path": "/probe.mjs",
+      "at": "2026-11-02T10:52:53.014Z"
+    },
+    {
+      "path": "/canonicalize.mjs",
+      "at": "2026-11-02T10:52:53.021Z"
+    },
+    {
+      "path": "/shared.mjs",
+      "at": "2026-11-02T10:52:53.021Z"
+    },
+    {
+      "path": "/",
+      "at": "2026-11-02T10:52:53.178Z"
+    },
+    {
+      "path": "/probe.mjs",
+      "at": "2026-11-02T10:52:53.194Z"
+    },
+    {
+      "path": "/canonicalize.mjs",
+      "at": "2026-11-02T10:52:53.204Z"
+    },
+    {
+      "path": "/shared.mjs",
+      "at": "2026-11-02T10:52:53.205Z"
+    },
+    {
+      "path": "/",
+      "at": "2026-11-02T10:52:53.304Z"
+    },
+    {
+      "path": "/probe.mjs",
+      "at": "2026-11-02T10:52:53.324Z"
+    },
+    {
+      "path": "/canonicalize.mjs",
+      "at": "2026-11-02T10:52:53.332Z"
+    },
+    {
+      "path": "/shared.mjs",
+      "at": "2026-11-02T10:52:53.332Z"
+    },
+    {
+      "path": "/sw.js",
+      "at": "2026-11-02T10:52:54.772Z"
+    },
+    {
+      "path": "/",
+      "at": "2026-11-02T10:52:54.812Z"
+    },
+    {
+      "path": "/probe.mjs",
+      "at": "2026-11-02T10:52:54.813Z"
+    },
+    {
+      "path": "/shared.mjs",
+      "at": "2026-11-02T10:52:54.813Z"
+    },
+    {
+      "path": "/canonicalize.mjs",
+      "at": "2026-11-02T10:52:54.832Z"
+    },
+    {
+      "path": "/",
+      "at": "2026-11-02T10:52:54.880Z"
+    },
+    {
+      "path": "/probe.mjs",
+      "at": "2026-11-02T10:52:54.919Z"
+    },
+    {
+      "path": "/canonicalize.mjs",
+      "at": "2026-11-02T10:52:54.936Z"
+    },
+    {
+      "path": "/shared.mjs",
+      "at": "2026-11-02T10:52:54.937Z"
+    },
+    {
+      "path": "/favicon.ico",
+      "at": "2026-11-02T10:52:54.964Z"
+    },
+    {
+      "path": "/sw.js",
+      "at": "2026-11-02T10:52:54.982Z"
+    },
+    {
+      "path": "/",
+      "at": "2026-11-02T10:52:55.002Z"
+    },
+    {
+      "path": "/probe.mjs",
+      "at": "2026-11-02T10:52:55.003Z"
+    },
+    {
+      "path": "/shared.mjs",
+      "at": "2026-11-02T10:52:55.003Z"
+    },
+    {
+      "path": "/canonicalize.mjs",
+      "at": "2026-11-02T10:52:55.010Z"
+    }
+  ]
+}
