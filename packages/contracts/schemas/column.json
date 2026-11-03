@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dashboard.invalid/contracts/v1/column.json",
+  "type": "object",
+  "properties": {
+    "columnId": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "name": {
+      "type": "string"
+    },
+    "logicalType": {
+      "enum": [
+        "number",
+        "string",
+        "boolean",
+        "date",
+        "datetime",
+        "bigint",
+        "decimal",
+        "json"
+      ]
+    },
+    "nullable": {
+      "type": "boolean"
+    },
+    "sourceColumns": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "datasetId": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+          },
+          "versionId": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+          },
+          "columnId": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+          }
+        },
+        "required": [
+          "datasetId",
+          "versionId",
+          "columnId"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "columnId",
+    "name",
+    "logicalType",
+    "nullable",
+    "sourceColumns"
+  ],
+  "additionalProperties": false
+}

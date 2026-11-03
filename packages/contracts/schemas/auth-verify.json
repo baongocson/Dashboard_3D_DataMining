@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dashboard.invalid/contracts/v1/auth-verify.json",
+  "type": "object",
+  "properties": {
+    "challengeId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{16,256}$"
+    },
+    "purpose": {
+      "enum": [
+        "register",
+        "reset"
+      ]
+    },
+    "generation": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "otp": {
+      "type": "string",
+      "pattern": "^[0-9]{6}$"
+    }
+  },
+  "required": [
+    "challengeId",
+    "purpose",
+    "generation",
+    "otp"
+  ],
+  "additionalProperties": false
+}

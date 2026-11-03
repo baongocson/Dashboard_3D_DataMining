@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dashboard.invalid/contracts/v1/auth-reset-result.json",
+  "type": "object",
+  "properties": {
+    "passwordChanged": {
+      "const": true
+    },
+    "autoLogin": {
+      "const": false
+    }
+  },
+  "required": [
+    "passwordChanged",
+    "autoLogin"
+  ],
+  "additionalProperties": false
+}

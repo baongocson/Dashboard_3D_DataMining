@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dashboard.invalid/contracts/v1/version-create-payload.json",
+  "type": "object",
+  "properties": {
+    "version": {
+      "$ref": "https://dashboard.invalid/contracts/v1/local-version-input.json"
+    },
+    "expectedHead": {
+      "$ref": "https://dashboard.invalid/contracts/v1/expected-head.json"
+    },
+    "branch": {
+      "type": "object",
+      "properties": {
+        "branchId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+        },
+        "forkVersionId": {
+          "anyOf": [
+            {
+              "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reason": {
+          "enum": [
+            "initial",
+            "undoContinuation",
+            "syncConflict"
+          ]
+        }
+      },
+      "required": [
+        "branchId",
+        "forkVersionId",
+        "reason"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "version",
+    "expectedHead",
+    "branch"
+  ],
+  "additionalProperties": false
+}

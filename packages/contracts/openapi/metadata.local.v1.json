@@ -1,0 +1,2680 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "B031 local-dev metadata foundation",
+    "version": "0.1.0",
+    "description": "O03/O04 dataset metadata subset. Optional MetadataService shares B030 local-only auth authority. Project POST invokes the same durable metadata commit service as future B033. Import intents30min do not publish a dataset; renewal preserves logical IDs and queries durable identity first. Cursor pages are bounded live lists, not B080 snapshot manifests. Dataset/version write HTTP endpoints and real artifact storage belong B032/B033; current default artifact authority fails closed. Synthetic fixture operations do not enable product engines. Config hash binds canonical {parseConfig,operationSnapshot} for dataset creation."
+  },
+  "servers": [
+    {
+      "url": "/api/v1"
+    }
+  ],
+  "paths": {
+    "/projects": {
+      "get": {
+        "operationId": "metadata_get__projects",
+        "tags": [
+          "B031-local-metadata"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^(?:[1-9]|[1-9][0-9]|100)$"
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 20,
+              "maxLength": 256
+            }
+          }
+        ],
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Validated metadata DTO; no-store; no private storage key, owner/session, raw source bytes or internal fence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/success-envelope"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/metadata-page"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "metadata_post__projects",
+        "tags": [
+          "B031-local-metadata"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Origin",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Exact configured HTTPS loopback origin; same CSRF bootstrap/cookies as auth.local.v1."
+          }
+        ],
+        "security": [
+          {
+            "sessionCookie": [],
+            "csrfCookie": [],
+            "csrfHeader": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/metadata-project-create-request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Validated metadata DTO; no-store; no private storage key, owner/session, raw source bytes or internal fence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/success-envelope"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/metadata-project"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/{id}": {
+      "get": {
+        "operationId": "metadata_get__projects__id_",
+        "tags": [
+          "B031-local-metadata"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/uuid"
+            }
+          }
+        ],
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Validated metadata DTO; no-store; no private storage key, owner/session, raw source bytes or internal fence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/success-envelope"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/metadata-project"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/{id}/datasets": {
+      "get": {
+        "operationId": "metadata_get__projects__id__datasets",
+        "tags": [
+          "B031-local-metadata"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/uuid"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^(?:[1-9]|[1-9][0-9]|100)$"
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 20,
+              "maxLength": 256
+            }
+          }
+        ],
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Validated metadata DTO; no-store; no private storage key, owner/session, raw source bytes or internal fence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/success-envelope"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/metadata-page"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/projects/{id}/import-intents": {
+      "post": {
+        "operationId": "metadata_post__projects__id__import_intents",
+        "tags": [
+          "B031-local-metadata"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/uuid"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Origin",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Exact configured HTTPS loopback origin; same CSRF bootstrap/cookies as auth.local.v1."
+          }
+        ],
+        "security": [
+          {
+            "sessionCookie": [],
+            "csrfCookie": [],
+            "csrfHeader": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/metadata-intent-request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Validated metadata DTO; no-store; no private storage key, owner/session, raw source bytes or internal fence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/success-envelope"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/metadata-intent-response"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/datasets/{id}/versions": {
+      "get": {
+        "operationId": "metadata_get__datasets__id__versions",
+        "tags": [
+          "B031-local-metadata"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/uuid"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^(?:[1-9]|[1-9][0-9]|100)$"
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 20,
+              "maxLength": 256
+            }
+          },
+          {
+            "in": "query",
+            "name": "branchId",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/uuid"
+            }
+          }
+        ],
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Validated metadata DTO; no-store; no private storage key, owner/session, raw source bytes or internal fence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/success-envelope"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/metadata-page"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/datasets/{id}/branches": {
+      "get": {
+        "operationId": "metadata_get__datasets__id__branches",
+        "tags": [
+          "B031-local-metadata"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/uuid"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^(?:[1-9]|[1-9][0-9]|100)$"
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 20,
+              "maxLength": 256
+            }
+          }
+        ],
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Validated metadata DTO; no-store; no private storage key, owner/session, raw source bytes or internal fence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/success-envelope"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/metadata-page"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/versions/{id}": {
+      "get": {
+        "operationId": "metadata_get__versions__id_",
+        "tags": [
+          "B031-local-metadata"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/uuid"
+            }
+          }
+        ],
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Validated metadata DTO; no-store; no private storage key, owner/session, raw source bytes or internal fence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/success-envelope"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/metadata-version"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "C18 safe error. Missing/other-owner resources use404. Tombstone/generation/expired cursor use410. Unknown fields or invalid DTO are rejected. No Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "metadata-project-create-request": {
+        "$ref": "#/components/schemas/metadata-types/$defs/projectCreateRequest"
+      },
+      "metadata-intent-request": {
+        "$ref": "#/components/schemas/metadata-types/$defs/intentRequest"
+      },
+      "metadata-intent-response": {
+        "$ref": "#/components/schemas/metadata-types/$defs/intentResponse"
+      },
+      "metadata-project": {
+        "$ref": "#/components/schemas/metadata-types/$defs/project"
+      },
+      "metadata-version": {
+        "$ref": "#/components/schemas/metadata-types/$defs/version"
+      },
+      "metadata-page": {
+        "$ref": "#/components/schemas/metadata-types/$defs/page"
+      },
+      "metadata-query": {
+        "$ref": "#/components/schemas/metadata-types/$defs/query"
+      },
+      "success-envelope": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/json-value"
+          },
+          "serverNow": {
+            "$ref": "#/components/schemas/common/$defs/utc"
+          },
+          "requestId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          }
+        },
+        "required": [
+          "data",
+          "requestId",
+          "serverNow"
+        ],
+        "additionalProperties": false
+      },
+      "error-envelope": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "enum": [
+                  "VALIDATION_FAILED",
+                  "UNSUPPORTED_OPERATION",
+                  "INVALID_SOURCE",
+                  "AUTH_REQUIRED",
+                  "SESSION_EXPIRED",
+                  "SESSION_REVOKED",
+                  "FORBIDDEN",
+                  "RESOURCE_NOT_FOUND",
+                  "CSRF_INVALID",
+                  "REVISION_CONFLICT",
+                  "IDEMPOTENCY_MISMATCH",
+                  "DEPENDENCY_EXISTS",
+                  "ACCOUNT_LIMIT_REACHED",
+                  "RESOURCE_DELETED",
+                  "CURSOR_EXPIRED",
+                  "RECONCILIATION_REQUIRED",
+                  "INPUT_FILE_TOO_LARGE",
+                  "ARTIFACT_LIMIT_EXCEEDED",
+                  "PAYLOAD_TOO_LARGE",
+                  "OTP_INVALID",
+                  "OTP_EXPIRED",
+                  "OTP_ATTEMPTS_EXCEEDED",
+                  "ARTIFACT_NOT_READY",
+                  "HASH_MISMATCH",
+                  "RATE_LIMITED",
+                  "AI_QUOTA_EXCEEDED",
+                  "STORAGE_CAPACITY_EXCEEDED",
+                  "STORAGE_UNAVAILABLE",
+                  "MAIL_UNAVAILABLE",
+                  "AI_UNAVAILABLE",
+                  "CLIENT_SCHEMA_UNSUPPORTED",
+                  "LOCAL_QUOTA_EXCEEDED",
+                  "WRITER_FENCE_LOST",
+                  "PREVIEW_STALE",
+                  "RESOURCE_LIMIT_EXCEEDED",
+                  "OFFLINE_RESOURCE_MISSING",
+                  "CONSENT_INVALID",
+                  "LEDGER_UNAVAILABLE",
+                  "UPSTREAM_UNAVAILABLE",
+                  "MUTATION_NOT_REQUESTED",
+                  "DEPENDENCY_NOT_READY"
+                ]
+              },
+              "message": {
+                "type": "string",
+                "minLength": 1
+              },
+              "details": {
+                "type": "object",
+                "properties": {
+                  "path": {
+                    "type": "string"
+                  },
+                  "field": {
+                    "type": "string"
+                  },
+                  "scope": {
+                    "enum": [
+                      "field",
+                      "source",
+                      "resource",
+                      "account",
+                      "project"
+                    ]
+                  },
+                  "limit": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "actualCount": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "entityIds": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+                    }
+                  },
+                  "requiresReconciliation": {
+                    "type": "boolean"
+                  },
+                  "requiresNewSnapshot": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [],
+                "additionalProperties": false
+              },
+              "retryable": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "code",
+              "message",
+              "retryable"
+            ],
+            "additionalProperties": false
+          },
+          "requestId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          },
+          "serverNow": {
+            "$ref": "#/components/schemas/common/$defs/utc"
+          }
+        },
+        "required": [
+          "error",
+          "requestId",
+          "serverNow"
+        ],
+        "additionalProperties": false
+      },
+      "uuid": {
+        "$ref": "#/components/schemas/common/$defs/uuid"
+      },
+      "metadata-types": {
+        "$defs": {
+          "namePayload": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200
+              }
+            },
+            "required": [
+              "name"
+            ],
+            "additionalProperties": false
+          },
+          "project": {
+            "type": "object",
+            "properties": {
+              "projectId": {
+                "$ref": "#/components/schemas/uuid"
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200
+              },
+              "revision": {
+                "$ref": "#/components/schemas/common/$defs/revision"
+              },
+              "createdAtServer": {
+                "$ref": "#/components/schemas/common/$defs/utc"
+              },
+              "updatedAtServer": {
+                "$ref": "#/components/schemas/common/$defs/utc"
+              }
+            },
+            "required": [
+              "projectId",
+              "name",
+              "revision",
+              "createdAtServer",
+              "updatedAtServer"
+            ],
+            "additionalProperties": false
+          },
+          "dataset": {
+            "type": "object",
+            "properties": {
+              "datasetId": {
+                "$ref": "#/components/schemas/uuid"
+              },
+              "projectId": {
+                "$ref": "#/components/schemas/uuid"
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200
+              },
+              "kind": {
+                "enum": [
+                  "imported",
+                  "derived"
+                ]
+              },
+              "sourceArtifactId": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/uuid"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "parseConfig": {
+                "type": "object",
+                "additionalProperties": {
+                  "$ref": "#/components/schemas/json-value"
+                }
+              },
+              "v0VersionId": {
+                "$ref": "#/components/schemas/uuid"
+              },
+              "defaultBranchId": {
+                "$ref": "#/components/schemas/uuid"
+              },
+              "revision": {
+                "$ref": "#/components/schemas/common/$defs/revision"
+              },
+              "createdAtServer": {
+                "$ref": "#/components/schemas/common/$defs/utc"
+              },
+              "updatedAtServer": {
+                "$ref": "#/components/schemas/common/$defs/utc"
+              }
+            },
+            "required": [
+              "datasetId",
+              "projectId",
+              "name",
+              "kind",
+              "sourceArtifactId",
+              "parseConfig",
+              "v0VersionId",
+              "defaultBranchId",
+              "revision",
+              "createdAtServer",
+              "updatedAtServer"
+            ],
+            "additionalProperties": false
+          },
+          "version": {
+            "type": "object",
+            "properties": {
+              "schemaVersion": {
+                "const": 1
+              },
+              "versionId": {
+                "$ref": "#/components/schemas/common/$defs/uuid"
+              },
+              "datasetId": {
+                "$ref": "#/components/schemas/common/$defs/uuid"
+              },
+              "branchId": {
+                "$ref": "#/components/schemas/common/$defs/uuid"
+              },
+              "parentVersionId": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/common/$defs/uuid"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "sourceVersions": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/common/$defs/sourceRef"
+                }
+              },
+              "tableManifestId": {
+                "$ref": "#/components/schemas/common/$defs/uuid"
+              },
+              "rowCount": {
+                "$ref": "#/components/schemas/common/$defs/revision"
+              },
+              "columnCount": {
+                "$ref": "#/components/schemas/common/$defs/revision"
+              },
+              "operationSnapshot": {
+                "$ref": "#/components/schemas/operation-config"
+              },
+              "rowLineageArtifactId": {
+                "$ref": "#/components/schemas/common/$defs/uuid"
+              },
+              "projectId": {
+                "$ref": "#/components/schemas/uuid"
+              },
+              "revision": {
+                "$ref": "#/components/schemas/common/$defs/revision"
+              },
+              "contentHash": {
+                "$ref": "#/components/schemas/common/$defs/sha256"
+              },
+              "createdAtServer": {
+                "$ref": "#/components/schemas/common/$defs/utc"
+              },
+              "declaredBranchId": {
+                "$ref": "#/components/schemas/common/$defs/uuid"
+              }
+            },
+            "required": [
+              "schemaVersion",
+              "versionId",
+              "datasetId",
+              "branchId",
+              "parentVersionId",
+              "sourceVersions",
+              "tableManifestId",
+              "rowCount",
+              "columnCount",
+              "operationSnapshot",
+              "projectId",
+              "revision",
+              "contentHash",
+              "createdAtServer"
+            ],
+            "additionalProperties": false
+          },
+          "branch": {
+            "type": "object",
+            "properties": {
+              "branchId": {
+                "$ref": "#/components/schemas/uuid"
+              },
+              "projectId": {
+                "$ref": "#/components/schemas/uuid"
+              },
+              "datasetId": {
+                "$ref": "#/components/schemas/uuid"
+              },
+              "forkVersionId": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/uuid"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "headVersionId": {
+                "$ref": "#/components/schemas/uuid"
+              },
+              "headRevision": {
+                "$ref": "#/components/schemas/common/$defs/revision"
+              },
+              "reason": {
+                "enum": [
+                  "initial",
+                  "undoContinuation",
+                  "syncConflict"
+                ]
+              },
+              "conflictOf": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/uuid"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "branchId",
+              "projectId",
+              "datasetId",
+              "forkVersionId",
+              "headVersionId",
+              "headRevision",
+              "reason",
+              "conflictOf"
+            ],
+            "additionalProperties": false
+          },
+          "intentRequest": {
+            "type": "object",
+            "properties": {
+              "logicalImportId": {
+                "$ref": "#/components/schemas/uuid"
+              },
+              "datasetId": {
+                "$ref": "#/components/schemas/uuid"
+              },
+              "versionId": {
+                "$ref": "#/components/schemas/uuid"
+              },
+              "mutationId": {
+                "$ref": "#/components/schemas/uuid"
+              },
+              "projectId": {
+                "$ref": "#/components/schemas/uuid"
+              },
+              "kind": {
+                "enum": [
+                  "import",
+                  "concat",
+                  "join"
+                ]
+              },
+              "configHash": {
+                "$ref": "#/components/schemas/common/$defs/sha256"
+              },
+              "sourceRefs": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/common/$defs/sourceRef"
+                }
+              },
+              "file": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 200
+                  },
+                  "size": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 20000000
+                  },
+                  "format": {
+                    "enum": [
+                      "csv",
+                      "json"
+                    ]
+                  }
+                },
+                "required": [
+                  "name",
+                  "size",
+                  "format"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "logicalImportId",
+              "datasetId",
+              "versionId",
+              "mutationId",
+              "projectId",
+              "kind",
+              "configHash"
+            ],
+            "additionalProperties": false,
+            "oneOf": [
+              {
+                "properties": {
+                  "kind": {
+                    "const": "import"
+                  },
+                  "sourceRefs": {
+                    "type": "array",
+                    "maxItems": 0
+                  },
+                  "file": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 200
+                      },
+                      "size": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 20000000
+                      },
+                      "format": {
+                        "enum": [
+                          "csv",
+                          "json"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "name",
+                      "size",
+                      "format"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "file"
+                ]
+              },
+              {
+                "properties": {
+                  "kind": {
+                    "enum": [
+                      "concat",
+                      "join"
+                    ]
+                  },
+                  "sourceRefs": {
+                    "type": "array",
+                    "minItems": 2
+                  }
+                },
+                "required": [
+                  "sourceRefs"
+                ],
+                "not": {
+                  "properties": {
+                    "file": true
+                  },
+                  "required": [
+                    "file"
+                  ]
+                }
+              }
+            ]
+          },
+          "intentResponse": {
+            "type": "object",
+            "properties": {
+              "intentId": {
+                "type": "string",
+                "minLength": 20,
+                "maxLength": 128
+              },
+              "logicalImportId": {
+                "$ref": "#/components/schemas/uuid"
+              },
+              "expiresAt": {
+                "$ref": "#/components/schemas/common/$defs/utc"
+              },
+              "serverNow": {
+                "$ref": "#/components/schemas/common/$defs/utc"
+              },
+              "sourceRevisions": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "datasetId": {
+                      "$ref": "#/components/schemas/uuid"
+                    },
+                    "versionId": {
+                      "$ref": "#/components/schemas/uuid"
+                    },
+                    "revision": {
+                      "$ref": "#/components/schemas/common/$defs/revision"
+                    }
+                  },
+                  "required": [
+                    "datasetId",
+                    "versionId",
+                    "revision"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "status": {
+                "enum": [
+                  "granted",
+                  "alreadyCommitted"
+                ]
+              },
+              "committedMutationId": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/uuid"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "intentId",
+              "logicalImportId",
+              "expiresAt",
+              "serverNow",
+              "sourceRevisions",
+              "status",
+              "committedMutationId"
+            ],
+            "additionalProperties": false
+          },
+          "headPayload": {
+            "type": "object",
+            "properties": {
+              "datasetId": {
+                "$ref": "#/components/schemas/uuid"
+              },
+              "branchId": {
+                "$ref": "#/components/schemas/uuid"
+              },
+              "versionId": {
+                "$ref": "#/components/schemas/uuid"
+              }
+            },
+            "required": [
+              "datasetId",
+              "branchId",
+              "versionId"
+            ],
+            "additionalProperties": false
+          },
+          "datasetCreate": {
+            "type": "object",
+            "properties": {
+              "dataset": {
+                "type": "object",
+                "properties": {
+                  "datasetId": {
+                    "$ref": "#/components/schemas/uuid"
+                  },
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 200
+                  },
+                  "kind": {
+                    "enum": [
+                      "imported",
+                      "derived"
+                    ]
+                  },
+                  "sourceArtifactId": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/components/schemas/uuid"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "parseConfig": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "$ref": "#/components/schemas/json-value"
+                    }
+                  },
+                  "v0VersionId": {
+                    "$ref": "#/components/schemas/uuid"
+                  },
+                  "defaultBranchId": {
+                    "$ref": "#/components/schemas/uuid"
+                  }
+                },
+                "required": [
+                  "datasetId",
+                  "name",
+                  "kind",
+                  "sourceArtifactId",
+                  "parseConfig",
+                  "v0VersionId",
+                  "defaultBranchId"
+                ],
+                "additionalProperties": false
+              },
+              "initialVersion": {
+                "$ref": "#/components/schemas/version-create-payload"
+              },
+              "intentId": {
+                "type": "string",
+                "minLength": 20,
+                "maxLength": 128
+              },
+              "logicalImportId": {
+                "$ref": "#/components/schemas/uuid"
+              },
+              "configHash": {
+                "$ref": "#/components/schemas/common/$defs/sha256"
+              }
+            },
+            "required": [
+              "dataset",
+              "initialVersion",
+              "intentId",
+              "logicalImportId",
+              "configHash"
+            ],
+            "additionalProperties": false
+          },
+          "projectCreateRequest": {
+            "type": "object",
+            "properties": {
+              "serverGeneration": {
+                "$ref": "#/components/schemas/uuid"
+              },
+              "mutation": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/mutation-envelope"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "const": "project.create"
+                      },
+                      "baseRevision": {
+                        "const": 0
+                      },
+                      "dependencies": {
+                        "type": "array",
+                        "maxItems": 0
+                      },
+                      "payload": {
+                        "$ref": "#/components/schemas/metadata-name-payload"
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "required": [
+              "serverGeneration",
+              "mutation"
+            ],
+            "additionalProperties": false
+          },
+          "query": {
+            "type": "object",
+            "properties": {
+              "limit": {
+                "type": "string",
+                "pattern": "^(?:[1-9]|[1-9][0-9]|100)$"
+              },
+              "cursor": {
+                "type": "string",
+                "minLength": 20,
+                "maxLength": 256
+              },
+              "branchId": {
+                "$ref": "#/components/schemas/uuid"
+              }
+            },
+            "required": [],
+            "additionalProperties": false
+          },
+          "page": {
+            "type": "object",
+            "properties": {
+              "items": {
+                "type": "array",
+                "maxItems": 100,
+                "items": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/metadata-types/$defs/project"
+                    },
+                    {
+                      "$ref": "#/components/schemas/metadata-types/$defs/dataset"
+                    },
+                    {
+                      "$ref": "#/components/schemas/metadata-types/$defs/version"
+                    },
+                    {
+                      "$ref": "#/components/schemas/metadata-types/$defs/branch"
+                    }
+                  ]
+                }
+              },
+              "nextCursor": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 20,
+                    "maxLength": 256
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "items",
+              "nextCursor"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "json-value": {
+        "$defs": {
+          "jsonValue": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/json-value/$defs/jsonValue"
+                }
+              },
+              {
+                "type": "object",
+                "additionalProperties": {
+                  "$ref": "#/components/schemas/json-value/$defs/jsonValue"
+                }
+              }
+            ]
+          }
+        },
+        "$ref": "#/components/schemas/json-value/$defs/jsonValue"
+      },
+      "common": {
+        "$defs": {
+          "uuid": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "utc": {
+            "type": "string",
+            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?Z$"
+          },
+          "sourceRef": {
+            "type": "object",
+            "properties": {
+              "datasetId": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+              },
+              "versionId": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+              },
+              "role": {
+                "enum": [
+                  "primary",
+                  "left",
+                  "right",
+                  "concat"
+                ]
+              },
+              "sourceOrder": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              }
+            },
+            "required": [
+              "datasetId",
+              "versionId"
+            ],
+            "additionalProperties": false
+          },
+          "columnRef": {
+            "type": "object",
+            "properties": {
+              "datasetId": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+              },
+              "versionId": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+              },
+              "columnId": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+              }
+            },
+            "required": [
+              "datasetId",
+              "versionId",
+              "columnId"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "operation-config": {
+        "type": "object",
+        "properties": {
+          "operationId": {
+            "enum": [
+              "AUTH.REGISTER",
+              "AUTH.LOGIN",
+              "AUTH.RESET",
+              "AUTH.OTP_VERIFY",
+              "AUTH.OTP_RESEND",
+              "AUTH.PASSWORD_COMMIT",
+              "AUTH.LOGOUT",
+              "PROJECT.LIST",
+              "PROJECT.CREATE",
+              "PROJECT.OPEN",
+              "PROJECT.RENAME",
+              "PROJECT.DELETE",
+              "PROJECT.REOPEN",
+              "TAB.ACQUIRE",
+              "DATA.SELECT",
+              "DATA.IMPORT",
+              "DATA.PREVIEW",
+              "DATA.JSON_FIELDS",
+              "DATA.RENAME",
+              "DATA.CONCAT",
+              "DATA.JOIN",
+              "DATA.DELETE",
+              "EDA.TABLE",
+              "EDA.SCHEMA",
+              "EDA.STATS",
+              "QUALITY.SCAN",
+              "QUALITY.OUTLIER",
+              "QUALITY.CONFIGURE_FIX",
+              "CLEAN.FILTER",
+              "CLEAN.HTML",
+              "CLEAN.TRIM",
+              "CLEAN.NEWLINE",
+              "CLEAN.CASE",
+              "CLEAN.CHARS",
+              "CLEAN.NULLS",
+              "CLEAN.TYPE",
+              "CLEAN.UNIT",
+              "CLEAN.DROP_COL",
+              "CLEAN.RENAME_COL",
+              "CLEAN.SPLIT_COL",
+              "CLEAN.MERGE_COL",
+              "CLEAN.DROP_ROWS",
+              "CLEAN.DEDUP",
+              "CLEAN.OUTLIER_APPLY",
+              "PREP.MISS_DROP",
+              "PREP.MISS_CONST",
+              "PREP.MISS_MEAN",
+              "PREP.MISS_MEDIAN",
+              "PREP.MISS_MODE",
+              "PREP.MISS_GROUP",
+              "PREP.FFILL",
+              "PREP.BFILL",
+              "PREP.INTERPOLATE",
+              "PREP.MISS_FLAG",
+              "PREP.LABEL",
+              "PREP.ORDINAL",
+              "PREP.ONEHOT",
+              "PREP.MINMAX",
+              "PREP.STANDARD",
+              "PREP.ROBUST",
+              "PREP.LOG",
+              "PREP.BIN",
+              "PREP.TFIDF",
+              "FEATURE.FORMULA",
+              "FEATURE.DATE",
+              "FEATURE.DROP_CONSTANT",
+              "FEATURE.PCA_APPLY",
+              "FEATURE.SELECT",
+              "PIPE.CREATE",
+              "PIPE.EDIT",
+              "PIPE.SAVE",
+              "PIPE.MAP",
+              "PIPE.VALIDATE",
+              "PIPE.RUN",
+              "PIPE.CONTINUE",
+              "RUN.CANCEL",
+              "RUN.HISTORY",
+              "RUN.DETAILS",
+              "MODEL.LINEAR",
+              "MODEL.LOGISTIC",
+              "MODEL.KNN",
+              "MODEL.KMEANS",
+              "MODEL.PCA",
+              "MODEL.CONFIG",
+              "MODEL.PREPROCESS",
+              "MODEL.CHECK",
+              "MODEL.RUN",
+              "MODEL.SAVE",
+              "MODEL.DOWNLOAD",
+              "RESULT.CLASS",
+              "RESULT.REGRESS",
+              "RESULT.CLUSTER",
+              "RESULT.PCA",
+              "RESULT.COMPARE",
+              "RESULT.EXPORT",
+              "AI.SUGGEST",
+              "AI.EXPLAIN",
+              "AI.REVIEW_PAYLOAD",
+              "AI.SEND",
+              "AI.ACCEPT",
+              "AI.DISMISS",
+              "AI.TEXT_IMPUTE",
+              "AI.APPLY_TEXT",
+              "CHART.HIST",
+              "CHART.BOX",
+              "CHART.BAR",
+              "CHART.LINE",
+              "CHART.SCATTER",
+              "CHART.CORR",
+              "CHART.PIE",
+              "CHART.SCATTER3D",
+              "CHART.CONFIG",
+              "CHART.PREVIEW",
+              "CHART.SAVE",
+              "CHART.EDIT",
+              "CHART.DELETE",
+              "CHART.SOURCE",
+              "CHART.EXPORT",
+              "DASH.CREATE",
+              "DASH.RENAME",
+              "DASH.OPEN",
+              "DASH.ADD",
+              "DASH.REMOVE",
+              "DASH.ORDER",
+              "VIEW3D.ROTATE",
+              "VIEW3D.ZOOM",
+              "VIEW3D.PICK",
+              "VIEW3D.RESET",
+              "VIEW3D.SAVE_LOCAL_CAMERA",
+              "VERSION.LIST",
+              "VERSION.COMPARE",
+              "VERSION.UNDO",
+              "VERSION.SELECT",
+              "EXPORT.DATA",
+              "EXPORT.RESULT",
+              "REPORT.CONFIG",
+              "REPORT.PREVIEW",
+              "REPORT.GENERATE",
+              "REPORT.DOWNLOAD",
+              "OFFLINE.PREPARE",
+              "OFFLINE.STATUS",
+              "OFFLINE.REMOVE",
+              "SYNC.NOW",
+              "SYNC.RETRY",
+              "SYNC.CONFLICT"
+            ]
+          },
+          "configVersion": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991
+          },
+          "columnIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            },
+            "uniqueItems": true
+          },
+          "params": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/json-value"
+            }
+          }
+        },
+        "required": [
+          "operationId",
+          "configVersion",
+          "columnIds",
+          "params"
+        ],
+        "additionalProperties": false
+      },
+      "version-create-payload": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "$ref": "#/components/schemas/local-version-input"
+          },
+          "expectedHead": {
+            "$ref": "#/components/schemas/expected-head"
+          },
+          "branch": {
+            "type": "object",
+            "properties": {
+              "branchId": {
+                "$ref": "#/components/schemas/common/$defs/uuid"
+              },
+              "forkVersionId": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/common/$defs/uuid"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "reason": {
+                "enum": [
+                  "initial",
+                  "undoContinuation",
+                  "syncConflict"
+                ]
+              }
+            },
+            "required": [
+              "branchId",
+              "forkVersionId",
+              "reason"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "version",
+          "expectedHead",
+          "branch"
+        ],
+        "additionalProperties": false
+      },
+      "mutation-envelope": {
+        "type": "object",
+        "properties": {
+          "mutationId": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+          },
+          "kind": {
+            "enum": [
+              "project.create",
+              "project.rename",
+              "dataset.create",
+              "dataset.rename",
+              "dataset.version.create",
+              "dataset.head.select",
+              "workflow.save",
+              "run.create",
+              "run.update",
+              "run.step.commit",
+              "chart.save",
+              "chart.delete",
+              "dashboard.save",
+              "model.save",
+              "report.save",
+              "reopenState.save",
+              "ai.acceptance.record"
+            ]
+          },
+          "projectId": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+          },
+          "entityId": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+          },
+          "schemaVersion": {
+            "const": 1
+          },
+          "baseRevision": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "dependencies": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            },
+            "uniqueItems": true
+          },
+          "payload": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/json-value"
+            }
+          },
+          "payloadHash": {
+            "$ref": "#/components/schemas/common/$defs/sha256"
+          }
+        },
+        "required": [
+          "mutationId",
+          "kind",
+          "projectId",
+          "entityId",
+          "schemaVersion",
+          "baseRevision",
+          "dependencies",
+          "payload",
+          "payloadHash"
+        ],
+        "additionalProperties": false
+      },
+      "metadata-name-payload": {
+        "$ref": "#/components/schemas/metadata-types/$defs/namePayload"
+      },
+      "local-version-input": {
+        "type": "object",
+        "properties": {
+          "schemaVersion": {
+            "const": 1
+          },
+          "versionId": {
+            "$ref": "#/components/schemas/common/$defs/uuid"
+          },
+          "datasetId": {
+            "$ref": "#/components/schemas/common/$defs/uuid"
+          },
+          "branchId": {
+            "$ref": "#/components/schemas/common/$defs/uuid"
+          },
+          "parentVersionId": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/common/$defs/uuid"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "sourceVersions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/common/$defs/sourceRef"
+            }
+          },
+          "tableManifestId": {
+            "$ref": "#/components/schemas/common/$defs/uuid"
+          },
+          "rowCount": {
+            "$ref": "#/components/schemas/common/$defs/revision"
+          },
+          "columnCount": {
+            "$ref": "#/components/schemas/common/$defs/revision"
+          },
+          "operationSnapshot": {
+            "$ref": "#/components/schemas/operation-config"
+          },
+          "rowLineageArtifactId": {
+            "$ref": "#/components/schemas/common/$defs/uuid"
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "versionId",
+          "datasetId",
+          "branchId",
+          "parentVersionId",
+          "sourceVersions",
+          "tableManifestId",
+          "rowCount",
+          "columnCount",
+          "operationSnapshot"
+        ],
+        "additionalProperties": false
+      },
+      "expected-head": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "const": "known"
+              },
+              "branchId": {
+                "$ref": "#/components/schemas/common/$defs/uuid"
+              },
+              "versionId": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/common/$defs/uuid"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "revision": {
+                "$ref": "#/components/schemas/common/$defs/revision"
+              }
+            },
+            "required": [
+              "kind",
+              "branchId",
+              "versionId",
+              "revision"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "const": "dependency"
+              },
+              "branchId": {
+                "$ref": "#/components/schemas/common/$defs/uuid"
+              },
+              "fromMutationId": {
+                "$ref": "#/components/schemas/common/$defs/uuid"
+              }
+            },
+            "required": [
+              "kind",
+              "branchId",
+              "fromMutationId"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      }
+    },
+    "securitySchemes": {
+      "sessionCookie": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "__Host-dashboard_session"
+      },
+      "csrfCookie": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "__Host-dashboard_csrf"
+      },
+      "csrfHeader": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-CSRF-Token"
+      }
+    }
+  }
+}

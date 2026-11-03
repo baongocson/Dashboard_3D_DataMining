@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dashboard.invalid/contracts/v1/project-manifest-page.json",
+  "type": "object",
+  "properties": {
+    "manifestId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{43}$"
+    },
+    "projectId": {
+      "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+    },
+    "serverGeneration": {
+      "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+    },
+    "requestHash": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/sha256"
+    },
+    "snapshotHash": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/sha256"
+    },
+    "createdAt": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/utc"
+    },
+    "expiresAt": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/utc"
+    },
+    "projectDeleted": {
+      "type": "boolean"
+    },
+    "sequence": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/revision"
+    },
+    "resourceKinds": {
+      "const": [
+        "project",
+        "dataset",
+        "version",
+        "branch",
+        "artifact",
+        "reference",
+        "conflict",
+        "tombstone"
+      ]
+    },
+    "completeServerManifest": {
+      "const": true
+    },
+    "bytesVerified": {
+      "const": false
+    },
+    "referenceClosureVerified": {
+      "const": false
+    },
+    "mutationsApplied": {
+      "const": false
+    },
+    "offset": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/revision"
+    },
+    "totalCount": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/revision"
+    },
+    "pageSize": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "rows": {
+      "type": "array",
+      "items": {
+        "$ref": "https://dashboard.invalid/contracts/v1/project-manifest-types.json#/$defs/row"
+      },
+      "maxItems": 100
+    },
+    "nextCursor": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{43}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "complete": {
+      "type": "boolean"
+    },
+    "metadataRevision": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/revision"
+    }
+  },
+  "required": [
+    "manifestId",
+    "projectId",
+    "serverGeneration",
+    "requestHash",
+    "snapshotHash",
+    "createdAt",
+    "expiresAt",
+    "projectDeleted",
+    "sequence",
+    "resourceKinds",
+    "completeServerManifest",
+    "bytesVerified",
+    "referenceClosureVerified",
+    "mutationsApplied",
+    "offset",
+    "totalCount",
+    "pageSize",
+    "rows",
+    "nextCursor",
+    "complete",
+    "metadataRevision"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,31 @@
+# B032 retained private storage, local-dev
+
+`StorageService` shares B030 AuthService and B031 MetadataService transaction fences. `createApp(auth,{metadata,storage})` registers six O05 routes. It does not listen or enable public auth, product import/parser/model/sparse/AI operations. To attach real bytes, construct metadata with `{artifacts:storage.authority}`; a metadata instance without this authority still fails closed. Existing auth-only and metadata-only factories remain available.
+
+All disk keys are random server-generated opaque IDs under the configured absolute private root. Requests contain descriptors, never a path/storage key. Every chunk attempt and sealed artifact uses exclusive creation and fsync before it can be published in metadata. No overwrite/unlink/remove operation exists. Superseded or failed attempt bytes remain on disk, and no TTL removes DB data. This is retention for the current user constraint, not a claim of production orphan cleanup or power-loss durability.
+
+Declaration binds descriptor/owner/project/session/epoch/generation. The descriptor is immutable per artifact ID. Unexpired active upload is reused; renewed upload keeps the artifact ID/hash and allocates a new opaque upload ID. Source max20,000,000 bytes is distinct from output artifact max256MiB. Header/offset/index/length and whole file limits apply even with chunked transport. At most64 chunks of4MiB for an output artifact; source may have a short final chunk. A logical chunk is unique(uploadId,index); same ID/hash retries remain equivalent, a fresh retained attempt file may repair a corrupt old staging file, and changed hash is rejected. Retry after complete checks the body without changing the sealed object.
+
+Operation leases last5min at most, bounded by the upload's1h expiry. A DB lease fence serializes counting2 account/8 instance concurrent operations. An expired/abandoned lease cannot publish a late chunk: token/session/epoch/expiry/generation and project fence are checked again after bytes finish. Byte receive/hash/assembly happen outside metadata transactions. Logout can complete while a body is held and late publish is then denied. Cancel invalidates the active lease and preserves every byte; cancel of a referenced ready artifact preserves ready.
+
+Complete re-reads and hashes every exact chunk, checks the whole expected size/hash, writes an immutable sealed file, and marks it verified staging only. The ready transition occurs inside the same B031 transaction that creates metadata, references and durable identity. The artifact authority preflights all file hashes and typed table graph outside that transaction and returns an opaque, owner-bound private proof. Attachment rechecks descriptor/storage key/byte revision/generation and hard references, then updates ready/attachFence. A later mutation failure rolls back data/ref/ready/identity together. Files are retained if a transaction fails.
+
+Typed checks cover table-jsonl-v1 manifest/column order, exact ordered chunk descriptors/hashes/rowStart/rowCount, strict UTF-8/LF/JSON, schema/cell shape/precision and unique row IDs. Row lineage must match output order, exact source version/role/order and actual ready source row IDs. Derived import requires a lineage artifact and new output row IDs. Source byte is kept independently; its parser and numeric transformation correctness remain B041/B050–B064. A binary model/PDF/etc can be hash-verified staging, but no typed attachment handler for those product kinds is enabled here. Sparse is not enabled.
+
+Format validation uses streaming rows and bounded JSON parse policy. Row-ID sets use a conservative policy estimate (192B/output ID,128B/source ID) plus text buffering under512MiB; this is an estimate, not measured physical heap enforcement or a guarantee for every maximum limit combination. No implicit sampling or fixed history/version cap is introduced.
+
+Content is served only through an authenticated owner/project/ready/live-reference check, an actual file hash check before headers and a second session/reference check. Response is attachment application/octet-stream/no-store/nosniff, filename from validated artifact UUID. There is no static storage alias or public URL. An already accepted stream is not advertised as instant revocation of bytes already sent. Missing/corrupt files fail explicitly; no silent ready success. Existing byte proof cannot protect against out-of-process tampering after preflight; repair/reconciliation remains explicit.
+
+`cleanupPlan(token,projectId,{limit,cursor})` is a live read-only inventory, with a default/max100 items per page and an opaque nextCursor whenever hasMore is true. Cursors bind owner/project/serverGeneration and expire after30min. Cursor records are retained; expiry never deletes data. Minimal artifact projection bounds the scan, and references/leases are checked outside account transactions. Short fenced checks before and after the scan reject stale auth/generation; ready/hard refs, active operation leases and24h grace remain protected. This advisory page never authorizes deletion or promises a consistent offline snapshot; any future physical action would need fresh ref/lease checks.
+
+The owner explicitly chose to retain all data and leave physical cleanup unverified on2026-11-03 (Asia/Saigon). The earlier12B proposal is historical and remains untouched. Do not ask again for that exception, delete the proposed file or enable a product cleanup job. The task remains partial with physical cleanup unverified.
+
+Tests distinguish actual local byte/HTTP/Mongo/Node restart behavior from injected ENOSPC/missing pointer faults. Local HTTP streaming with manually supplied test cookies is not browser Secure-cookie/public HTTPS/Nginx hosting evidence. Restart uses owned Node child processes and owned replica set/private path, retaining DB and byte files; it is not cloud redeploy or physical crash/backup restore proof.
+
+Commands from root:
+
+    node --test tests/integration/b032-contract.test.mjs
+    node experiments/g02s/run-b032.mjs
+    node experiments/g02s/review-b032.mjs
+
+Review must keep storage/format/attachment capabilities separate from pending physical cleanup and B033 batch/conflict/ACK/receipt/reconciliation.

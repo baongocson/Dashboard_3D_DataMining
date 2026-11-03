@@ -1,0 +1,178 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dashboard.invalid/contracts/v1/csr-manifest.json",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "formatVersion": {
+      "const": "csr-v1"
+    },
+    "rows": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "cols": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "nnz": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "indexType": {
+      "const": "uint32-le"
+    },
+    "dataType": {
+      "const": "float64-le"
+    },
+    "rowIds": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+      },
+      "uniqueItems": true
+    },
+    "featureMapping": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "columnId": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+          },
+          "sourceColumns": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "datasetId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+                },
+                "versionId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+                },
+                "columnId": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+                }
+              },
+              "required": [
+                "datasetId",
+                "versionId",
+                "columnId"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "columnId",
+          "sourceColumns"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "artifacts": {
+      "type": "object",
+      "properties": {
+        "indptr": {
+          "type": "object",
+          "properties": {
+            "artifactId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            },
+            "sizeBytes": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "sha256": {
+              "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/sha256"
+            }
+          },
+          "required": [
+            "artifactId",
+            "sizeBytes",
+            "sha256"
+          ],
+          "additionalProperties": false
+        },
+        "indices": {
+          "type": "object",
+          "properties": {
+            "artifactId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            },
+            "sizeBytes": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "sha256": {
+              "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/sha256"
+            }
+          },
+          "required": [
+            "artifactId",
+            "sizeBytes",
+            "sha256"
+          ],
+          "additionalProperties": false
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "artifactId": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            },
+            "sizeBytes": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "sha256": {
+              "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/sha256"
+            }
+          },
+          "required": [
+            "artifactId",
+            "sizeBytes",
+            "sha256"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "indptr",
+        "indices",
+        "data"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "formatVersion",
+    "rows",
+    "cols",
+    "nnz",
+    "indexType",
+    "dataType",
+    "rowIds",
+    "featureMapping",
+    "artifacts"
+  ],
+  "additionalProperties": false
+}

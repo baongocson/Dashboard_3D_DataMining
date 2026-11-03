@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dashboard.invalid/contracts/v1/sync-declaration-plan.json",
+  "type": "object",
+  "properties": {
+    "batchId": {
+      "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+    },
+    "serverGeneration": {
+      "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+    },
+    "needsUpload": {
+      "type": "array",
+      "items": {
+        "allOf": [
+          {
+            "$ref": "https://dashboard.invalid/contracts/v1/storage-view.json"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "state": {
+                "enum": [
+                  "declared",
+                  "uploading",
+                  "verifying"
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    "alreadyPresent": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "artifactId": {
+            "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+          },
+          "sha256": {
+            "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/sha256"
+          },
+          "sizeBytes": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "state": {
+            "enum": [
+              "verified",
+              "ready"
+            ]
+          }
+        },
+        "required": [
+          "artifactId",
+          "sha256",
+          "sizeBytes",
+          "state"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "rejected": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "target": {
+            "enum": [
+              "artifact",
+              "mutation"
+            ]
+          },
+          "id": {
+            "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+          },
+          "code": {
+            "$ref": "https://dashboard.invalid/contracts/v1/error-envelope.json#/properties/error/properties/code"
+          }
+        },
+        "required": [
+          "target",
+          "id",
+          "code"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "batchId",
+    "serverGeneration",
+    "needsUpload",
+    "alreadyPresent",
+    "rejected"
+  ],
+  "additionalProperties": false
+}

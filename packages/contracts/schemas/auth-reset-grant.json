@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dashboard.invalid/contracts/v1/auth-reset-grant.json",
+  "type": "object",
+  "properties": {
+    "grant": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{16,256}$"
+    },
+    "expiresAt": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/utc"
+    },
+    "autoLogin": {
+      "const": false
+    }
+  },
+  "required": [
+    "grant",
+    "expiresAt",
+    "autoLogin"
+  ],
+  "additionalProperties": false
+}

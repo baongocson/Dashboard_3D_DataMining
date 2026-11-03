@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dashboard.invalid/contracts/v1/ops-live.json",
+  "type": "object",
+  "properties": {
+    "live": {
+      "const": true
+    }
+  },
+  "required": [
+    "live"
+  ],
+  "additionalProperties": false
+}

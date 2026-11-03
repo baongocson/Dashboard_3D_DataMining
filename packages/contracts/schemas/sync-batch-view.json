@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dashboard.invalid/contracts/v1/sync-batch-view.json",
+  "type": "object",
+  "properties": {
+    "declaration": {
+      "$ref": "https://dashboard.invalid/contracts/v1/sync-declaration.json"
+    },
+    "snapshotHash": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/sha256"
+    },
+    "state": {
+      "enum": [
+        "declared",
+        "partial",
+        "committed"
+      ]
+    },
+    "createdAt": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/utc"
+    },
+    "expiresAt": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/utc"
+    }
+  },
+  "required": [
+    "declaration",
+    "snapshotHash",
+    "state",
+    "createdAt",
+    "expiresAt"
+  ],
+  "additionalProperties": false
+}

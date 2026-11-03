@@ -1,0 +1,21 @@
+{
+  "profileVersion": "local-dev-v1",
+  "inputSourceMaxBytes": 20000000,
+  "metadataBodyMaxBytes": 1048576,
+  "chunkMaxBytes": 4194304,
+  "artifactMaxBytes": 268435456,
+  "workerMemoryBudgetBytes": 536870912,
+  "denseMatrixMaxCells": 10000000,
+  "sparseMaxNnz": 10000000,
+  "featureMaxCount": 20000,
+  "outputRowMaxCount": 1000000,
+  "exactPairwiseMaxPairs": 2000000,
+  "mutationsPerBatch": 100,
+  "mutationsPerAtomicGroup": 20,
+  "perAccountConcurrentUploads": 2,
+  "perInstanceUploads": 8,
+  "perProjectWriteTasks": 1,
+  "perAccountAiRequests": 1,
+  "stagingGraceMs": 86400000,
+  "uploadExpiryMs": 3600000
+}

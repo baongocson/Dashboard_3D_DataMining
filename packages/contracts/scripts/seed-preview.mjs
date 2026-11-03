@@ -1,0 +1,16 @@
+// One-time S05/S28 bootstrap. Primary JSON remains authoritative.
+import {writeFile} from 'node:fs/promises';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+const dir=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../schemas'),base='https://dashboard.invalid/contracts/v1/';
+const r={type:'integer',minimum:0,maximum:Number.MAX_SAFE_INTEGER},p={...r,minimum:1},u={$ref:base+'common.json#/$defs/uuid'},h={$ref:base+'common.json#/$defs/sha256'};
+const obj=(properties,required=Object.keys(properties))=>({type:'object',properties,required,additionalProperties:false}),arr=items=>({type:'array',items});
+const ref=name=>({$ref:base+name+'.json'});
+const limitNames=['inputSourceMaxBytes','metadataBodyMaxBytes','chunkMaxBytes','artifactMaxBytes','workerMemoryBudgetBytes','denseMatrixMaxCells','sparseMaxNnz','featureMaxCount','outputRowMaxCount','exactPairwiseMaxPairs','mutationsPerBatch','mutationsPerAtomicGroup','perAccountConcurrentUploads','perInstanceUploads','perProjectWriteTasks','perAccountAiRequests','stagingGraceMs','uploadExpiryMs'];
+const limits=obj({profileVersion:{type:'string',minLength:1,maxLength:100},...Object.fromEntries(limitNames.map(n=>[n,n==='inputSourceMaxBytes'?{const:20000000}:p]))});
+const plan=obj({estimateVersion:{const:1},byteBuffers:arr(obj({role:{enum:['inputSource','artifact','workspace']},sizeBytes:r,copies:p})),denseMatrices:arr(obj({role:{enum:['features','workspace']},rows:r,columns:r,copies:p,workspaceBytes:r})),sparseMatrices:arr(obj({rows:r,columns:r,nnz:r,copies:p,workspaceBytes:r})),tables:arr(obj({rows:r,columns:r,stringBytesUtf8:r,copies:p})),vocabularies:arr(obj({entries:r,copies:p})),outputRows:arr(r),pairwiseComparisons:r,featureCount:r});
+const req=obj({schemaVersion:{const:1},ownerId:u,projectId:u,sourceRefs:arr({$ref:base+'common.json#/$defs/sourceRef'}),sourceArtifacts:arr(obj({artifactId:u,sha256:h})),sourceRowCount:r,config:ref('operation-config'),contextRevision:r,localGeneration:r,scope:{enum:['full','sample']},sampleMethod:{enum:['none','head','seededUniform']},sampleSeed:{anyOf:[r,{type:'null'}]},rowsExamined:r});
+const commonEffects={outputRowUpperBound:r,outputFeatureUpperBound:r};
+const estimate=obj({totalBytes:r,maxDenseCells:r,maxSparseNnz:r,pairwiseComparisons:r,outputRowsMax:r,featureCount:r,profileVersion:{type:'string'},assumptionVersion:{const:'policy-overhead-v1'},measuredPeakRAM:{const:false}});
+const result=obj({schemaVersion:{const:1},previewId:u,sourceRefs:req.properties.sourceRefs,configHash:h,fingerprint:h,planHash:h,profileHash:h,estimatorVersion:{type:'string',minLength:1,maxLength:100},scope:req.properties.scope,sampleMethod:req.properties.sampleMethod,sampleSeed:req.properties.sampleSeed,rowsExamined:r,effects:{oneOf:[obj({...commonEffects,affectedRows:r}),obj({...commonEffects,sampleAffectedRows:r})]},warnings:arr({type:'string',minLength:1,maxLength:100}),errors:arr({type:'string',minLength:1,maxLength:100}),estimate,createdAt:{$ref:base+'common.json#/$defs/utc'}});
+for(const[file,body]of Object.entries({'limits-profile.json':limits,'resource-plan.json':plan,'preview-request.json':req,'preview-result.json':result}))await writeFile(path.join(dir,file),JSON.stringify({$schema:'https://json-schema.org/draft/2020-12/schema',$id:base+file,...body},null,2)+'\n',{flag:'wx'});

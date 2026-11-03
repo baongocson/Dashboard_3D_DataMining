@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dashboard.invalid/contracts/v1/sync-receipt-query.json",
+  "type": "object",
+  "properties": {
+    "serverGeneration": {
+      "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+    }
+  },
+  "required": [
+    "serverGeneration"
+  ],
+  "additionalProperties": false
+}

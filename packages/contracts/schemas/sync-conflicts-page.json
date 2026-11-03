@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dashboard.invalid/contracts/v1/sync-conflicts-page.json",
+  "type": "object",
+  "properties": {
+    "projectId": {
+      "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+    },
+    "serverGeneration": {
+      "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+    },
+    "snapshot": {
+      "const": false
+    },
+    "pageSize": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "expiresAt": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/utc"
+    },
+    "items": {
+      "type": "array",
+      "minItems": 0,
+      "maxItems": 100,
+      "items": {
+        "allOf": [
+          {
+            "$ref": "https://dashboard.invalid/contracts/v1/project-manifest-types.json#/$defs/row"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "const": "conflict"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          }
+        ]
+      }
+    },
+    "nextCursor": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{43}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "required": [
+    "projectId",
+    "serverGeneration",
+    "snapshot",
+    "pageSize",
+    "expiresAt",
+    "items",
+    "nextCursor"
+  ],
+  "additionalProperties": false
+}

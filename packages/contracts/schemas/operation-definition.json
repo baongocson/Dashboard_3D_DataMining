@@ -1,0 +1,427 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dashboard.invalid/contracts/v1/operation-definition.json",
+  "type": "object",
+  "properties": {
+    "id": {
+      "enum": [
+        "AUTH.REGISTER",
+        "AUTH.LOGIN",
+        "AUTH.RESET",
+        "AUTH.OTP_VERIFY",
+        "AUTH.OTP_RESEND",
+        "AUTH.PASSWORD_COMMIT",
+        "AUTH.LOGOUT",
+        "PROJECT.LIST",
+        "PROJECT.CREATE",
+        "PROJECT.OPEN",
+        "PROJECT.RENAME",
+        "PROJECT.DELETE",
+        "PROJECT.REOPEN",
+        "TAB.ACQUIRE",
+        "DATA.SELECT",
+        "DATA.IMPORT",
+        "DATA.PREVIEW",
+        "DATA.JSON_FIELDS",
+        "DATA.RENAME",
+        "DATA.CONCAT",
+        "DATA.JOIN",
+        "DATA.DELETE",
+        "EDA.TABLE",
+        "EDA.SCHEMA",
+        "EDA.STATS",
+        "QUALITY.SCAN",
+        "QUALITY.OUTLIER",
+        "QUALITY.CONFIGURE_FIX",
+        "CLEAN.FILTER",
+        "CLEAN.HTML",
+        "CLEAN.TRIM",
+        "CLEAN.NEWLINE",
+        "CLEAN.CASE",
+        "CLEAN.CHARS",
+        "CLEAN.NULLS",
+        "CLEAN.TYPE",
+        "CLEAN.UNIT",
+        "CLEAN.DROP_COL",
+        "CLEAN.RENAME_COL",
+        "CLEAN.SPLIT_COL",
+        "CLEAN.MERGE_COL",
+        "CLEAN.DROP_ROWS",
+        "CLEAN.DEDUP",
+        "CLEAN.OUTLIER_APPLY",
+        "PREP.MISS_DROP",
+        "PREP.MISS_CONST",
+        "PREP.MISS_MEAN",
+        "PREP.MISS_MEDIAN",
+        "PREP.MISS_MODE",
+        "PREP.MISS_GROUP",
+        "PREP.FFILL",
+        "PREP.BFILL",
+        "PREP.INTERPOLATE",
+        "PREP.MISS_FLAG",
+        "PREP.LABEL",
+        "PREP.ORDINAL",
+        "PREP.ONEHOT",
+        "PREP.MINMAX",
+        "PREP.STANDARD",
+        "PREP.ROBUST",
+        "PREP.LOG",
+        "PREP.BIN",
+        "PREP.TFIDF",
+        "FEATURE.FORMULA",
+        "FEATURE.DATE",
+        "FEATURE.DROP_CONSTANT",
+        "FEATURE.PCA_APPLY",
+        "FEATURE.SELECT",
+        "PIPE.CREATE",
+        "PIPE.EDIT",
+        "PIPE.SAVE",
+        "PIPE.MAP",
+        "PIPE.VALIDATE",
+        "PIPE.RUN",
+        "PIPE.CONTINUE",
+        "RUN.CANCEL",
+        "RUN.HISTORY",
+        "RUN.DETAILS",
+        "MODEL.LINEAR",
+        "MODEL.LOGISTIC",
+        "MODEL.KNN",
+        "MODEL.KMEANS",
+        "MODEL.PCA",
+        "MODEL.CONFIG",
+        "MODEL.PREPROCESS",
+        "MODEL.CHECK",
+        "MODEL.RUN",
+        "MODEL.SAVE",
+        "MODEL.DOWNLOAD",
+        "RESULT.CLASS",
+        "RESULT.REGRESS",
+        "RESULT.CLUSTER",
+        "RESULT.PCA",
+        "RESULT.COMPARE",
+        "RESULT.EXPORT",
+        "AI.SUGGEST",
+        "AI.EXPLAIN",
+        "AI.REVIEW_PAYLOAD",
+        "AI.SEND",
+        "AI.ACCEPT",
+        "AI.DISMISS",
+        "AI.TEXT_IMPUTE",
+        "AI.APPLY_TEXT",
+        "CHART.HIST",
+        "CHART.BOX",
+        "CHART.BAR",
+        "CHART.LINE",
+        "CHART.SCATTER",
+        "CHART.CORR",
+        "CHART.PIE",
+        "CHART.SCATTER3D",
+        "CHART.CONFIG",
+        "CHART.PREVIEW",
+        "CHART.SAVE",
+        "CHART.EDIT",
+        "CHART.DELETE",
+        "CHART.SOURCE",
+        "CHART.EXPORT",
+        "DASH.CREATE",
+        "DASH.RENAME",
+        "DASH.OPEN",
+        "DASH.ADD",
+        "DASH.REMOVE",
+        "DASH.ORDER",
+        "VIEW3D.ROTATE",
+        "VIEW3D.ZOOM",
+        "VIEW3D.PICK",
+        "VIEW3D.RESET",
+        "VIEW3D.SAVE_LOCAL_CAMERA",
+        "VERSION.LIST",
+        "VERSION.COMPARE",
+        "VERSION.UNDO",
+        "VERSION.SELECT",
+        "EXPORT.DATA",
+        "EXPORT.RESULT",
+        "REPORT.CONFIG",
+        "REPORT.PREVIEW",
+        "REPORT.GENERATE",
+        "REPORT.DOWNLOAD",
+        "OFFLINE.PREPARE",
+        "OFFLINE.STATUS",
+        "OFFLINE.REMOVE",
+        "SYNC.NOW",
+        "SYNC.RETRY",
+        "SYNC.CONFLICT"
+      ]
+    },
+    "configVersion": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "label": {
+      "type": "string"
+    },
+    "group": {
+      "type": "string",
+      "minLength": 1
+    },
+    "inputKinds": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "outputKind": {
+      "enum": [
+        "view",
+        "version",
+        "artifact",
+        "config",
+        "control"
+      ]
+    },
+    "configSchemaId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "defaults": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "https://dashboard.invalid/contracts/v1/json-value.json"
+          }
+        }
+      ]
+    },
+    "preconditions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "resourceEstimator": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "string",
+          "minLength": 1
+        }
+      ]
+    },
+    "previewHandler": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "string",
+          "minLength": 1
+        }
+      ]
+    },
+    "executor": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "string",
+          "minLength": 1
+        }
+      ]
+    },
+    "cancelMode": {
+      "enum": [
+        "unavailable",
+        "cooperative",
+        "terminate",
+        "notApplicable"
+      ]
+    },
+    "offlineCapable": {
+      "type": "boolean"
+    },
+    "learnsParameters": {
+      "enum": [
+        true,
+        false,
+        "conditional"
+      ]
+    },
+    "createsVersion": {
+      "type": "boolean"
+    },
+    "capability": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "enum": [
+            "unavailable",
+            "available"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "required": [
+        "status",
+        "reason"
+      ],
+      "additionalProperties": false
+    },
+    "documentation": {
+      "type": "object",
+      "properties": {
+        "source": {
+          "type": "string",
+          "minLength": 1
+        },
+        "section": {
+          "type": "string",
+          "minLength": 1
+        },
+        "output": {
+          "type": "string",
+          "minLength": 1
+        },
+        "fitPolicy": {
+          "type": "string",
+          "minLength": 1
+        },
+        "offlinePolicy": {
+          "type": "string",
+          "minLength": 1
+        },
+        "gates": {
+          "type": "string",
+          "minLength": 1
+        },
+        "implementation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "contracts": {
+          "type": "string",
+          "minLength": 1
+        },
+        "acceptance": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "source",
+        "section",
+        "output",
+        "fitPolicy",
+        "offlinePolicy",
+        "gates",
+        "implementation",
+        "contracts",
+        "acceptance"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "id",
+    "configVersion",
+    "label",
+    "group",
+    "inputKinds",
+    "outputKind",
+    "configSchemaId",
+    "defaults",
+    "preconditions",
+    "resourceEstimator",
+    "previewHandler",
+    "executor",
+    "cancelMode",
+    "offlineCapable",
+    "learnsParameters",
+    "createsVersion",
+    "capability",
+    "documentation"
+  ],
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "capability": {
+            "properties": {
+              "status": {
+                "const": "available"
+              }
+            },
+            "required": [
+              "status"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "capability"
+        ]
+      },
+      "then": {
+        "properties": {
+          "executor": {
+            "type": "string",
+            "minLength": 1
+          },
+          "previewHandler": {
+            "type": "string",
+            "minLength": 1
+          },
+          "resourceEstimator": {
+            "type": "string",
+            "minLength": 1
+          },
+          "defaults": {
+            "type": "object"
+          },
+          "cancelMode": {
+            "enum": [
+              "cooperative",
+              "terminate",
+              "notApplicable"
+            ]
+          },
+          "capability": {
+            "properties": {
+              "evidenceRefs": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "required": [
+              "evidenceRefs"
+            ],
+            "type": "object"
+          }
+        }
+      }
+    }
+  ]
+}

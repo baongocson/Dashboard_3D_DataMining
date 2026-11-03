@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dashboard.invalid/contracts/v1/project-changes-query.json",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "manifestId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{43}$"
+        },
+        "serverGeneration": {
+          "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+        },
+        "pageSize": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        }
+      },
+      "required": [
+        "manifestId",
+        "serverGeneration"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "cursor": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{43}$"
+        }
+      },
+      "required": [
+        "cursor"
+      ],
+      "additionalProperties": false
+    }
+  ]
+}

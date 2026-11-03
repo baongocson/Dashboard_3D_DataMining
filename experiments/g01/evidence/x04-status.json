@@ -1,0 +1,86 @@
+{
+  "experiment": "X04",
+  "task": "B013",
+  "runId": "2026-11-02T11-56-17-043Z",
+  "results": "x04-runs/2026-11-02T11-56-17-043Z/results.json",
+  "counts": {
+    "passed": 198,
+    "failed": 0,
+    "inconclusive": 0,
+    "blocked": 20
+  },
+  "capabilities": {
+    "linear": {
+      "browserWorker": "passed",
+      "dense": "passed",
+      "sparse": "blocked",
+      "seedRepeat": "passed",
+      "cancel": "passed",
+      "modelRoundtrip": "passed",
+      "chrome": "passed",
+      "edge": "passed",
+      "workerPeakMemory": "inconclusive"
+    },
+    "logistic": {
+      "browserWorker": "passed",
+      "dense": "passed",
+      "sparse": "blocked",
+      "seedRepeat": "passed",
+      "cancel": "passed",
+      "modelRoundtrip": "passed",
+      "chrome": "passed",
+      "edge": "passed",
+      "workerPeakMemory": "inconclusive"
+    },
+    "knn": {
+      "browserWorker": "passed",
+      "dense": "passed",
+      "sparse": "blocked",
+      "seedRepeat": "passed",
+      "cancel": "passed",
+      "modelRoundtrip": "passed",
+      "chrome": "passed",
+      "edge": "passed",
+      "workerPeakMemory": "inconclusive"
+    },
+    "kmeans": {
+      "browserWorker": "passed",
+      "dense": "passed",
+      "sparse": "blocked",
+      "seedRepeat": "passed",
+      "cancel": "passed",
+      "modelRoundtrip": "passed",
+      "chrome": "passed",
+      "edge": "passed",
+      "workerPeakMemory": "inconclusive"
+    },
+    "pca": {
+      "browserWorker": "passed",
+      "dense": "passed",
+      "sparse": "blocked",
+      "seedRepeat": "passed",
+      "cancel": "passed",
+      "modelRoundtrip": "passed",
+      "chrome": "passed",
+      "edge": "passed",
+      "workerPeakMemory": "inconclusive"
+    }
+  },
+  "closure": {
+    "status": "passed",
+    "scope": "technical investigation of five dense CPU browser candidates, with sparse unsupported explicitly recorded; not approval to enable product adapters",
+    "allProductRequirementsAccepted": false
+  },
+  "V01": {
+    "status": "inconclusive",
+    "verified": "Five dense worker engines; offline cached reload; licenses/versions; seed repeat; multiclass classifiers; numeric/text/category train-only probe; technical model reload; terminate and target close",
+    "blocked": "Native CSR solve in all five selected versions",
+    "remaining": "UI/3D/chart/export/local-store integration and production serializer/pipeline validators are outside X04"
+  },
+  "V04": {
+    "status": "inconclusive",
+    "verified": "Per-estimator fit/predict timing, bounded termination, page timer proxy, 1k/10k/50k synthetic cases on this machine",
+    "remaining": "Trustworthy per-worker peak RAM, FPS, 100 concurrent users and release window not verified"
+  },
+  "protectedEvidenceUnchanged": true
+}

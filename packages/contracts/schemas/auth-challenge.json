@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dashboard.invalid/contracts/v1/auth-challenge.json",
+  "type": "object",
+  "properties": {
+    "challengeId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{16,256}$"
+    },
+    "purpose": {
+      "enum": [
+        "register",
+        "reset"
+      ]
+    },
+    "generation": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "serverNow": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/utc"
+    },
+    "expiresAt": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/utc"
+    },
+    "resendAvailableAt": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/utc"
+    },
+    "attemptsRemaining": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 5
+    },
+    "sendStatus": {
+      "enum": [
+        "accepted",
+        "failed",
+        "unknown"
+      ]
+    }
+  },
+  "required": [
+    "challengeId",
+    "purpose",
+    "generation",
+    "serverNow",
+    "expiresAt",
+    "resendAvailableAt",
+    "attemptsRemaining",
+    "sendStatus"
+  ],
+  "additionalProperties": false
+}

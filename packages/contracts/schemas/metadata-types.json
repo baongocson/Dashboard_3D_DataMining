@@ -1,0 +1,661 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dashboard.invalid/contracts/v1/metadata-types.json",
+  "$defs": {
+    "namePayload": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "additionalProperties": false
+    },
+    "project": {
+      "type": "object",
+      "properties": {
+        "projectId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "revision": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/revision"
+        },
+        "createdAtServer": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/utc"
+        },
+        "updatedAtServer": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/utc"
+        }
+      },
+      "required": [
+        "projectId",
+        "name",
+        "revision",
+        "createdAtServer",
+        "updatedAtServer"
+      ],
+      "additionalProperties": false
+    },
+    "dataset": {
+      "type": "object",
+      "properties": {
+        "datasetId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+        },
+        "projectId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "kind": {
+          "enum": [
+            "imported",
+            "derived"
+          ]
+        },
+        "sourceArtifactId": {
+          "anyOf": [
+            {
+              "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "parseConfig": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "https://dashboard.invalid/contracts/v1/json-value.json"
+          }
+        },
+        "v0VersionId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+        },
+        "defaultBranchId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+        },
+        "revision": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/revision"
+        },
+        "createdAtServer": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/utc"
+        },
+        "updatedAtServer": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/utc"
+        }
+      },
+      "required": [
+        "datasetId",
+        "projectId",
+        "name",
+        "kind",
+        "sourceArtifactId",
+        "parseConfig",
+        "v0VersionId",
+        "defaultBranchId",
+        "revision",
+        "createdAtServer",
+        "updatedAtServer"
+      ],
+      "additionalProperties": false
+    },
+    "version": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": 1
+        },
+        "versionId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+        },
+        "datasetId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+        },
+        "branchId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+        },
+        "parentVersionId": {
+          "anyOf": [
+            {
+              "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sourceVersions": {
+          "type": "array",
+          "items": {
+            "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/sourceRef"
+          }
+        },
+        "tableManifestId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+        },
+        "rowCount": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/revision"
+        },
+        "columnCount": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/revision"
+        },
+        "operationSnapshot": {
+          "$ref": "https://dashboard.invalid/contracts/v1/operation-config.json"
+        },
+        "rowLineageArtifactId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+        },
+        "projectId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+        },
+        "revision": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/revision"
+        },
+        "contentHash": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/sha256"
+        },
+        "createdAtServer": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/utc"
+        },
+        "declaredBranchId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "versionId",
+        "datasetId",
+        "branchId",
+        "parentVersionId",
+        "sourceVersions",
+        "tableManifestId",
+        "rowCount",
+        "columnCount",
+        "operationSnapshot",
+        "projectId",
+        "revision",
+        "contentHash",
+        "createdAtServer"
+      ],
+      "additionalProperties": false
+    },
+    "branch": {
+      "type": "object",
+      "properties": {
+        "branchId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+        },
+        "projectId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+        },
+        "datasetId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+        },
+        "forkVersionId": {
+          "anyOf": [
+            {
+              "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "headVersionId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+        },
+        "headRevision": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/revision"
+        },
+        "reason": {
+          "enum": [
+            "initial",
+            "undoContinuation",
+            "syncConflict"
+          ]
+        },
+        "conflictOf": {
+          "anyOf": [
+            {
+              "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "branchId",
+        "projectId",
+        "datasetId",
+        "forkVersionId",
+        "headVersionId",
+        "headRevision",
+        "reason",
+        "conflictOf"
+      ],
+      "additionalProperties": false
+    },
+    "intentRequest": {
+      "type": "object",
+      "properties": {
+        "logicalImportId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+        },
+        "datasetId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+        },
+        "versionId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+        },
+        "mutationId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+        },
+        "projectId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+        },
+        "kind": {
+          "enum": [
+            "import",
+            "concat",
+            "join"
+          ]
+        },
+        "configHash": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/sha256"
+        },
+        "sourceRefs": {
+          "type": "array",
+          "items": {
+            "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/sourceRef"
+          }
+        },
+        "file": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            "size": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 20000000
+            },
+            "format": {
+              "enum": [
+                "csv",
+                "json"
+              ]
+            }
+          },
+          "required": [
+            "name",
+            "size",
+            "format"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "logicalImportId",
+        "datasetId",
+        "versionId",
+        "mutationId",
+        "projectId",
+        "kind",
+        "configHash"
+      ],
+      "additionalProperties": false,
+      "oneOf": [
+        {
+          "properties": {
+            "kind": {
+              "const": "import"
+            },
+            "sourceRefs": {
+              "type": "array",
+              "maxItems": 0
+            },
+            "file": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200
+                },
+                "size": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 20000000
+                },
+                "format": {
+                  "enum": [
+                    "csv",
+                    "json"
+                  ]
+                }
+              },
+              "required": [
+                "name",
+                "size",
+                "format"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "file"
+          ]
+        },
+        {
+          "properties": {
+            "kind": {
+              "enum": [
+                "concat",
+                "join"
+              ]
+            },
+            "sourceRefs": {
+              "type": "array",
+              "minItems": 2
+            }
+          },
+          "required": [
+            "sourceRefs"
+          ],
+          "not": {
+            "properties": {
+              "file": true
+            },
+            "required": [
+              "file"
+            ]
+          }
+        }
+      ]
+    },
+    "intentResponse": {
+      "type": "object",
+      "properties": {
+        "intentId": {
+          "type": "string",
+          "minLength": 20,
+          "maxLength": 128
+        },
+        "logicalImportId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+        },
+        "expiresAt": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/utc"
+        },
+        "serverNow": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/utc"
+        },
+        "sourceRevisions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "datasetId": {
+                "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+              },
+              "versionId": {
+                "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+              },
+              "revision": {
+                "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/revision"
+              }
+            },
+            "required": [
+              "datasetId",
+              "versionId",
+              "revision"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "status": {
+          "enum": [
+            "granted",
+            "alreadyCommitted"
+          ]
+        },
+        "committedMutationId": {
+          "anyOf": [
+            {
+              "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "intentId",
+        "logicalImportId",
+        "expiresAt",
+        "serverNow",
+        "sourceRevisions",
+        "status",
+        "committedMutationId"
+      ],
+      "additionalProperties": false
+    },
+    "headPayload": {
+      "type": "object",
+      "properties": {
+        "datasetId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+        },
+        "branchId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+        },
+        "versionId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+        }
+      },
+      "required": [
+        "datasetId",
+        "branchId",
+        "versionId"
+      ],
+      "additionalProperties": false
+    },
+    "datasetCreate": {
+      "type": "object",
+      "properties": {
+        "dataset": {
+          "type": "object",
+          "properties": {
+            "datasetId": {
+              "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+            },
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            "kind": {
+              "enum": [
+                "imported",
+                "derived"
+              ]
+            },
+            "sourceArtifactId": {
+              "anyOf": [
+                {
+                  "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "parseConfig": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "https://dashboard.invalid/contracts/v1/json-value.json"
+              }
+            },
+            "v0VersionId": {
+              "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+            },
+            "defaultBranchId": {
+              "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+            }
+          },
+          "required": [
+            "datasetId",
+            "name",
+            "kind",
+            "sourceArtifactId",
+            "parseConfig",
+            "v0VersionId",
+            "defaultBranchId"
+          ],
+          "additionalProperties": false
+        },
+        "initialVersion": {
+          "$ref": "https://dashboard.invalid/contracts/v1/version-create-payload.json"
+        },
+        "intentId": {
+          "type": "string",
+          "minLength": 20,
+          "maxLength": 128
+        },
+        "logicalImportId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+        },
+        "configHash": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/sha256"
+        }
+      },
+      "required": [
+        "dataset",
+        "initialVersion",
+        "intentId",
+        "logicalImportId",
+        "configHash"
+      ],
+      "additionalProperties": false
+    },
+    "projectCreateRequest": {
+      "type": "object",
+      "properties": {
+        "serverGeneration": {
+          "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+        },
+        "mutation": {
+          "allOf": [
+            {
+              "$ref": "https://dashboard.invalid/contracts/v1/mutation-envelope.json"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "project.create"
+                },
+                "baseRevision": {
+                  "const": 0
+                },
+                "dependencies": {
+                  "type": "array",
+                  "maxItems": 0
+                },
+                "payload": {
+                  "$ref": "https://dashboard.invalid/contracts/v1/metadata-name-payload.json"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "required": [
+        "serverGeneration",
+        "mutation"
+      ],
+      "additionalProperties": false
+    },
+    "query": {
+      "type": "object",
+      "properties": {
+        "limit": {
+          "type": "string",
+          "pattern": "^(?:[1-9]|[1-9][0-9]|100)$"
+        },
+        "cursor": {
+          "type": "string",
+          "minLength": 20,
+          "maxLength": 256
+        },
+        "branchId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    },
+    "page": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "maxItems": 100,
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "https://dashboard.invalid/contracts/v1/metadata-types.json#/$defs/project"
+              },
+              {
+                "$ref": "https://dashboard.invalid/contracts/v1/metadata-types.json#/$defs/dataset"
+              },
+              {
+                "$ref": "https://dashboard.invalid/contracts/v1/metadata-types.json#/$defs/version"
+              },
+              {
+                "$ref": "https://dashboard.invalid/contracts/v1/metadata-types.json#/$defs/branch"
+              }
+            ]
+          }
+        },
+        "nextCursor": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 20,
+              "maxLength": 256
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "items",
+        "nextCursor"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

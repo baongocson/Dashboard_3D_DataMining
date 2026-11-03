@@ -1,0 +1,5082 @@
+{
+  "registryVersion": 1,
+  "schemaVersion": 1,
+  "source": "docs/g00/danh_muc_thao_tac.md",
+  "operations": [
+    {
+      "id": "AUTH.REGISTER",
+      "configVersion": 1,
+      "label": "AUTH.REGISTER",
+      "group": "AUTH",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "control",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/AUTH.REGISTER.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.1",
+        "output": "email/tên/password/confirm → control(challenge đăng ký, chưa active)",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Không",
+        "gates": "N + Origin/CSRF + form policy C07; không yêu cầu phiên cũ",
+        "implementation": "B030, B040 / G02S/G03 / AUTH/FE",
+        "contracts": "C01/C07/C18; S07/S09; F08/F10/F11; V02/V04 notTested",
+        "acceptance": "K-AUTH.REGISTER: Challenge chưa active; source OTP/hash/expiry đúng, pending không chiếm slot hoặc thay user cũ; I01–I03"
+      }
+    },
+    {
+      "id": "AUTH.LOGIN",
+      "configVersion": 1,
+      "label": "AUTH.LOGIN",
+      "group": "AUTH",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "control",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/AUTH.LOGIN.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.1",
+        "output": "email/password → control(phiên mới + entitlement + deferred revoke handle)",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Không",
+        "gates": "N + Origin/CSRF + credential check; không đòi S trước login",
+        "implementation": "B030, B040 / G02S/G03 / AUTH/FE",
+        "contracts": "C01/C07/C18; S07/S09; F08/F10/F11; V02/V04 notTested",
+        "acceptance": "K-AUTH.LOGIN: Login B thu hồi A nguyên tử; tab cùng profile chung phiên; local chưa sync giữ, không lộ existence; I04/I21"
+      }
+    },
+    {
+      "id": "AUTH.RESET",
+      "configVersion": 1,
+      "label": "AUTH.RESET",
+      "group": "AUTH",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "control",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/AUTH.RESET.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.1",
+        "output": "email → control(challenge forgot/reset phản hồi chung)",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Không",
+        "gates": "N + Origin/CSRF; OTP/reset grant đúng purpose ở bước tiếp",
+        "implementation": "B030, B040 / G02S/G03 / AUTH/FE",
+        "contracts": "C01/C07/C18; S07/S09; F08/F10/F11; V02/V04 notTested",
+        "acceptance": "K-AUTH.RESET: Phản hồi chung không lộ account, không tự login; grant/reset làm theo C07; I01/I03/I21"
+      }
+    },
+    {
+      "id": "AUTH.OTP_VERIFY",
+      "configVersion": 1,
+      "label": "AUTH.OTP_VERIFY",
+      "group": "AUTH",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "control",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/AUTH.OTP_VERIFY.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.1",
+        "output": "challengeId/purpose/generation/OTP → control(activate hoặc reset grant)",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Không",
+        "gates": "N + challenge chưa expiry/consumed, đúng purpose/generation, attempts > 0",
+        "implementation": "B030, B040 / G02S/G03 / AUTH/FE",
+        "contracts": "C01/C07/C18; S07/S09; F08/F10/F11; V02/V04 notTested",
+        "acceptance": "K-AUTH.OTP_VERIFY: OTP một lần/300s/5 sai; activate transaction không quá100; reset chỉ cấp grant giới hạn; I02–I03"
+      }
+    },
+    {
+      "id": "AUTH.OTP_RESEND",
+      "configVersion": 1,
+      "label": "AUTH.OTP_RESEND",
+      "group": "AUTH",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "control",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/AUTH.OTP_RESEND.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.1",
+        "output": "challengeId/purpose → control(challenge generation mới + sendStatus)",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Không",
+        "gates": "N + challenge hợp lệ + cooldown60s/rate limit C07",
+        "implementation": "B030, B040 / G02S/G03 / AUTH/FE",
+        "contracts": "C01/C07/C18; S07/S09; F08/F10/F11; V02/V04 notTested",
+        "acceptance": "K-AUTH.OTP_RESEND: Không resend sớm; mã mới vô hiệu cũ, attempts không bị race; accepted không delivered giả; I03"
+      }
+    },
+    {
+      "id": "AUTH.PASSWORD_COMMIT",
+      "configVersion": 1,
+      "label": "AUTH.PASSWORD_COMMIT",
+      "group": "AUTH",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "control",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/AUTH.PASSWORD_COMMIT.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.1",
+        "output": "reset grant + password/confirm → control(password generation mới, revoked sessions)",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Không",
+        "gates": "N + reset grant một lần đúng user/passwordGeneration, Origin/CSRF",
+        "implementation": "B030, B040 / G02S/G03 / AUTH/FE",
+        "contracts": "C01/C07/C18; S07/S09; F08/F10/F11; V02/V04 notTested",
+        "acceptance": "K-AUTH.PASSWORD_COMMIT: Password/grant/session epoch commit cùng transaction, không tự login/xóa local unsynced; I21"
+      }
+    },
+    {
+      "id": "AUTH.LOGOUT",
+      "configVersion": 1,
+      "label": "AUTH.LOGOUT",
+      "group": "AUTH",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "control",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/AUTH.LOGOUT.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.1",
+        "output": "account/task/dirty snapshot + lựa chọn người dùng → control(logout/giữ phiên/blocked)",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có điều kiện: offline sạch cho logout; offline dirty chặn; online đúng các nhánh OFF §9",
+        "gates": "Theo OFF §9/C07; account gate dừng task trước dirty snapshot, S khi gọi API; không đòi N cho logout offline sạch",
+        "implementation": "B030, B040 / G02S/G03 / AUTH/FE",
+        "contracts": "C01/C07/C18; S07/S09; F08/F10/F11; V02/V04 notTested",
+        "acceptance": "K-AUTH.LOGOUT: Sync-first fail giữ dữ liệu/phiên; discard online xác nhận; mọi tab/worker/request cũ không ghi lại; deferred revoke chỉ phiên cũ"
+      }
+    },
+    {
+      "id": "PROJECT.LIST",
+      "configVersion": 1,
+      "label": "PROJECT.LIST",
+      "group": "PROJECT",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "view",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/PROJECT.LIST.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.1",
+        "output": "project/context → view",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có nếu metadata/nguồn local đủ",
+        "gates": "R với danh mục metadata thuộc owner; offline chỉ phần có trên máy",
+        "implementation": "B031, B040, B043 / G02S/G03 / API/FE/LOC",
+        "contracts": "C01/C05/C07/C10/C13; S08/S13; F01/F08/F15; V01/V02 notTested",
+        "acceptance": "K-PROJECT.LIST: Chỉ metadata owner, phân trang đúng; trạng thái local/server rõ, không tải toàn history"
+      }
+    },
+    {
+      "id": "PROJECT.CREATE",
+      "configVersion": 1,
+      "label": "PROJECT.CREATE",
+      "group": "PROJECT",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "config",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/PROJECT.CREATE.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.1",
+        "output": "project/name → config",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Không",
+        "gates": "S + tên hợp lệ + mutationId; không đòi dataset/project writer đã tồn tại",
+        "implementation": "B031, B040, B043 / G02S/G03 / API/FE/LOC",
+        "contracts": "C01/C05/C07/C10/C13; S08/S13; F01/F08/F15; V01/V02 notTested",
+        "acceptance": "K-PROJECT.CREATE: Một project đúng owner qua commit service/receipt, retry không tạo trùng; offline chặn"
+      }
+    },
+    {
+      "id": "PROJECT.OPEN",
+      "configVersion": 1,
+      "label": "PROJECT.OPEN",
+      "group": "PROJECT",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "view",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/PROJECT.OPEN.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.1",
+        "output": "project/context → view",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có nếu metadata/nguồn local đủ",
+        "gates": "R + tài nguyên cần màn hình khả dụng; chưa đủ báo đúng phần thiếu",
+        "implementation": "B031, B040, B043 / G02S/G03 / API/FE/LOC",
+        "contracts": "C01/C05/C07/C10/C13; S08/S13; F01/F08/F15; V01/V02 notTested",
+        "acceptance": "K-PROJECT.OPEN: Mở đúng project/source, không kéo toàn lịch sử, không giả đủ offline khi thiếu byte"
+      }
+    },
+    {
+      "id": "PROJECT.RENAME",
+      "configVersion": 1,
+      "label": "PROJECT.RENAME",
+      "group": "PROJECT",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "config",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/PROJECT.RENAME.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.1",
+        "output": "project/name → config",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có, local trước rồi sync theo C09",
+        "gates": "W(project) + tên hợp lệ + revision",
+        "implementation": "B031, B040, B043 / G02S/G03 / API/FE/LOC",
+        "contracts": "C01/C05/C07/C10/C13; S08/S13; F01/F08/F15; V01/V02 notTested",
+        "acceptance": "K-PROJECT.RENAME: ID/owner/resources không đổi; config revision mới/outbox nhất quán, không dataset version"
+      }
+    },
+    {
+      "id": "PROJECT.DELETE",
+      "configVersion": 1,
+      "label": "PROJECT.DELETE",
+      "group": "PROJECT",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "control",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/PROJECT.DELETE.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.1",
+        "output": "project/deletion plan → control",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Không",
+        "gates": "W(project) + S + plan/ref fence + xử lý dirty/task + xác nhận; W + S; xem phạm vi, xử lý tác vụ/chưa đồng bộ và xác nhận",
+        "implementation": "B100, B101 / G09 / API/DB/FE",
+        "contracts": "C07/C11/C17/C19; S26/S27; F27; V02/V05 notTested",
+        "acceptance": "K-PROJECT.DELETE: Scope toàn project rõ, mark trước dọn, ledger durable, không cascade ngoài scope/tái sinh; I31–I33"
+      }
+    },
+    {
+      "id": "PROJECT.REOPEN",
+      "configVersion": 1,
+      "label": "PROJECT.REOPEN",
+      "group": "PROJECT",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "view",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/PROJECT.REOPEN.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.12",
+        "output": "project/context → view",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có nếu metadata/nguồn local đủ",
+        "gates": "R; ghi cần W, tạo/xóa cần S; khôi phục bản commit gần nhất đã lưu, màn hình/dashboard phù hợp, kể cả kết quả chưa đồng bộ; không tự chạy lại phần dở, không bắt buộc khôi phục form chưa áp dụng.",
+        "implementation": "B043, B082 / G03/G07 / LOC/FE/SYN",
+        "contracts": "C01/C05/C07/C10/C13; S08/S13; F01/F08/F15; V01/V02 notTested",
+        "acceptance": "K-PROJECT.REOPEN: Commit local mới nhất dù chưa sync; valid screen/source/dashboard phục hồi, không auto run interrupted"
+      }
+    },
+    {
+      "id": "TAB.ACQUIRE",
+      "configVersion": 1,
+      "label": "TAB.ACQUIRE",
+      "group": "TAB",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "control",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/TAB.ACQUIRE.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.1",
+        "output": "writer ownership → control",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có",
+        "gates": "R + protocol bàn giao + writer gate; Quy trình bàn giao an toàn; tab cũ ngừng ghi trước khi tab mới được ghi",
+        "implementation": "B022, B043 / G02L/G03 / LOC/FE",
+        "contracts": "C01/C05/C06; S06/S07; F07/F08; V01/V04 notTested",
+        "acceptance": "K-TAB.ACQUIRE: Writer cũ dừng trước mới; event fence cũ không commit, tab khác project không bị khóa"
+      }
+    },
+    {
+      "id": "DATA.SELECT",
+      "configVersion": 1,
+      "label": "DATA.SELECT",
+      "group": "DATA",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "view",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/DATA.SELECT.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.2",
+        "output": "dataset/version ref → view",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có, đủ local",
+        "gates": "R; chỉ xem không đổi pointer làm việc ngầm; R; ghi rõ nguồn ở tiêu đề màn hình",
+        "implementation": "B040, B043 / G03 / ENG/API/FE",
+        "contracts": "C01/C05/C13; S05/S13; F01/F15; V01/V02/V04 notTested",
+        "acceptance": "K-DATA.SELECT: Context rõ, xem lịch sử không tự chọn version làm việc"
+      }
+    },
+    {
+      "id": "DATA.IMPORT",
+      "configVersion": 1,
+      "label": "DATA.IMPORT",
+      "group": "DATA",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "config",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/DATA.IMPORT.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.2",
+        "output": "file/parse config → config(dataset mới) + version(V0)",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Không khởi chạy nhập mới offline",
+        "gates": "W(project) + S + D; intent khi START; W + S; mỗi tệp tạo dataset mới, giữ byte gốc và cấu hình đọc",
+        "implementation": "B041 / G03 / ENG/API/FE",
+        "contracts": "C01/C03/C05/C08/C10; S03/S10/S12/S13; F02/F12/F14; V01/V02/V04 notTested",
+        "acceptance": "K-DATA.IMPORT: Source byte khác V0, START phải online; localCommitted khác server ACK; AC01–03/I05–I07"
+      }
+    },
+    {
+      "id": "DATA.PREVIEW",
+      "configVersion": 1,
+      "label": "DATA.PREVIEW",
+      "group": "DATA",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "view",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/DATA.PREVIEW.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.2",
+        "output": "file/parse config → view",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Không khởi chạy nhập mới offline",
+        "gates": "W(project) + S; file/kích thước/parser config theo C08, chưa tạo version; intent hợp lệ khi START áp dụng",
+        "implementation": "B041 / G03 / ENG/API/FE",
+        "contracts": "C01/C03/C05/C08/C10; S03/S10/S12/S13; F02/F12/F14; V01/V02/V04 notTested",
+        "acceptance": "K-DATA.PREVIEW: Preview nguồn nhập online, không dataset/version/outbox success chỉ vì đọc được"
+      }
+    },
+    {
+      "id": "DATA.JSON_FIELDS",
+      "configVersion": 1,
+      "label": "DATA.JSON_FIELDS",
+      "group": "DATA",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "config",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/DATA.JSON_FIELDS.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.2",
+        "output": "JSON record path/flatten/array choice → config",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Không khởi chạy nhập mới offline",
+        "gates": "W(project) + S trong form import; record path/flatten/array policy/va chạm tên hợp lệ",
+        "implementation": "B041 / G03 / ENG/API/FE",
+        "contracts": "C01/C03/C05/C08/C10; S03/S10/S12/S13; F02/F12/F14; V01/V02/V04 notTested",
+        "acceptance": "K-DATA.JSON_FIELDS: Không bung mảng, path collision chặn; config chưa áp dụng không version"
+      }
+    },
+    {
+      "id": "DATA.RENAME",
+      "configVersion": 1,
+      "label": "DATA.RENAME",
+      "group": "DATA",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "config",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/DATA.RENAME.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.2",
+        "output": "dataset name → config",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có, lưu local rồi sync",
+        "gates": "W + tên hợp lệ; W; không đổi nguồn của artifact cũ",
+        "implementation": "B031, B040 / G02S/G03 / API/DB/FE",
+        "contracts": "C01/C10; S11/S13; F01/F15; V01/V02/V04 notTested",
+        "acceptance": "K-DATA.RENAME: Rename không đổi ID/source của chart/model lịch sử"
+      }
+    },
+    {
+      "id": "DATA.CONCAT",
+      "configVersion": 1,
+      "label": "DATA.CONCAT",
+      "group": "DATA",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "config",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/DATA.CONCAT.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.2",
+        "output": "ordered source versions + column/type/missing mappings → config(dataset dẫn xuất mới) + version(V0)",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Không khởi chạy nhập mới offline",
+        "gates": "W(project) + S + D; intent khi START; W(project) + S + D; nguồn/phiên bản, ánh xạ cột, xử lý cột thiếu và khác kiểu; không tự xóa trùng",
+        "implementation": "B054 / G04 / ENG/API/FE",
+        "contracts": "C01/C03/C05/C08/C10; S03/S10/S12/S13; F04/F12; V01/V02/V04 notTested",
+        "acceptance": "K-DATA.CONCAT: Nối dòng đúng thứ tự nguồn/mapping/missing, không tự dedup; mọi source/row lineage giữ, estimate trước allocate; I08"
+      }
+    },
+    {
+      "id": "DATA.JOIN",
+      "configVersion": 1,
+      "label": "DATA.JOIN",
+      "group": "DATA",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "config",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/DATA.JOIN.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.2",
+        "output": "source versions/mapping/keys → config(dataset dẫn xuất mới) + version(V0)",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Không khởi chạy nhập mới offline",
+        "gates": "W(project) + S + D; intent khi START; W(project) + S + D; khóa hai phía, kiểu join, hậu tố cột; kiểm tra null/trùng/nhiều–nhiều và số dòng dự kiến",
+        "implementation": "B054 / G04 / ENG/API/FE",
+        "contracts": "C01/C03/C05/C08/C10; S03/S10/S12/S13; F04/F12; V01/V02/V04 notTested",
+        "acceptance": "K-DATA.JOIN: Đúng policy nguồn/khóa/missing ghi ở validation riêng; inner/left, order/row lineage đầy đủ; estimate trước allocate; I08"
+      }
+    },
+    {
+      "id": "DATA.DELETE",
+      "configVersion": 1,
+      "label": "DATA.DELETE",
+      "group": "DATA",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "control",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/DATA.DELETE.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.2",
+        "output": "dataset/deletion plan → control",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Không",
+        "gates": "W + S + plan không hard refs ngoài scope + confirmation; W + S; hiện phụ thuộc, không cascade ngoài phạm vi thông báo",
+        "implementation": "B100, B101 / G09 / API/DB/FE",
+        "contracts": "C07/C11/C14/C17/C19; S26/S27; F27; V02/V05 notTested",
+        "acceptance": "K-DATA.DELETE: Chặn dependency/race; không xóa nguồn/dẫn xuất khác hoặc artifact còn ref; I31–I33"
+      }
+    },
+    {
+      "id": "EDA.TABLE",
+      "configVersion": 1,
+      "label": "EDA.TABLE",
+      "group": "EDA",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "view",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/EDA.TABLE.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.3",
+        "output": "version/schema/query → view",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có, đủ local engine/data",
+        "gates": "R + D; R; tìm kiếm, lọc, sắp xếp, chọn cột hiển thị chỉ đổi cách xem",
+        "implementation": "B050 / G04 / ENG/FE",
+        "contracts": "C01/C03/C04/C05; S04/S05; F02/F29; V01/V04 notTested",
+        "acceptance": "K-EDA.TABLE: Không version/outbox; scope thống kê/mẫu số/undefined rõ; F29 có valid/invalid riêng"
+      }
+    },
+    {
+      "id": "EDA.SCHEMA",
+      "configVersion": 1,
+      "label": "EDA.SCHEMA",
+      "group": "EDA",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "view",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/EDA.SCHEMA.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.3",
+        "output": "version/schema/query → view",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có, đủ local engine/data",
+        "gates": "R + D; R; số dòng/cột, kiểu, missing, unique",
+        "implementation": "B050 / G04 / ENG/FE",
+        "contracts": "C01/C03/C04/C05; S04/S05; F02/F29; V01/V04 notTested",
+        "acceptance": "K-EDA.SCHEMA: Không version/outbox; scope thống kê/mẫu số/undefined rõ; F29 có valid/invalid riêng"
+      }
+    },
+    {
+      "id": "EDA.STATS",
+      "configVersion": 1,
+      "label": "EDA.STATS",
+      "group": "EDA",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "view",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/EDA.STATS.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.3",
+        "output": "version/schema/query → view",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có, đủ local engine/data",
+        "gates": "R + D; R + D; bỏ qua giá trị không hợp lệ có thông báo; nêu mẫu số và lý do không tính được",
+        "implementation": "B050 / G04 / ENG/FE",
+        "contracts": "C01/C03/C04/C05; S04/S05; F02/F29; V01/V04 notTested",
+        "acceptance": "K-EDA.STATS: Không version/outbox; scope thống kê/mẫu số/undefined rõ; F29 có valid/invalid riêng"
+      }
+    },
+    {
+      "id": "QUALITY.SCAN",
+      "configVersion": 1,
+      "label": "QUALITY.SCAN",
+      "group": "QUALITY",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "view",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/QUALITY.SCAN.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.3",
+        "output": "version/quality rules → view",
+        "fitPolicy": "Không (chỉ báo cáo)",
+        "offlinePolicy": "Có, đủ local engine/data",
+        "gates": "R + D; R; HTML/ký tự/kiểu/missing/trùng/phạm vi được cấu hình; chỉ báo cáo",
+        "implementation": "B050 / G04 / ENG/FE",
+        "contracts": "C01/C04/C05; S04/S05; F02/F29; V01/V04 notTested",
+        "acceptance": "K-QUALITY.SCAN: Phát hiện không sửa dữ liệu; report đưa đúng cột/config nhưng không tự áp"
+      }
+    },
+    {
+      "id": "QUALITY.OUTLIER",
+      "configVersion": 1,
+      "label": "QUALITY.OUTLIER",
+      "group": "QUALITY",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "view",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/QUALITY.OUTLIER.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": true,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.3",
+        "output": "version/quality rules → view",
+        "fitPolicy": "Có tính ngưỡng báo cáo; không fitted model",
+        "offlinePolicy": "Có, đủ local engine/data",
+        "gates": "R + D; R + D; IQR hoặc Z-score trên cột số, xử lý cột hằng/thiếu; ngoại lệ chưa chắc là lỗi",
+        "implementation": "B050 / G04 / ENG/FE",
+        "contracts": "C01/C04/C05; S04/S05; F02/F29; V01/V04 notTested",
+        "acceptance": "K-QUALITY.OUTLIER: IQR/Z-score chỉ report; ngưỡng/constant/missing rõ; outlier không mặc định là lỗi"
+      }
+    },
+    {
+      "id": "QUALITY.CONFIGURE_FIX",
+      "configVersion": 1,
+      "label": "QUALITY.CONFIGURE_FIX",
+      "group": "QUALITY",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "config",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/QUALITY.CONFIGURE_FIX.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.3",
+        "output": "quality finding/cột → config",
+        "fitPolicy": "Không (chỉ báo cáo)",
+        "offlinePolicy": "Có, đủ local engine/data",
+        "gates": "R + D; Mở đúng thao tác CLEAN/PREP bên dưới; chưa áp dụng dữ liệu",
+        "implementation": "B050 / G04 / ENG/FE",
+        "contracts": "C01/C04/C05; S04/S05; F02/F29; V01/V04 notTested",
+        "acceptance": "K-QUALITY.CONFIGURE_FIX: Mở đúng CLEAN/PREP và cột, chưa áp dụng/version"
+      }
+    },
+    {
+      "id": "CLEAN.FILTER",
+      "configVersion": 1,
+      "label": "CLEAN.FILTER",
+      "group": "CLEAN",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "version",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/CLEAN.FILTER.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": true,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.3",
+        "output": "version+cột+params → version",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có, đủ local engine/data",
+        "gates": "W + D + preview/confirmation + source snapshot; W + D; xem số dòng giữ/bỏ và xác nhận",
+        "implementation": "B051 / G04 / ENG/LOC/FE",
+        "contracts": "C03/C04/C05/C06/C20; S03/S04/S05/S06; F02/F06/F29; V01/V04 notTested",
+        "acceptance": "K-CLEAN.FILTER: Áp dụng đúng validation ở cột riêng; một commit/version mới, nguồn cũ bất biến, lỗi giữ bản trước"
+      }
+    },
+    {
+      "id": "CLEAN.HTML",
+      "configVersion": 1,
+      "label": "CLEAN.HTML",
+      "group": "CLEAN",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "version",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/CLEAN.HTML.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": true,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.4",
+        "output": "version+cột+params → version",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có, đủ local engine/data",
+        "gates": "W + D + preview/confirmation + source snapshot; Cột, bỏ thẻ, decode entities, bỏ nội dung script/style; bảo toàn ranh giới từ/đoạn phù hợp; không chạy HTML",
+        "implementation": "B042, B051 / G03/G04 / ENG/LOC/FE",
+        "contracts": "C03/C04/C05/C06/C20; S03/S04/S05/S06; F02/F06/F29; V01/V04 notTested",
+        "acceptance": "K-CLEAN.HTML: Áp dụng đúng validation ở cột riêng; một commit/version mới, nguồn cũ bất biến, lỗi giữ bản trước"
+      }
+    },
+    {
+      "id": "CLEAN.TRIM",
+      "configVersion": 1,
+      "label": "CLEAN.TRIM",
+      "group": "CLEAN",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "version",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/CLEAN.TRIM.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": true,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.4",
+        "output": "version+cột+params → version",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có, đủ local engine/data",
+        "gates": "W + D + preview/confirmation + source snapshot; Phạm vi đầu/cuối/bên trong, cột và ví dụ ảnh hưởng",
+        "implementation": "B051 / G04 / ENG/LOC/FE",
+        "contracts": "C03/C04/C05/C06/C20; S03/S04/S05/S06; F02/F06/F29; V01/V04 notTested",
+        "acceptance": "K-CLEAN.TRIM: Áp dụng đúng validation ở cột riêng; một commit/version mới, nguồn cũ bất biến, lỗi giữ bản trước"
+      }
+    },
+    {
+      "id": "CLEAN.NEWLINE",
+      "configVersion": 1,
+      "label": "CLEAN.NEWLINE",
+      "group": "CLEAN",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "version",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/CLEAN.NEWLINE.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": true,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.4",
+        "output": "version+cột+params → version",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có, đủ local engine/data",
+        "gates": "W + D + preview/confirmation + source snapshot; Quy tắc thay thế được chọn rõ",
+        "implementation": "B051 / G04 / ENG/LOC/FE",
+        "contracts": "C03/C04/C05/C06/C20; S03/S04/S05/S06; F02/F06/F29; V01/V04 notTested",
+        "acceptance": "K-CLEAN.NEWLINE: Áp dụng đúng validation ở cột riêng; một commit/version mới, nguồn cũ bất biến, lỗi giữ bản trước"
+      }
+    },
+    {
+      "id": "CLEAN.CASE",
+      "configVersion": 1,
+      "label": "CLEAN.CASE",
+      "group": "CLEAN",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "version",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/CLEAN.CASE.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": true,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.4",
+        "output": "version+cột+params → version",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có, đủ local engine/data",
+        "gates": "W + D + preview/confirmation + source snapshot; Cách đổi, cột; không tự áp dụng lên mã định danh",
+        "implementation": "B051 / G04 / ENG/LOC/FE",
+        "contracts": "C03/C04/C05/C06/C20; S03/S04/S05/S06; F02/F06/F29; V01/V04 notTested",
+        "acceptance": "K-CLEAN.CASE: Áp dụng đúng validation ở cột riêng; một commit/version mới, nguồn cũ bất biến, lỗi giữ bản trước"
+      }
+    },
+    {
+      "id": "CLEAN.CHARS",
+      "configVersion": 1,
+      "label": "CLEAN.CHARS",
+      "group": "CLEAN",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "version",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/CLEAN.CHARS.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": true,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.4",
+        "output": "version+cột+params → version",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có, đủ local engine/data",
+        "gates": "W + D + preview/confirmation + source snapshot; Quy tắc cụ thể; không xóa hàng loạt ký tự có ý nghĩa",
+        "implementation": "B051 / G04 / ENG/LOC/FE",
+        "contracts": "C03/C04/C05/C06/C20; S03/S04/S05/S06; F02/F06/F29; V01/V04 notTested",
+        "acceptance": "K-CLEAN.CHARS: Áp dụng đúng validation ở cột riêng; một commit/version mới, nguồn cũ bất biến, lỗi giữ bản trước"
+      }
+    },
+    {
+      "id": "CLEAN.NULLS",
+      "configVersion": 1,
+      "label": "CLEAN.NULLS",
+      "group": "CLEAN",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "version",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/CLEAN.NULLS.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": true,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.4",
+        "output": "version+cột+params → version",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có, đủ local engine/data",
+        "gates": "W + D + preview/confirmation + source snapshot; Người dùng xác nhận danh sách token; 0, '-', 'null' không mặc định luôn thiếu",
+        "implementation": "B051 / G04 / ENG/LOC/FE",
+        "contracts": "C03/C04/C05/C06/C20; S03/S04/S05/S06; F02/F06/F29; V01/V04 notTested",
+        "acceptance": "K-CLEAN.NULLS: Áp dụng đúng validation ở cột riêng; một commit/version mới, nguồn cũ bất biến, lỗi giữ bản trước"
+      }
+    },
+    {
+      "id": "CLEAN.TYPE",
+      "configVersion": 1,
+      "label": "CLEAN.TYPE",
+      "group": "CLEAN",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "version",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/CLEAN.TYPE.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": true,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.4",
+        "output": "version+cột+params → version",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có, đủ local engine/data",
+        "gates": "W + D + preview/confirmation + source snapshot; Kiểu đích, locale/ngày/dấu số/boolean; liệt kê lỗi, không âm thầm đổi lỗi thành null",
+        "implementation": "B051 / G04 / ENG/LOC/FE",
+        "contracts": "C03/C04/C05/C06/C20; S03/S04/S05/S06; F02/F06/F29; V01/V04 notTested",
+        "acceptance": "K-CLEAN.TYPE: Áp dụng đúng validation ở cột riêng; một commit/version mới, nguồn cũ bất biến, lỗi giữ bản trước"
+      }
+    },
+    {
+      "id": "CLEAN.UNIT",
+      "configVersion": 1,
+      "label": "CLEAN.UNIT",
+      "group": "CLEAN",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "version",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/CLEAN.UNIT.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": true,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.4",
+        "output": "version+cột+params → version",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có, đủ local engine/data",
+        "gates": "W + D + preview/confirmation + source snapshot; Đơn vị nguồn/đích và quy tắc rõ; không tự suy luận tỷ giá hoặc đơn vị mơ hồ",
+        "implementation": "B051 / G04 / ENG/LOC/FE",
+        "contracts": "C03/C04/C05/C06/C20; S03/S04/S05/S06; F02/F06/F29; V01/V04 notTested",
+        "acceptance": "K-CLEAN.UNIT: Áp dụng đúng validation ở cột riêng; một commit/version mới, nguồn cũ bất biến, lỗi giữ bản trước"
+      }
+    },
+    {
+      "id": "CLEAN.DROP_COL",
+      "configVersion": 1,
+      "label": "CLEAN.DROP_COL",
+      "group": "CLEAN",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "version",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/CLEAN.DROP_COL.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": true,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.4",
+        "output": "version+cột+params → version",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có, đủ local engine/data",
+        "gates": "W + D + preview/confirmation + source snapshot; Chọn cột, xem phụ thuộc; xử lý trường hợp xóa toàn bộ cột",
+        "implementation": "B051 / G04 / ENG/LOC/FE",
+        "contracts": "C03/C04/C05/C06/C20; S03/S04/S05/S06; F02/F06/F29; V01/V04 notTested",
+        "acceptance": "K-CLEAN.DROP_COL: Áp dụng đúng validation ở cột riêng; một commit/version mới, nguồn cũ bất biến, lỗi giữ bản trước"
+      }
+    },
+    {
+      "id": "CLEAN.RENAME_COL",
+      "configVersion": 1,
+      "label": "CLEAN.RENAME_COL",
+      "group": "CLEAN",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "version",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/CLEAN.RENAME_COL.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": true,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.4",
+        "output": "version+cột+params → version",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có, đủ local engine/data",
+        "gates": "W + D + preview/confirmation + source snapshot; Tên không rỗng/không va chạm, cập nhật ánh xạ trong cấu hình mới; lịch sử cũ giữ snapshot",
+        "implementation": "B051 / G04 / ENG/LOC/FE",
+        "contracts": "C03/C04/C05/C06/C20; S03/S04/S05/S06; F02/F06/F29; V01/V04 notTested",
+        "acceptance": "K-CLEAN.RENAME_COL: Áp dụng đúng validation ở cột riêng; một commit/version mới, nguồn cũ bất biến, lỗi giữ bản trước"
+      }
+    },
+    {
+      "id": "CLEAN.SPLIT_COL",
+      "configVersion": 1,
+      "label": "CLEAN.SPLIT_COL",
+      "group": "CLEAN",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "version",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/CLEAN.SPLIT_COL.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": true,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.4",
+        "output": "version+cột+params → version",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có, đủ local engine/data",
+        "gates": "W + D + preview/confirmation + source snapshot; Dấu tách/quy tắc, số cột, tên đích và dữ liệu không khớp",
+        "implementation": "B051 / G04 / ENG/LOC/FE",
+        "contracts": "C03/C04/C05/C06/C20; S03/S04/S05/S06; F02/F06/F29; V01/V04 notTested",
+        "acceptance": "K-CLEAN.SPLIT_COL: Áp dụng đúng validation ở cột riêng; một commit/version mới, nguồn cũ bất biến, lỗi giữ bản trước"
+      }
+    },
+    {
+      "id": "CLEAN.MERGE_COL",
+      "configVersion": 1,
+      "label": "CLEAN.MERGE_COL",
+      "group": "CLEAN",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "version",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/CLEAN.MERGE_COL.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": true,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.4",
+        "output": "version+cột+params → version",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có, đủ local engine/data",
+        "gates": "W + D + preview/confirmation + source snapshot; Thứ tự, dấu nối, missing, tên cột đầu ra",
+        "implementation": "B051 / G04 / ENG/LOC/FE",
+        "contracts": "C03/C04/C05/C06/C20; S03/S04/S05/S06; F02/F06/F29; V01/V04 notTested",
+        "acceptance": "K-CLEAN.MERGE_COL: Áp dụng đúng validation ở cột riêng; một commit/version mới, nguồn cũ bất biến, lỗi giữ bản trước"
+      }
+    },
+    {
+      "id": "CLEAN.DROP_ROWS",
+      "configVersion": 1,
+      "label": "CLEAN.DROP_ROWS",
+      "group": "CLEAN",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "version",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/CLEAN.DROP_ROWS.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": true,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.4",
+        "output": "version+cột+params → version",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có, đủ local engine/data",
+        "gates": "W + D + preview/confirmation + source snapshot; Điều kiện hợp lệ, số dòng dự kiến; không áp dụng bộ lọc xem ngầm",
+        "implementation": "B051 / G04 / ENG/LOC/FE",
+        "contracts": "C03/C04/C05/C06/C20; S03/S04/S05/S06; F02/F06/F29; V01/V04 notTested",
+        "acceptance": "K-CLEAN.DROP_ROWS: Áp dụng đúng validation ở cột riêng; một commit/version mới, nguồn cũ bất biến, lỗi giữ bản trước"
+      }
+    },
+    {
+      "id": "CLEAN.DEDUP",
+      "configVersion": 1,
+      "label": "CLEAN.DEDUP",
+      "group": "CLEAN",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "version",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/CLEAN.DEDUP.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": true,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.4",
+        "output": "version+cột+params → version",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có, đủ local engine/data",
+        "gates": "W + D + preview/confirmation + source snapshot; Cột khóa, giữ bản đầu/cuối hoặc bỏ tất cả theo lựa chọn; xem số dòng",
+        "implementation": "B051 / G04 / ENG/LOC/FE",
+        "contracts": "C03/C04/C05/C06/C20; S03/S04/S05/S06; F02/F06/F29; V01/V04 notTested",
+        "acceptance": "K-CLEAN.DEDUP: Áp dụng đúng validation ở cột riêng; một commit/version mới, nguồn cũ bất biến, lỗi giữ bản trước"
+      }
+    },
+    {
+      "id": "CLEAN.OUTLIER_APPLY",
+      "configVersion": 1,
+      "label": "CLEAN.OUTLIER_APPLY",
+      "group": "CLEAN",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "version",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/CLEAN.OUTLIER_APPLY.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": "conditional",
+      "createsVersion": true,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.4",
+        "output": "version+cột+params → version",
+        "fitPolicy": "Có nếu fit IQR/Z-score; Không nếu ngưỡng cố định",
+        "offlinePolicy": "Có, đủ local engine/data",
+        "gates": "W + D + preview/confirmation + source snapshot; Phương pháp/ngưỡng, cột cờ mới hoặc dòng bị loại; ghi rõ mất thông tin",
+        "implementation": "B051 / G04 / ENG/LOC/FE",
+        "contracts": "C03/C04/C05/C06/C20; S03/S04/S05/S06; F02/F06/F29; V01/V04 notTested",
+        "acceptance": "K-CLEAN.OUTLIER_APPLY: Áp dụng đúng validation ở cột riêng; một commit/version mới, nguồn cũ bất biến, lỗi giữ bản trước"
+      }
+    },
+    {
+      "id": "PREP.MISS_DROP",
+      "configVersion": 1,
+      "label": "PREP.MISS_DROP",
+      "group": "PREP",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "version",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/PREP.MISS_DROP.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": true,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.5",
+        "output": "version+cột+params → version",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có, đủ local engine/data",
+        "gates": "W + D + preview/confirmation; Chọn cột, điều kiện any/all hoặc ngưỡng được chọn rõ",
+        "implementation": "B052 / G04 / ENG/LOC/FE",
+        "contracts": "C03/C04/C05/C06/C12/C20; S03/S04/S06/S18; F05/F17/F29; V01/V04 notTested",
+        "acceptance": "K-PREP.MISS_DROP: Đúng policy đã duyệt, giữ lineage; fit có scope, không cấp phát vượt limit; case F29 riêng mỗi method"
+      }
+    },
+    {
+      "id": "PREP.MISS_CONST",
+      "configVersion": 1,
+      "label": "PREP.MISS_CONST",
+      "group": "PREP",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "version",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/PREP.MISS_CONST.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": true,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.5",
+        "output": "version+cột+params → version",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có, đủ local engine/data",
+        "gates": "W + D + preview/confirmation; Giá trị tương thích kiểu cột",
+        "implementation": "B052 / G04 / ENG/LOC/FE",
+        "contracts": "C03/C04/C05/C06/C12/C20; S03/S04/S06/S18; F05/F17/F29; V01/V04 notTested",
+        "acceptance": "K-PREP.MISS_CONST: Đúng policy đã duyệt, giữ lineage; fit có scope, không cấp phát vượt limit; case F29 riêng mỗi method"
+      }
+    },
+    {
+      "id": "PREP.MISS_MEAN",
+      "configVersion": 1,
+      "label": "PREP.MISS_MEAN",
+      "group": "PREP",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "version",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/PREP.MISS_MEAN.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": true,
+      "createsVersion": true,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.5",
+        "output": "version+cột+params → version",
+        "fitPolicy": "Có; supervised fit train, giữ learned params",
+        "offlinePolicy": "Có, đủ local engine/data",
+        "gates": "W + D + preview/confirmation; Cột số có đủ giá trị hợp lệ",
+        "implementation": "B052 / G04 / ENG/LOC/FE",
+        "contracts": "C03/C04/C05/C06/C12/C20; S03/S04/S06/S18; F05/F17/F29; V01/V04 notTested",
+        "acceptance": "K-PREP.MISS_MEAN: Đúng policy đã duyệt, giữ lineage; fit có scope, không cấp phát vượt limit; case F29 riêng mỗi method"
+      }
+    },
+    {
+      "id": "PREP.MISS_MEDIAN",
+      "configVersion": 1,
+      "label": "PREP.MISS_MEDIAN",
+      "group": "PREP",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "version",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/PREP.MISS_MEDIAN.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": true,
+      "createsVersion": true,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.5",
+        "output": "version+cột+params → version",
+        "fitPolicy": "Có; supervised fit train, giữ learned params",
+        "offlinePolicy": "Có, đủ local engine/data",
+        "gates": "W + D + preview/confirmation; Cột số có đủ giá trị hợp lệ",
+        "implementation": "B042, B052 / G03/G04 / ENG/LOC/FE",
+        "contracts": "C03/C04/C05/C06/C12/C20; S03/S04/S06/S18; F05/F17/F29; V01/V04 notTested",
+        "acceptance": "K-PREP.MISS_MEDIAN: Đúng policy đã duyệt, giữ lineage; fit có scope, không cấp phát vượt limit; case F29 riêng mỗi method"
+      }
+    },
+    {
+      "id": "PREP.MISS_MODE",
+      "configVersion": 1,
+      "label": "PREP.MISS_MODE",
+      "group": "PREP",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "version",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/PREP.MISS_MODE.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": true,
+      "createsVersion": true,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.5",
+        "output": "version+cột+params → version",
+        "fitPolicy": "Có; supervised fit train, giữ learned params",
+        "offlinePolicy": "Có, đủ local engine/data",
+        "gates": "W + D + preview/confirmation; Có giá trị hợp lệ; quy tắc khi nhiều mode",
+        "implementation": "B052 / G04 / ENG/LOC/FE",
+        "contracts": "C03/C04/C05/C06/C12/C20; S03/S04/S06/S18; F05/F17/F29; V01/V04 notTested",
+        "acceptance": "K-PREP.MISS_MODE: Đúng policy đã duyệt, giữ lineage; fit có scope, không cấp phát vượt limit; case F29 riêng mỗi method"
+      }
+    },
+    {
+      "id": "PREP.MISS_GROUP",
+      "configVersion": 1,
+      "label": "PREP.MISS_GROUP",
+      "group": "PREP",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "version",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/PREP.MISS_GROUP.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": true,
+      "createsVersion": true,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.5",
+        "output": "version+cột+params → version",
+        "fitPolicy": "Có; supervised fit train, giữ learned params",
+        "offlinePolicy": "Có, đủ local engine/data",
+        "gates": "W + D + preview/confirmation; Cột nhóm, phép điền, tối thiểu mẫu, nhóm không đủ dữ liệu; không tự fallback toàn cục",
+        "implementation": "B052 / G04 / ENG/LOC/FE",
+        "contracts": "C03/C04/C05/C06/C12/C20; S03/S04/S06/S18; F05/F17/F29; V01/V04 notTested",
+        "acceptance": "K-PREP.MISS_GROUP: Đúng policy đã duyệt, giữ lineage; fit có scope, không cấp phát vượt limit; case F29 riêng mỗi method"
+      }
+    },
+    {
+      "id": "PREP.FFILL",
+      "configVersion": 1,
+      "label": "PREP.FFILL",
+      "group": "PREP",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "version",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/PREP.FFILL.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": true,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.5",
+        "output": "version+cột+params → version",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có, đủ local engine/data",
+        "gates": "W + D + preview/confirmation; Cột thứ tự, chiều, nhóm tùy chọn và giới hạn khoảng; không lan qua nhóm",
+        "implementation": "B052 / G04 / ENG/LOC/FE",
+        "contracts": "C03/C04/C05/C06/C12/C20; S03/S04/S06/S18; F05/F17/F29; V01/V04 notTested",
+        "acceptance": "K-PREP.FFILL: Đúng policy đã duyệt, giữ lineage; fit có scope, không cấp phát vượt limit; case F29 riêng mỗi method"
+      }
+    },
+    {
+      "id": "PREP.BFILL",
+      "configVersion": 1,
+      "label": "PREP.BFILL",
+      "group": "PREP",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "version",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/PREP.BFILL.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": true,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.5",
+        "output": "version+cột+params → version",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có, đủ local engine/data",
+        "gates": "W + D + preview/confirmation; Điều kiện như ffill; cảnh báo dùng thông tin tương lai trong dự đoán",
+        "implementation": "B052 / G04 / ENG/LOC/FE",
+        "contracts": "C03/C04/C05/C06/C12/C20; S03/S04/S06/S18; F05/F17/F29; V01/V04 notTested",
+        "acceptance": "K-PREP.BFILL: Đúng policy đã duyệt, giữ lineage; fit có scope, không cấp phát vượt limit; case F29 riêng mỗi method"
+      }
+    },
+    {
+      "id": "PREP.INTERPOLATE",
+      "configVersion": 1,
+      "label": "PREP.INTERPOLATE",
+      "group": "PREP",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "version",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/PREP.INTERPOLATE.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": true,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.5",
+        "output": "version+cột+params → version",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có, đủ local engine/data",
+        "gates": "W + D + preview/confirmation; Cột số, trục, mốc trùng, khoảng và biên; không tự ngoại suy",
+        "implementation": "B052 / G04 / ENG/LOC/FE",
+        "contracts": "C03/C04/C05/C06/C12/C20; S03/S04/S06/S18; F05/F17/F29; V01/V04 notTested",
+        "acceptance": "K-PREP.INTERPOLATE: Đúng policy đã duyệt, giữ lineage; fit có scope, không cấp phát vượt limit; case F29 riêng mỗi method"
+      }
+    },
+    {
+      "id": "PREP.MISS_FLAG",
+      "configVersion": 1,
+      "label": "PREP.MISS_FLAG",
+      "group": "PREP",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "version",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/PREP.MISS_FLAG.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": true,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.5",
+        "output": "version+cột+params → version",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có, đủ local engine/data",
+        "gates": "W + D + preview/confirmation; Xác định trạng thái trước điền; tên cột không trùng, mã cờ nhất quán",
+        "implementation": "B052 / G04 / ENG/LOC/FE",
+        "contracts": "C03/C04/C05/C06/C12/C20; S03/S04/S06/S18; F05/F17/F29; V01/V04 notTested",
+        "acceptance": "K-PREP.MISS_FLAG: Đúng policy đã duyệt, giữ lineage; fit có scope, không cấp phát vượt limit; case F29 riêng mỗi method"
+      }
+    },
+    {
+      "id": "PREP.LABEL",
+      "configVersion": 1,
+      "label": "PREP.LABEL",
+      "group": "PREP",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "version",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/PREP.LABEL.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": "conditional",
+      "createsVersion": true,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.6",
+        "output": "version+cột+params → version",
+        "fitPolicy": "Tùy: học categories/mapping có; mapping cố định không; fitScope lưu rõ",
+        "offlinePolicy": "Có, đủ local engine/data",
+        "gates": "W + D + preview/confirmation; Vai trò cột và mapping rõ; ưu tiên nhãn mục tiêu, cảnh báo mã số tạo thứ tự giả nếu dùng làm đặc trưng",
+        "implementation": "B053 / G04 / ENG/LOC/FE",
+        "contracts": "C03/C04/C05/C06/C12/C20; S03/S04/S06/S18; F05/F17/F29; V01/V04 notTested",
+        "acceptance": "K-PREP.LABEL: Đúng policy đã duyệt, giữ lineage; fit có scope, không cấp phát vượt limit; case F29 riêng mỗi method"
+      }
+    },
+    {
+      "id": "PREP.ORDINAL",
+      "configVersion": 1,
+      "label": "PREP.ORDINAL",
+      "group": "PREP",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "version",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/PREP.ORDINAL.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": "conditional",
+      "createsVersion": true,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.6",
+        "output": "version+cột+params → version",
+        "fitPolicy": "Tùy: học categories/mapping có; mapping cố định không; fitScope lưu rõ",
+        "offlinePolicy": "Có, đủ local engine/data",
+        "gates": "W + D + preview/confirmation; Người dùng xác nhận thứ tự; cách xử lý missing/nhóm chưa biết",
+        "implementation": "B053 / G04 / ENG/LOC/FE",
+        "contracts": "C03/C04/C05/C06/C12/C20; S03/S04/S06/S18; F05/F17/F29; V01/V04 notTested",
+        "acceptance": "K-PREP.ORDINAL: Đúng policy đã duyệt, giữ lineage; fit có scope, không cấp phát vượt limit; case F29 riêng mỗi method"
+      }
+    },
+    {
+      "id": "PREP.ONEHOT",
+      "configVersion": 1,
+      "label": "PREP.ONEHOT",
+      "group": "PREP",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "version",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/PREP.ONEHOT.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": "conditional",
+      "createsVersion": true,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.6",
+        "output": "version+cột+params → version",
+        "fitPolicy": "Tùy: học categories/mapping có; mapping cố định không; fitScope lưu rõ",
+        "offlinePolicy": "Có, đủ local engine/data",
+        "gates": "W + D + preview/confirmation; Nhóm, missing/unknown, số đặc trưng và bộ nhớ sau biến đổi",
+        "implementation": "B053 / G04 / ENG/LOC/FE",
+        "contracts": "C03/C04/C05/C06/C12/C20; S03/S04/S06/S18; F05/F17/F29; V01/V04 notTested",
+        "acceptance": "K-PREP.ONEHOT: Đúng policy đã duyệt, giữ lineage; fit có scope, không cấp phát vượt limit; case F29 riêng mỗi method"
+      }
+    },
+    {
+      "id": "PREP.MINMAX",
+      "configVersion": 1,
+      "label": "PREP.MINMAX",
+      "group": "PREP",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "version",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/PREP.MINMAX.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": true,
+      "createsVersion": true,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.6",
+        "output": "version+cột+params → version",
+        "fitPolicy": "Có; supervised fit train, giữ learned params",
+        "offlinePolicy": "Có, đủ local engine/data",
+        "gates": "W + D + preview/confirmation; Khoảng đích, cột số, cột hằng và giá trị mới ngoài khoảng",
+        "implementation": "B053 / G04 / ENG/LOC/FE",
+        "contracts": "C03/C04/C05/C06/C12/C20; S03/S04/S06/S18; F05/F17/F29; V01/V04 notTested",
+        "acceptance": "K-PREP.MINMAX: Đúng policy đã duyệt, giữ lineage; fit có scope, không cấp phát vượt limit; case F29 riêng mỗi method"
+      }
+    },
+    {
+      "id": "PREP.STANDARD",
+      "configVersion": 1,
+      "label": "PREP.STANDARD",
+      "group": "PREP",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "version",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/PREP.STANDARD.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": true,
+      "createsVersion": true,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.6",
+        "output": "version+cột+params → version",
+        "fitPolicy": "Có; supervised fit train, giữ learned params",
+        "offlinePolicy": "Có, đủ local engine/data",
+        "gates": "W + D + preview/confirmation; Cột số, định nghĩa độ lệch chuẩn dùng nhất quán, trường hợp bằng 0",
+        "implementation": "B053 / G04 / ENG/LOC/FE",
+        "contracts": "C03/C04/C05/C06/C12/C20; S03/S04/S06/S18; F05/F17/F29; V01/V04 notTested",
+        "acceptance": "K-PREP.STANDARD: Đúng policy đã duyệt, giữ lineage; fit có scope, không cấp phát vượt limit; case F29 riêng mỗi method"
+      }
+    },
+    {
+      "id": "PREP.ROBUST",
+      "configVersion": 1,
+      "label": "PREP.ROBUST",
+      "group": "PREP",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "version",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/PREP.ROBUST.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": true,
+      "createsVersion": true,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.6",
+        "output": "version+cột+params → version",
+        "fitPolicy": "Có; supervised fit train, giữ learned params",
+        "offlinePolicy": "Có, đủ local engine/data",
+        "gates": "W + D + preview/confirmation; Khoảng phân vị, trung vị, trường hợp khoảng phân vị bằng 0",
+        "implementation": "B053 / G04 / ENG/LOC/FE",
+        "contracts": "C03/C04/C05/C06/C12/C20; S03/S04/S06/S18; F05/F17/F29; V01/V04 notTested",
+        "acceptance": "K-PREP.ROBUST: Đúng policy đã duyệt, giữ lineage; fit có scope, không cấp phát vượt limit; case F29 riêng mỗi method"
+      }
+    },
+    {
+      "id": "PREP.LOG",
+      "configVersion": 1,
+      "label": "PREP.LOG",
+      "group": "PREP",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "version",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/PREP.LOG.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": true,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.6",
+        "output": "version+cột+params → version",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có, đủ local engine/data",
+        "gates": "W + D + preview/confirmation; Cơ số hoặc log1p nếu hỗ trợ; miền xác định; không tự cộng hằng số",
+        "implementation": "B053 / G04 / ENG/LOC/FE",
+        "contracts": "C03/C04/C05/C06/C12/C20; S03/S04/S06/S18; F05/F17/F29; V01/V04 notTested",
+        "acceptance": "K-PREP.LOG: Đúng policy đã duyệt, giữ lineage; fit có scope, không cấp phát vượt limit; case F29 riêng mỗi method"
+      }
+    },
+    {
+      "id": "PREP.BIN",
+      "configVersion": 1,
+      "label": "PREP.BIN",
+      "group": "PREP",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "version",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/PREP.BIN.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": "conditional",
+      "createsVersion": true,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.6",
+        "output": "version+cột+params → version",
+        "fitPolicy": "Tùy: learned quantiles/equal-width từ data có; edges cố định không",
+        "offlinePolicy": "Có, đủ local engine/data",
+        "gates": "W + D + preview/confirmation; Cách chia/ngưỡng, nhãn, biên, ngoài khoảng, missing",
+        "implementation": "B053 / G04 / ENG/LOC/FE",
+        "contracts": "C03/C04/C05/C06/C12/C20; S03/S04/S06/S18; F05/F17/F29; V01/V04 notTested",
+        "acceptance": "K-PREP.BIN: Đúng policy đã duyệt, giữ lineage; fit có scope, không cấp phát vượt limit; case F29 riêng mỗi method"
+      }
+    },
+    {
+      "id": "PREP.TFIDF",
+      "configVersion": 1,
+      "label": "PREP.TFIDF",
+      "group": "PREP",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "version",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/PREP.TFIDF.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": true,
+      "createsVersion": true,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.6",
+        "output": "version+cột+params → version",
+        "fitPolicy": "Có; supervised fit train, giữ learned params",
+        "offlinePolicy": "Có, đủ local engine/data",
+        "gates": "W + D + preview/confirmation; Tokenization, hoa/thường, stopwords/ngôn ngữ, n-gram, ngưỡng tần suất, vocabulary, văn bản rỗng; giới hạn kích thước",
+        "implementation": "B053 / G04 / ENG/LOC/FE",
+        "contracts": "C03/C04/C05/C06/C12/C20; S03/S04/S06/S18; F05/F17/F29; V01/V04 notTested",
+        "acceptance": "K-PREP.TFIDF: Đúng policy đã duyệt, giữ lineage; fit có scope, không cấp phát vượt limit; case F29 riêng mỗi method"
+      }
+    },
+    {
+      "id": "FEATURE.FORMULA",
+      "configVersion": 1,
+      "label": "FEATURE.FORMULA",
+      "group": "FEATURE",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "version",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/FEATURE.FORMULA.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": true,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.6",
+        "output": "version+cột+params → version",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có, đủ local engine/data",
+        "gates": "W + D + preview/confirmation; Danh sách phép cho phép, cột, chia 0/overflow/missing, tên đích; parser giới hạn, không eval",
+        "implementation": "B053 / G04 / ENG/LOC/FE",
+        "contracts": "C03/C04/C05/C06/C12; S03/S04/S06; F05/F17/F29; V01/V04 notTested",
+        "acceptance": "K-FEATURE.FORMULA: Tên/cột không va chạm, phép/kiểu hợp lệ, không eval; version riêng chỉ khi áp biến đổi"
+      }
+    },
+    {
+      "id": "FEATURE.DATE",
+      "configVersion": 1,
+      "label": "FEATURE.DATE",
+      "group": "FEATURE",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "version",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/FEATURE.DATE.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": true,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.6",
+        "output": "version+cột+params → version",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có, đủ local engine/data",
+        "gates": "W + D + preview/confirmation; Cột ngày hợp lệ, múi giờ/cách hiểu ngày khi ảnh hưởng",
+        "implementation": "B053 / G04 / ENG/LOC/FE",
+        "contracts": "C03/C04/C05/C06/C12; S03/S04/S06; F05/F17/F29; V01/V04 notTested",
+        "acceptance": "K-FEATURE.DATE: Tên/cột không va chạm, phép/kiểu hợp lệ, không eval; version riêng chỉ khi áp biến đổi"
+      }
+    },
+    {
+      "id": "FEATURE.DROP_CONSTANT",
+      "configVersion": 1,
+      "label": "FEATURE.DROP_CONSTANT",
+      "group": "FEATURE",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "version",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/FEATURE.DROP_CONSTANT.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": true,
+      "createsVersion": true,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.6",
+        "output": "version+cột+params → version",
+        "fitPolicy": "Có quyết định dựa dữ liệu; train trong evaluation",
+        "offlinePolicy": "Có, đủ local engine/data",
+        "gates": "W + D + preview/confirmation; Quy tắc missing, danh sách phát hiện; xác nhận trước loại",
+        "implementation": "B053 / G04 / ENG/LOC/FE",
+        "contracts": "C03/C04/C05/C06/C12; S03/S04/S06; F05/F17/F29; V01/V04 notTested",
+        "acceptance": "K-FEATURE.DROP_CONSTANT: Tên/cột không va chạm, phép/kiểu hợp lệ, không eval; version riêng chỉ khi áp biến đổi"
+      }
+    },
+    {
+      "id": "FEATURE.PCA_APPLY",
+      "configVersion": 1,
+      "label": "FEATURE.PCA_APPLY",
+      "group": "FEATURE",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "version",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/FEATURE.PCA_APPLY.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": true,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.6",
+        "output": "PCA artifact+component selection → version",
+        "fitPolicy": "Không fit lại; dùng PCA artifact đã fit",
+        "offlinePolicy": "Có, đủ local engine/data",
+        "gates": "W + D + preview/confirmation; W + D; chọn artifact PCA và số thành phần, giữ row lineage, preview/xác nhận riêng; C12",
+        "implementation": "B062 / G05 / ENG/LOC/FE",
+        "contracts": "C03/C04/C05/C06/C12; S03/S04/S18/S19; F19; V01/V04 notTested",
+        "acceptance": "K-FEATURE.PCA_APPLY: Preview/confirmation riêng, row IDs/source/variance rõ; MODEL.PCA không version ngầm"
+      }
+    },
+    {
+      "id": "FEATURE.SELECT",
+      "configVersion": 1,
+      "label": "FEATURE.SELECT",
+      "group": "FEATURE",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "config",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/FEATURE.SELECT.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.6",
+        "output": "feature/target roles → config",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có, đủ local engine/data",
+        "gates": "W + D; không xóa cột dataset; Vai trò dữ liệu; chỉ lưu cấu hình cho mô hình, không tự xóa cột khỏi dataset",
+        "implementation": "B053 / G04 / ENG/LOC/FE",
+        "contracts": "C03/C04/C05/C06/C12; S03/S04/S06; F05/F17/F29; V01/V04 notTested",
+        "acceptance": "K-FEATURE.SELECT: Chỉ lưu roles/model config, không dataset version"
+      }
+    },
+    {
+      "id": "PIPE.CREATE",
+      "configVersion": 1,
+      "label": "PIPE.CREATE",
+      "group": "PIPE",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "config",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/PIPE.CREATE.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.7",
+        "output": "steps/config/mapping → config",
+        "fitPolicy": "Không (khai báo steps)",
+        "offlinePolicy": "Có nếu đủ mọi nguồn/capability cần; bước online vẫn chặn",
+        "gates": "W + D cho sửa; mở/validate R; W; chọn danh sách bước hoặc lấy từ thao tác đã làm",
+        "implementation": "B055 / G04 / FE/CT/API",
+        "contracts": "C04/C05/C10/C12; S04/S14/S15; F17/F30; V01/V02 notTested",
+        "acceptance": "K-PIPE.CREATE: Snapshot không sửa lịch sử; mapping theo type/role, kiểm tĩnh và động, không auto run"
+      }
+    },
+    {
+      "id": "PIPE.EDIT",
+      "configVersion": 1,
+      "label": "PIPE.EDIT",
+      "group": "PIPE",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "config",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/PIPE.EDIT.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.7",
+        "output": "steps/config/mapping → config",
+        "fitPolicy": "Không (khai báo steps)",
+        "offlinePolicy": "Có nếu đủ mọi nguồn/capability cần; bước online vẫn chặn",
+        "gates": "W + D cho sửa; mở/validate R; W; thứ tự rõ, lưu mã thao tác và tham số",
+        "implementation": "B055 / G04 / FE/CT/API",
+        "contracts": "C04/C05/C10/C12; S04/S14/S15; F17/F30; V01/V02 notTested",
+        "acceptance": "K-PIPE.EDIT: Snapshot không sửa lịch sử; mapping theo type/role, kiểm tĩnh và động, không auto run"
+      }
+    },
+    {
+      "id": "PIPE.SAVE",
+      "configVersion": 1,
+      "label": "PIPE.SAVE",
+      "group": "PIPE",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "config",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/PIPE.SAVE.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.7",
+        "output": "workflow save/rename → config; open → view",
+        "fitPolicy": "Không (khai báo steps)",
+        "offlinePolicy": "Có nếu đủ mọi nguồn/capability cần; bước online vẫn chặn",
+        "gates": "W save/rename, R open; D và revision khi ghi; Lưu/đổi W; mở R; giữ lịch sử cấu hình đã chạy",
+        "implementation": "B055 / G04 / FE/CT/API",
+        "contracts": "C04/C05/C10/C12; S04/S14/S15; F17/F30; V01/V02 notTested",
+        "acceptance": "K-PIPE.SAVE: Snapshot không sửa lịch sử; mapping theo type/role, kiểm tĩnh và động, không auto run"
+      }
+    },
+    {
+      "id": "PIPE.MAP",
+      "configVersion": 1,
+      "label": "PIPE.MAP",
+      "group": "PIPE",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "config",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/PIPE.MAP.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.7",
+        "output": "steps/config/mapping → config",
+        "fitPolicy": "Không (khai báo steps)",
+        "offlinePolicy": "Có nếu đủ mọi nguồn/capability cần; bước online vẫn chặn",
+        "gates": "W + D cho sửa; mở/validate R; W + D; kiểm tra kiểu/vai trò, không chỉ tên cột",
+        "implementation": "B055 / G04 / FE/CT/API",
+        "contracts": "C04/C05/C10/C12; S04/S14/S15; F17/F30; V01/V02 notTested",
+        "acceptance": "K-PIPE.MAP: Snapshot không sửa lịch sử; mapping theo type/role, kiểm tĩnh và động, không auto run"
+      }
+    },
+    {
+      "id": "PIPE.VALIDATE",
+      "configVersion": 1,
+      "label": "PIPE.VALIDATE",
+      "group": "PIPE",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "view",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/PIPE.VALIDATE.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.7",
+        "output": "workflow/source/mapping → view",
+        "fitPolicy": "Không (khai báo steps)",
+        "offlinePolicy": "Có nếu đủ mọi nguồn/capability cần; bước online vẫn chặn",
+        "gates": "R + D; R + D; tĩnh trước chạy, kiểm tra động lại trước từng bước",
+        "implementation": "B055 / G04 / FE/CT/API",
+        "contracts": "C04/C05/C10/C12; S04/S14/S15; F17/F30; V01/V02 notTested",
+        "acceptance": "K-PIPE.VALIDATE: Tĩnh trước run và động mỗi step, kiểm kiểu/roles không chỉ tên cột"
+      }
+    },
+    {
+      "id": "PIPE.RUN",
+      "configVersion": 1,
+      "label": "PIPE.RUN",
+      "group": "PIPE",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "version",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/PIPE.RUN.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": "conditional",
+      "createsVersion": true,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.7",
+        "output": "workflow+snapshot → version/artifact theo từng step + run history",
+        "fitPolicy": "Tùy steps; split/fitScope theo C12",
+        "offlinePolicy": "Có nếu đủ mọi nguồn/capability cần; bước online vẫn chặn",
+        "gates": "W + D cho sửa; mở/validate R; W + D; snapshot cấu hình/đầu vào, tuần tự, chỉ hỏi thêm nếu ngoài quyết định đã duyệt",
+        "implementation": "B056 / G04 / ENG/LOC/FE",
+        "contracts": "C04/C05/C10/C12; S04/S14/S15; F17/F30; V01/V02 notTested",
+        "acceptance": "K-PIPE.RUN: 1–2 commit giữ khi bước3 lỗi/hủy, không bước4; CONTINUE lượt mới linked run, không auto refresh; I16"
+      }
+    },
+    {
+      "id": "PIPE.CONTINUE",
+      "configVersion": 1,
+      "label": "PIPE.CONTINUE",
+      "group": "PIPE",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "version",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/PIPE.CONTINUE.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": "conditional",
+      "createsVersion": true,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.7",
+        "output": "workflow+snapshot → version/artifact theo từng step + run history",
+        "fitPolicy": "Tùy steps; split/fitScope theo C12",
+        "offlinePolicy": "Có nếu đủ mọi nguồn/capability cần; bước online vẫn chặn",
+        "gates": "W + D cho sửa; mở/validate R; W + D; chủ động chọn điểm/đầu vào, lượt mới liên kết lượt trước, không sửa lịch sử",
+        "implementation": "B056 / G04 / ENG/LOC/FE",
+        "contracts": "C04/C05/C10/C12; S04/S14/S15; F17/F30; V01/V02 notTested",
+        "acceptance": "K-PIPE.CONTINUE: 1–2 commit giữ khi bước3 lỗi/hủy, không bước4; CONTINUE lượt mới linked run, không auto refresh; I16"
+      }
+    },
+    {
+      "id": "RUN.CANCEL",
+      "configVersion": 1,
+      "label": "RUN.CANCEL",
+      "group": "RUN",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "control",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/RUN.CANCEL.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.7",
+        "output": "running task → control",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có cho task browser",
+        "gates": "Đúng owner/task active; cancel xử lý trước commit gate; Tác vụ đang chạy; bỏ phần dở, giữ bước đã commit",
+        "implementation": "B022, B056 / G02L/G04 / LOC/ENG/FE",
+        "contracts": "C05/C06; S06; F06/F07/F30; V01/V02 notTested",
+        "acceptance": "K-RUN.CANCEL: Bỏ phần chưa commit, giữ trước đó; commit đã thắng báo hủy quá muộn, không rollback"
+      }
+    },
+    {
+      "id": "RUN.HISTORY",
+      "configVersion": 1,
+      "label": "RUN.HISTORY",
+      "group": "RUN",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "view",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/RUN.HISTORY.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.12",
+        "output": "run/step refs → view",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có cho history đã có local",
+        "gates": "R; R; trạng thái từng bước, thời gian, input/output, lỗi/cảnh báo và cấu hình snapshot.",
+        "implementation": "B070 / G06 / FE/API",
+        "contracts": "C01/C05/C10/C15; S06/S15; F06/F30; V01/V02 notTested",
+        "acceptance": "K-RUN.HISTORY: Chọn history không chạy lại, cấu hình nguồn chỉ đọc, state/partial output đúng"
+      }
+    },
+    {
+      "id": "RUN.DETAILS",
+      "configVersion": 1,
+      "label": "RUN.DETAILS",
+      "group": "RUN",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "view",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/RUN.DETAILS.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.12",
+        "output": "run/step refs → view",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có cho history đã có local",
+        "gates": "R; R; trạng thái từng bước, thời gian, input/output, lỗi/cảnh báo và cấu hình snapshot.",
+        "implementation": "B070 / G06 / FE/API",
+        "contracts": "C01/C05/C10/C15; S06/S15; F06/F30; V01/V02 notTested",
+        "acceptance": "K-RUN.DETAILS: Chọn history không chạy lại, cấu hình nguồn chỉ đọc, state/partial output đúng"
+      }
+    },
+    {
+      "id": "MODEL.LINEAR",
+      "configVersion": 1,
+      "label": "MODEL.LINEAR",
+      "group": "MODEL",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "config",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/MODEL.LINEAR.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": "conditional",
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.8",
+        "output": "algorithm/config → config; MODEL.RUN tạo artifact",
+        "fitPolicy": "Có khi MODEL.RUN fit",
+        "offlinePolicy": "Có, đủ data/engine đã chuẩn bị",
+        "gates": "W + D để chạy; menu mở/config trước, không tự chạy; Mục tiêu số, đặc trưng hợp lệ; kết quả hồi quy và mô hình",
+        "implementation": "B060, B061 / G05 / ENG/FE",
+        "contracts": "C04/C05/C12/C20; S04/S17/S18/S19; F16/F18/F19; V01/V04 notTested",
+        "acceptance": "K-MODEL.LINEAR: Params đúng engine, fit/split theo bài toán, không fake metric hoặc version bảng ngầm"
+      }
+    },
+    {
+      "id": "MODEL.LOGISTIC",
+      "configVersion": 1,
+      "label": "MODEL.LOGISTIC",
+      "group": "MODEL",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "config",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/MODEL.LOGISTIC.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": "conditional",
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.8",
+        "output": "algorithm/config → config; MODEL.RUN tạo artifact",
+        "fitPolicy": "Có khi MODEL.RUN fit",
+        "offlinePolicy": "Có, đủ data/engine đã chuẩn bị",
+        "gates": "W + D để chạy; menu mở/config trước, không tự chạy; Nhãn, đủ lớp/mẫu; công bố hỗ trợ nhị phân/đa lớp theo thư viện thực tế",
+        "implementation": "B060, B061 / G05 / ENG/FE",
+        "contracts": "C04/C05/C12/C20; S04/S17/S18/S19; F16/F18/F19; V01/V04 notTested",
+        "acceptance": "K-MODEL.LOGISTIC: Params đúng engine, fit/split theo bài toán, không fake metric hoặc version bảng ngầm"
+      }
+    },
+    {
+      "id": "MODEL.KNN",
+      "configVersion": 1,
+      "label": "MODEL.KNN",
+      "group": "MODEL",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "config",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/MODEL.KNN.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": "conditional",
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.8",
+        "output": "algorithm/config → config; MODEL.RUN tạo artifact",
+        "fitPolicy": "Có khi MODEL.RUN fit",
+        "offlinePolicy": "Có, đủ data/engine đã chuẩn bị",
+        "gates": "W + D để chạy; menu mở/config trước, không tự chạy; k không vượt mẫu train, khoảng cách, scaling, lớp/mẫu hợp lệ",
+        "implementation": "B060, B061 / G05 / ENG/FE",
+        "contracts": "C04/C05/C12/C20; S04/S17/S18/S19; F16/F18/F19; V01/V04 notTested",
+        "acceptance": "K-MODEL.KNN: Params đúng engine, fit/split theo bài toán, không fake metric hoặc version bảng ngầm"
+      }
+    },
+    {
+      "id": "MODEL.KMEANS",
+      "configVersion": 1,
+      "label": "MODEL.KMEANS",
+      "group": "MODEL",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "config",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/MODEL.KMEANS.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": "conditional",
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.8",
+        "output": "algorithm/config → config; MODEL.RUN tạo artifact",
+        "fitPolicy": "Có khi MODEL.RUN fit",
+        "offlinePolicy": "Có, đủ data/engine đã chuẩn bị",
+        "gates": "W + D để chạy; menu mở/config trước, không tự chạy; Cột số, k hợp lệ, đủ điểm khác nhau, seed nếu hỗ trợ; nhãn và tâm cụm",
+        "implementation": "B060, B062 / G05 / ENG/FE",
+        "contracts": "C04/C05/C12/C20; S04/S17/S18/S19; F16/F18/F19; V01/V04 notTested",
+        "acceptance": "K-MODEL.KMEANS: Params đúng engine, fit/split theo bài toán, không fake metric hoặc version bảng ngầm"
+      }
+    },
+    {
+      "id": "MODEL.PCA",
+      "configVersion": 1,
+      "label": "MODEL.PCA",
+      "group": "MODEL",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "config",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/MODEL.PCA.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": "conditional",
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.8",
+        "output": "algorithm/config → config; MODEL.RUN tạo artifact",
+        "fitPolicy": "Có khi MODEL.RUN fit",
+        "offlinePolicy": "Có, đủ data/engine đã chuẩn bị",
+        "gates": "W + D để chạy; menu mở/config trước, không tự chạy; Số thành phần trong miền khả thi của mẫu/đặc trưng; phương sai giải thích và tọa độ theo dòng gốc",
+        "implementation": "B060, B062 / G05 / ENG/FE",
+        "contracts": "C04/C05/C12/C20; S04/S17/S18/S19; F16/F18/F19; V01/V04 notTested",
+        "acceptance": "K-MODEL.PCA: Params đúng engine, fit/split theo bài toán, không fake metric hoặc version bảng ngầm"
+      }
+    },
+    {
+      "id": "MODEL.CONFIG",
+      "configVersion": 1,
+      "label": "MODEL.CONFIG",
+      "group": "MODEL",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "config",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/MODEL.CONFIG.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.8",
+        "output": "feature/params/split/preprocess → config",
+        "fitPolicy": "Không khi cấu hình; các steps fit khi chạy",
+        "offlinePolicy": "Có, đủ data/engine đã chuẩn bị",
+        "gates": "W + D để chạy; menu mở/config trước, không tự chạy; W; train/test và seed cho supervised, stratify khi phù hợp; không ép mục tiêu/split supervised lên PCA/K-Means",
+        "implementation": "B060 / G05 / ENG/FE",
+        "contracts": "C04/C05/C12/C20; S04/S17/S18/S19; F16/F18/F19; V01/V04 notTested",
+        "acceptance": "K-MODEL.CONFIG: Params đúng engine, fit/split theo bài toán, không fake metric hoặc version bảng ngầm"
+      }
+    },
+    {
+      "id": "MODEL.PREPROCESS",
+      "configVersion": 1,
+      "label": "MODEL.PREPROCESS",
+      "group": "MODEL",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "config",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/MODEL.PREPROCESS.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.8",
+        "output": "feature/params/split/preprocess → config",
+        "fitPolicy": "Không khi cấu hình; các steps fit khi chạy",
+        "offlinePolicy": "Có, đủ data/engine đã chuẩn bị",
+        "gates": "W + D để chạy; menu mở/config trước, không tự chạy; W; split trước fit, fit train rồi transform test; lưu tham số đã học",
+        "implementation": "B060 / G05 / ENG/FE",
+        "contracts": "C04/C05/C12/C20; S04/S17/S18/S19; F16/F18/F19; V01/V04 notTested",
+        "acceptance": "K-MODEL.PREPROCESS: Params đúng engine, fit/split theo bài toán, không fake metric hoặc version bảng ngầm"
+      }
+    },
+    {
+      "id": "MODEL.CHECK",
+      "configVersion": 1,
+      "label": "MODEL.CHECK",
+      "group": "MODEL",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "view",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/MODEL.CHECK.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.8",
+        "output": "source/config/limits → view",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có, đủ data/engine đã chuẩn bị",
+        "gates": "R + D; không lưu output bền khi chỉ kiểm; Dữ liệu thiếu/NaN/vô hạn, nhãn, cột hằng, kích thước, chi phí, rò rỉ dữ liệu",
+        "implementation": "B060, B063 / G05 / ENG/FE",
+        "contracts": "C04/C05/C12/C20; S04/S17/S18/S19; F16/F18/F19; V01/V04 notTested",
+        "acceptance": "K-MODEL.CHECK: Missing/finite/class/sample/constant/cost/leakage được kiểm, không fake metric"
+      }
+    },
+    {
+      "id": "MODEL.RUN",
+      "configVersion": 1,
+      "label": "MODEL.RUN",
+      "group": "MODEL",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "artifact",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/MODEL.RUN.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": true,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.8",
+        "output": "source+approved model config → artifact + run/step",
+        "fitPolicy": "Có, theo thuật toán và pipeline",
+        "offlinePolicy": "Có, đủ data/engine đã chuẩn bị",
+        "gates": "W + D để chạy; menu mở/config trước, không tự chạy; W + D; trong worker browser; có RUN.CANCEL",
+        "implementation": "B061, B062 / G05 / ENG/FE",
+        "contracts": "C04/C05/C12/C20; S04/S17/S18/S19; F16/F18/F19; V01/V04 notTested",
+        "acceptance": "K-MODEL.RUN: Worker browser, train-only cho supervised, cancel truthful; không ngầm thành version bảng"
+      }
+    },
+    {
+      "id": "MODEL.SAVE",
+      "configVersion": 1,
+      "label": "MODEL.SAVE",
+      "group": "MODEL",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "artifact",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/MODEL.SAVE.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.8",
+        "output": "model/run/artifacts hoàn chỉnh → artifact(model đã lưu)",
+        "fitPolicy": "Không fit lại",
+        "offlinePolicy": "Có, đủ data/engine đã chuẩn bị",
+        "gates": "W + nguồn/result snapshot hợp lệ; W; đúng snapshot nguồn, cấu hình và artifact hoàn chỉnh",
+        "implementation": "B064 / G05 / ENG/API/FE",
+        "contracts": "C04/C05/C12/C20; S04/S17/S18/S19; F16/F18/F19; V01/V02/V04 notTested",
+        "acceptance": "K-MODEL.SAVE: Artifact đủ byte/feature order/split/fittedPipeline/metrics/serializer/source; không fit lại, local commit rồi sync"
+      }
+    },
+    {
+      "id": "MODEL.DOWNLOAD",
+      "configVersion": 1,
+      "label": "MODEL.DOWNLOAD",
+      "group": "MODEL",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "artifact",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/MODEL.DOWNLOAD.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.8",
+        "output": "model + fitted pipeline/mapping → artifact(tệp tải)",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có, đủ data/engine đã chuẩn bị",
+        "gates": "R + verified serializer/assets; R; serializer JS/TS thực tế hỗ trợ; kèm tiền xử lý và mapping cần thiết",
+        "implementation": "B064 / G05 / ENG/FE",
+        "contracts": "C04/C05/C12/C20; S04/S17/S18/S19; F16/F18/F19; V01/V04 notTested",
+        "acceptance": "K-MODEL.DOWNLOAD: Đủ metadata/features/learned params để roundtrip kỹ thuật, không prediction UI"
+      }
+    },
+    {
+      "id": "RESULT.CLASS",
+      "configVersion": 1,
+      "label": "RESULT.CLASS",
+      "group": "RESULT",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "view",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/RESULT.CLASS.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.9",
+        "output": "run/model/metric refs → view",
+        "fitPolicy": "Không (đọc metric; không fit lại)",
+        "offlinePolicy": "Có nếu đủ result/data/engine",
+        "gates": "R + D; tính lại có tài nguyên và W nếu lưu run/output; Accuracy/Precision/Recall/F1/ma trận nhầm lẫn; chọn cách tổng hợp đa lớp hợp lệ, nêu trường hợp không xác định.",
+        "implementation": "B063 / G05 / ENG/FE",
+        "contracts": "C01/C12/C20; S19; F18/F19/F31; V01/V04 notTested",
+        "acceptance": "K-RESULT.CLASS: Metric oracle độc lập, undefined có reason, compare nguồn/split khác phải cảnh báo"
+      }
+    },
+    {
+      "id": "RESULT.REGRESS",
+      "configVersion": 1,
+      "label": "RESULT.REGRESS",
+      "group": "RESULT",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "view",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/RESULT.REGRESS.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.9",
+        "output": "run/model/metric refs → view",
+        "fitPolicy": "Không (đọc metric; không fit lại)",
+        "offlinePolicy": "Có nếu đủ result/data/engine",
+        "gates": "R + D; tính lại có tài nguyên và W nếu lưu run/output; MAE/MSE/RMSE/R²; nêu thiếu điều kiện hoặc chỉ số không có ý nghĩa.",
+        "implementation": "B063 / G05 / ENG/FE",
+        "contracts": "C01/C12/C20; S19; F18/F19/F31; V01/V04 notTested",
+        "acceptance": "K-RESULT.REGRESS: Metric oracle độc lập, undefined có reason, compare nguồn/split khác phải cảnh báo"
+      }
+    },
+    {
+      "id": "RESULT.CLUSTER",
+      "configVersion": 1,
+      "label": "RESULT.CLUSTER",
+      "group": "RESULT",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "view",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/RESULT.CLUSTER.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.9",
+        "output": "run/model/metric refs → view",
+        "fitPolicy": "Không (đọc metric; không fit lại)",
+        "offlinePolicy": "Có nếu đủ result/data/engine",
+        "gates": "R + D; tính lại có tài nguyên và W nếu lưu run/output; kích thước cụm, Silhouette khi đủ điều kiện; chi phí/lấy mẫu phải được thông báo và chấp nhận trước.",
+        "implementation": "B063 / G05 / ENG/FE",
+        "contracts": "C01/C12/C20; S19; F18/F19/F31; V01/V04 notTested",
+        "acceptance": "K-RESULT.CLUSTER: Metric oracle độc lập, undefined có reason, compare nguồn/split khác phải cảnh báo"
+      }
+    },
+    {
+      "id": "RESULT.PCA",
+      "configVersion": 1,
+      "label": "RESULT.PCA",
+      "group": "RESULT",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "view",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/RESULT.PCA.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.9",
+        "output": "run/model/metric refs → view",
+        "fitPolicy": "Không (đọc metric; không fit lại)",
+        "offlinePolicy": "Có nếu đủ result/data/engine",
+        "gates": "R + D; tính lại có tài nguyên và W nếu lưu run/output; phương sai giải thích/tích lũy, tọa độ và liên kết dòng gốc; không dùng accuracy để đánh giá PCA.",
+        "implementation": "B063 / G05 / ENG/FE",
+        "contracts": "C01/C12/C20; S19; F18/F19/F31; V01/V04 notTested",
+        "acceptance": "K-RESULT.PCA: Metric oracle độc lập, undefined có reason, compare nguồn/split khác phải cảnh báo"
+      }
+    },
+    {
+      "id": "RESULT.COMPARE",
+      "configVersion": 1,
+      "label": "RESULT.COMPARE",
+      "group": "RESULT",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "view",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/RESULT.COMPARE.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.9",
+        "output": "run/model/metric refs → view",
+        "fitPolicy": "Không (đọc metric; không fit lại)",
+        "offlinePolicy": "Có nếu đủ result/data/engine",
+        "gates": "R + D; tính lại có tài nguyên và W nếu lưu run/output; chọn các lần chạy; hiển thị phiên bản, split, đặc trưng, tham số và cảnh báo điều kiện khác nhau.",
+        "implementation": "B063 / G05 / ENG/FE",
+        "contracts": "C01/C12/C20; S19; F18/F19/F31; V01/V04 notTested",
+        "acceptance": "K-RESULT.COMPARE: Metric oracle độc lập, undefined có reason, compare nguồn/split khác phải cảnh báo"
+      }
+    },
+    {
+      "id": "RESULT.EXPORT",
+      "configVersion": 1,
+      "label": "RESULT.EXPORT",
+      "group": "RESULT",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "artifact",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/RESULT.EXPORT.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.9",
+        "output": "actual result refs → artifact(tệp tải)",
+        "fitPolicy": "Không (đọc metric; không fit lại)",
+        "offlinePolicy": "Có nếu đủ result/data/engine",
+        "gates": "R + D; tính lại có tài nguyên và W nếu lưu run/output; xuất kết quả thực; định dạng theo khả năng đã xác minh.",
+        "implementation": "B073, B064 / G05/G06 / EXP/FE",
+        "contracts": "C01/C12/C20; S19/S22; F18/F22; V01/V04 notTested",
+        "acceptance": "K-RESULT.EXPORT: Xuất actual/undefined reason đúng nguồn và định dạng đã kiểm chứng"
+      }
+    },
+    {
+      "id": "AI.SUGGEST",
+      "configVersion": 1,
+      "label": "AI.SUGGEST",
+      "group": "AI",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "artifact",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/AI.SUGGEST.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.10",
+        "output": "approved context → artifact(đề xuất có cấu trúc, không dataset version)",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Không gọi dịch vụ offline",
+        "gates": "R + A + consent nếu có row; A + R; ưu tiên schema và thống kê tổng hợp, hiện lý do và cột liên quan",
+        "implementation": "B091, B092 / G08 / AI/FE/ENG",
+        "contracts": "C01/C04/C05/C07/C16/C18; S04/S25; F25/F26; V01/V03/V04 notTested",
+        "acceptance": "K-AI.SUGGEST: Consent bound hash/epoch/provider; không auto chạy/thêm row/fallback; thiếu căn cứ giữ missing"
+      }
+    },
+    {
+      "id": "AI.EXPLAIN",
+      "configVersion": 1,
+      "label": "AI.EXPLAIN",
+      "group": "AI",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "artifact",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/AI.EXPLAIN.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.10",
+        "output": "approved context → artifact(đề xuất có cấu trúc, không dataset version)",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Không gọi dịch vụ offline",
+        "gates": "R + A + consent nếu có row; A + R; dựa trên kết quả thực và giới hạn",
+        "implementation": "B091, B092 / G08 / AI/FE/ENG",
+        "contracts": "C01/C04/C05/C07/C16/C18; S04/S25; F25/F26; V01/V03/V04 notTested",
+        "acceptance": "K-AI.EXPLAIN: Consent bound hash/epoch/provider; không auto chạy/thêm row/fallback; thiếu căn cứ giữ missing"
+      }
+    },
+    {
+      "id": "AI.REVIEW_PAYLOAD",
+      "configVersion": 1,
+      "label": "AI.REVIEW_PAYLOAD",
+      "group": "AI",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "view",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/AI.REVIEW_PAYLOAD.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.10",
+        "output": "context/provider/model → view",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Không gọi dịch vụ offline",
+        "gates": "R + context/provider/model; S + CSRF khi tạo preview consent ở server, chưa gọi provider",
+        "implementation": "B091, B092 / G08 / AI/FE/ENG",
+        "contracts": "C01/C04/C05/C07/C16/C18; S04/S25; F25/F26; V01/V03/V04 notTested",
+        "acceptance": "K-AI.REVIEW_PAYLOAD: Hiển thị đúng payloadPreview/hash/source/provider/model và phạm vi row, chưa dispatch hoặc ngầm thêm dữ liệu"
+      }
+    },
+    {
+      "id": "AI.SEND",
+      "configVersion": 1,
+      "label": "AI.SEND",
+      "group": "AI",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "control",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/AI.SEND.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.10",
+        "output": "approved payload/consent → control(request dispatch)",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Không gọi dịch vụ offline",
+        "gates": "R + A khi gửi; consent đúng payload nếu row; A; chỉ nội dung đã duyệt, không toàn bộ dataset ngầm",
+        "implementation": "B091 / G08 / AI/FE/ENG",
+        "contracts": "C01/C04/C05/C07/C16/C18; S04/S25; F25/F26; V01/V03/V04 notTested",
+        "acceptance": "K-AI.SEND: Only exact approved hash/source/provider/epoch, one request identity; không tự thêm row"
+      }
+    },
+    {
+      "id": "AI.ACCEPT",
+      "configVersion": 1,
+      "label": "AI.ACCEPT",
+      "group": "AI",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "config",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/AI.ACCEPT.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.10",
+        "output": "validated proposal → config",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Không công bố capability AI offline; cấu hình thông thường vẫn dùng được",
+        "gates": "W + proposal source/configVersion còn hợp lệ; W; điền vào biểu mẫu, chạy validator; chưa chạy/chưa đổi dữ liệu",
+        "implementation": "B091, B092 / G08 / AI/FE/ENG",
+        "contracts": "C01/C04/C05/C07/C16/C18; S04/S25; F25/F26; V01/V03/V04 notTested",
+        "acceptance": "K-AI.ACCEPT: Điền form giữ draft, vẫn cần user chạy; không version ngay"
+      }
+    },
+    {
+      "id": "AI.DISMISS",
+      "configVersion": 1,
+      "label": "AI.DISMISS",
+      "group": "AI",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "control",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/AI.DISMISS.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.10",
+        "output": "proposal → control",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có với đề xuất đã có local/RAM; không gọi dịch vụ",
+        "gates": "R; chỉ bỏ/đóng đề xuất; Đóng đề xuất, không tạo version",
+        "implementation": "B091, B092 / G08 / AI/FE/ENG",
+        "contracts": "C01/C04/C05/C07/C16/C18; S04/S25; F25/F26; V01/V03/V04 notTested",
+        "acceptance": "K-AI.DISMISS: Không version, không áp thay đổi"
+      }
+    },
+    {
+      "id": "AI.TEXT_IMPUTE",
+      "configVersion": 1,
+      "label": "AI.TEXT_IMPUTE",
+      "group": "AI",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "artifact",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/AI.TEXT_IMPUTE.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.10",
+        "output": "approved context → artifact(đề xuất có cấu trúc, không dataset version)",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Không gọi dịch vụ offline",
+        "gates": "R + A + consent nếu có row; A; ưu tiên quy tắc/thông tin sẵn có trước; không ép mean/median cho văn bản",
+        "implementation": "B091, B092 / G08 / AI/FE/ENG",
+        "contracts": "C01/C04/C05/C07/C16/C18; S04/S25; F25/F26; V01/V03/V04 notTested",
+        "acceptance": "K-AI.TEXT_IMPUTE: Consent bound hash/epoch/provider; không auto chạy/thêm row/fallback; thiếu căn cứ giữ missing"
+      }
+    },
+    {
+      "id": "AI.APPLY_TEXT",
+      "configVersion": 1,
+      "label": "AI.APPLY_TEXT",
+      "group": "AI",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "version",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/AI.APPLY_TEXT.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": true,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.10",
+        "output": "approved text values+source → version",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Không bật chức năng AI offline; giá trị đã commit là dữ liệu thường",
+        "gates": "W + D + per-value preview/confirmation; W + D; xem từng giá trị, nguồn AI, xác nhận rồi version; cho phép giữ missing",
+        "implementation": "B091, B092 / G08 / AI/FE/ENG",
+        "contracts": "C03/C04/C05/C06/C16; S03/S04/S06/S25; F25/F26/F29; V01/V03/V04 notTested",
+        "acceptance": "K-AI.APPLY_TEXT: Giữ missing nếu thiếu căn cứ, provenance AI/row/cột/approved scope rõ; cùng local commit chuẩn"
+      }
+    },
+    {
+      "id": "CHART.HIST",
+      "configVersion": 1,
+      "label": "CHART.HIST",
+      "group": "CHART",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "config",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/CHART.HIST.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.11",
+        "output": "source+chart params → config; preview → view",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có khi đủ data/renderer",
+        "gates": "R + D preview; W lưu/sửa config; Một cột số; bins hợp lệ",
+        "implementation": "B071 / G06 / FE/ENG/API",
+        "contracts": "C01/C03/C05/C12/C14; S20; F19/F21/F31; V01/V04 notTested",
+        "acceptance": "K-CHART.HIST: Validator đúng loại/missing/aggregation, sample công bố, pin source, không dataset version"
+      }
+    },
+    {
+      "id": "CHART.BOX",
+      "configVersion": 1,
+      "label": "CHART.BOX",
+      "group": "CHART",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "config",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/CHART.BOX.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.11",
+        "output": "source+chart params → config; preview → view",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có khi đủ data/renderer",
+        "gates": "R + D preview; W lưu/sửa config; Cột số; nhóm tùy chọn",
+        "implementation": "B071 / G06 / FE/ENG/API",
+        "contracts": "C01/C03/C05/C12/C14; S20; F19/F21/F31; V01/V04 notTested",
+        "acceptance": "K-CHART.BOX: Validator đúng loại/missing/aggregation, sample công bố, pin source, không dataset version"
+      }
+    },
+    {
+      "id": "CHART.BAR",
+      "configVersion": 1,
+      "label": "CHART.BAR",
+      "group": "CHART",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "config",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/CHART.BAR.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.11",
+        "output": "source+chart params → config; preview → view",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có khi đủ data/renderer",
+        "gates": "R + D preview; W lưu/sửa config; Cột nhóm; đếm không đòi thêm cột số, tổng/trung bình cần cột số",
+        "implementation": "B071 / G06 / FE/ENG/API",
+        "contracts": "C01/C03/C05/C12/C14; S20; F19/F21/F31; V01/V04 notTested",
+        "acceptance": "K-CHART.BAR: Validator đúng loại/missing/aggregation, sample công bố, pin source, không dataset version"
+      }
+    },
+    {
+      "id": "CHART.LINE",
+      "configVersion": 1,
+      "label": "CHART.LINE",
+      "group": "CHART",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "config",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/CHART.LINE.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.11",
+        "output": "source+chart params → config; preview → view",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có khi đủ data/renderer",
+        "gates": "R + D preview; W lưu/sửa config; X có thứ tự, Y số; sắp xếp và cách xử lý X trùng",
+        "implementation": "B071 / G06 / FE/ENG/API",
+        "contracts": "C01/C03/C05/C12/C14; S20; F19/F21/F31; V01/V04 notTested",
+        "acceptance": "K-CHART.LINE: Validator đúng loại/missing/aggregation, sample công bố, pin source, không dataset version"
+      }
+    },
+    {
+      "id": "CHART.SCATTER",
+      "configVersion": 1,
+      "label": "CHART.SCATTER",
+      "group": "CHART",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "config",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/CHART.SCATTER.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.11",
+        "output": "source+chart params → config; preview → view",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có khi đủ data/renderer",
+        "gates": "R + D preview; W lưu/sửa config; Hai cột số",
+        "implementation": "B071 / G06 / FE/ENG/API",
+        "contracts": "C01/C03/C05/C12/C14; S20; F19/F21/F31; V01/V04 notTested",
+        "acceptance": "K-CHART.SCATTER: Validator đúng loại/missing/aggregation, sample công bố, pin source, không dataset version"
+      }
+    },
+    {
+      "id": "CHART.CORR",
+      "configVersion": 1,
+      "label": "CHART.CORR",
+      "group": "CHART",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "config",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/CHART.CORR.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.11",
+        "output": "source+chart params → config; preview → view",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có khi đủ data/renderer",
+        "gates": "R + D preview; W lưu/sửa config; Ít nhất hai cột số phù hợp, đủ mẫu từng cặp; cột hằng không có tương quan hợp lệ",
+        "implementation": "B071 / G06 / FE/ENG/API",
+        "contracts": "C01/C03/C05/C12/C14; S20; F19/F21/F31; V01/V04 notTested",
+        "acceptance": "K-CHART.CORR: Validator đúng loại/missing/aggregation, sample công bố, pin source, không dataset version"
+      }
+    },
+    {
+      "id": "CHART.PIE",
+      "configVersion": 1,
+      "label": "CHART.PIE",
+      "group": "CHART",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "config",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/CHART.PIE.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.11",
+        "output": "source+chart params → config; preview → view",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có khi đủ data/renderer",
+        "gates": "R + D preview; W lưu/sửa config; Phép gộp thích hợp, tỷ trọng không âm, tổng dương",
+        "implementation": "B071 / G06 / FE/ENG/API",
+        "contracts": "C01/C03/C05/C12/C14; S20; F19/F21/F31; V01/V04 notTested",
+        "acceptance": "K-CHART.PIE: Validator đúng loại/missing/aggregation, sample công bố, pin source, không dataset version"
+      }
+    },
+    {
+      "id": "CHART.SCATTER3D",
+      "configVersion": 1,
+      "label": "CHART.SCATTER3D",
+      "group": "CHART",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "config",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/CHART.SCATTER3D.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.11",
+        "output": "source+chart params → config; preview → view",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có khi đủ data/renderer",
+        "gates": "R + D preview; W lưu/sửa config; Ba cột số hoặc ba thành phần PCA khả dụng; ghi rõ loại tọa độ",
+        "implementation": "B071 / G06 / FE/ENG/API",
+        "contracts": "C01/C03/C05/C12/C14; S20; F19/F21/F31; V01/V04 notTested",
+        "acceptance": "K-CHART.SCATTER3D: Validator đúng loại/missing/aggregation, sample công bố, pin source, không dataset version"
+      }
+    },
+    {
+      "id": "CHART.CONFIG",
+      "configVersion": 1,
+      "label": "CHART.CONFIG",
+      "group": "CHART",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "config",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/CHART.CONFIG.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.11",
+        "output": "type/axes/aggregation params → config",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có khi đủ data/renderer",
+        "gates": "R + D preview; W lưu/sửa config; X/Y/Z, nhóm, màu, kích thước nếu hỗ trợ, phép gộp, thứ tự, Top N/Khác, missing.",
+        "implementation": "B071 / G06 / FE/ENG/API",
+        "contracts": "C01/C03/C05/C12/C14; S20; F19/F21/F31; V01/V04 notTested",
+        "acceptance": "K-CHART.CONFIG: Validator đúng loại/missing/aggregation, sample công bố, pin source, không dataset version"
+      }
+    },
+    {
+      "id": "CHART.PREVIEW",
+      "configVersion": 1,
+      "label": "CHART.PREVIEW",
+      "group": "CHART",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "view",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/CHART.PREVIEW.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.11",
+        "output": "source+chart config → view",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có khi đủ data/renderer",
+        "gates": "R + D; R + D, ghi số dòng loại khỏi phép vẽ và phạm vi mẫu; không sửa dataset.",
+        "implementation": "B071 / G06 / FE/ENG/API",
+        "contracts": "C01/C03/C05/C12/C14; S20; F19/F21/F31; V01/V04 notTested",
+        "acceptance": "K-CHART.PREVIEW: Valid axes/missing/sample counts, không dataset version/outbox"
+      }
+    },
+    {
+      "id": "CHART.SAVE",
+      "configVersion": 1,
+      "label": "CHART.SAVE",
+      "group": "CHART",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "artifact",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/CHART.SAVE.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.11",
+        "output": "validated chart+source ref → artifact(chart metadata)",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có khi đủ data/renderer",
+        "gates": "W + D + revision; W; lưu config và tham chiếu nguồn; không tạo version dữ liệu.",
+        "implementation": "B071 / G06 / FE/ENG/API",
+        "contracts": "C01/C03/C05/C12/C14; S20; F19/F21/F31; V01/V02/V04 notTested",
+        "acceptance": "K-CHART.SAVE: Validator đúng loại/missing/aggregation, sample công bố, pin source, không dataset version"
+      }
+    },
+    {
+      "id": "CHART.EDIT",
+      "configVersion": 1,
+      "label": "CHART.EDIT",
+      "group": "CHART",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "config",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/CHART.EDIT.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.11",
+        "output": "chart config changes → config",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có khi đủ data/renderer",
+        "gates": "W + D + revision; W; lưu config và tham chiếu nguồn; không tạo version dữ liệu.",
+        "implementation": "B071 / G06 / FE/ENG/API",
+        "contracts": "C01/C03/C05/C12/C14; S20; F19/F21/F31; V01/V02/V04 notTested",
+        "acceptance": "K-CHART.EDIT: Validator đúng loại/missing/aggregation, sample công bố, pin source, không dataset version"
+      }
+    },
+    {
+      "id": "CHART.DELETE",
+      "configVersion": 1,
+      "label": "CHART.DELETE",
+      "group": "CHART",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "control",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/CHART.DELETE.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.11",
+        "output": "chart+dependency plan → control",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có khi đủ data/renderer",
+        "gates": "W + no hard refs theo C14 + revision; không cascade ngầm; W; lưu config và tham chiếu nguồn; không tạo version dữ liệu.",
+        "implementation": "B071 (ref fence B100) / G06 / FE/ENG/API",
+        "contracts": "C01/C03/C05/C12/C14; S20; F19/F21/F31; V01/V02 notTested",
+        "acceptance": "K-CHART.DELETE: Chart còn dashboard/report hard refs chặn xóa; gỡ item khác delete chart"
+      }
+    },
+    {
+      "id": "CHART.SOURCE",
+      "configVersion": 1,
+      "label": "CHART.SOURCE",
+      "group": "CHART",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "config",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/CHART.SOURCE.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.11",
+        "output": "new source+chart config → config",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có khi đủ data/renderer",
+        "gates": "W + D + explicit source switch; W + D; người dùng chủ động chọn phiên bản mới, kiểm tra cột/kiểu/phép gộp; lỗi thì giữ nguồn cũ.",
+        "implementation": "B071 / G06 / FE/ENG/API",
+        "contracts": "C01/C03/C05/C12/C14; S20; F19/F21/F31; V01/V04 notTested",
+        "acceptance": "K-CHART.SOURCE: Cột/type/aggregation kiểm lại; lỗi giữ source/config cũ, V mới không auto rebind"
+      }
+    },
+    {
+      "id": "CHART.EXPORT",
+      "configVersion": 1,
+      "label": "CHART.EXPORT",
+      "group": "CHART",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "artifact",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/CHART.EXPORT.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.11",
+        "output": "chart/viewpoint → artifact(PNG sau kiểm chứng)",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có khi đủ data/renderer",
+        "gates": "R + đủ source/renderer/export capability; R, đủ dữ liệu/tài nguyên ảnh; công bố định dạng thực tế.",
+        "implementation": "B073 / G06 / EXP/FE",
+        "contracts": "C01/C03/C05/C12/C14; S20; F21/F22/F23; V01/V04 notTested",
+        "acceptance": "K-CHART.EXPORT: Không ảnh rỗng, nguồn/PCA/sample/camera chú thích, offline đủ assets"
+      }
+    },
+    {
+      "id": "DASH.CREATE",
+      "configVersion": 1,
+      "label": "DASH.CREATE",
+      "group": "DASH",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "config",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/DASH.CREATE.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.11",
+        "output": "dashboard/chart refs → config",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có, đủ chart/local",
+        "gates": "W, mở dùng R; tạo/đổi cần W, mở R; nhiều dashboard trong dự án.",
+        "implementation": "B072 / G06 / FE/API",
+        "contracts": "C01/C10/C14; S21; F21; V01/V02 notTested",
+        "acceptance": "K-DASH.CREATE: Layout 1/2/3 và order đúng, gỡ item không xóa chart/source"
+      }
+    },
+    {
+      "id": "DASH.RENAME",
+      "configVersion": 1,
+      "label": "DASH.RENAME",
+      "group": "DASH",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "config",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/DASH.RENAME.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.11",
+        "output": "dashboard/chart refs → config",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có, đủ chart/local",
+        "gates": "W, mở dùng R; tạo/đổi cần W, mở R; nhiều dashboard trong dự án.",
+        "implementation": "B072 / G06 / FE/API",
+        "contracts": "C01/C10/C14; S21; F21; V01/V02 notTested",
+        "acceptance": "K-DASH.RENAME: Layout 1/2/3 và order đúng, gỡ item không xóa chart/source"
+      }
+    },
+    {
+      "id": "DASH.OPEN",
+      "configVersion": 1,
+      "label": "DASH.OPEN",
+      "group": "DASH",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "view",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/DASH.OPEN.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.11",
+        "output": "dashboard ref → view",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có, đủ chart/local",
+        "gates": "R; tạo/đổi cần W, mở R; nhiều dashboard trong dự án.",
+        "implementation": "B072 / G06 / FE/API",
+        "contracts": "C01/C10/C14; S21; F21; V01/V02 notTested",
+        "acceptance": "K-DASH.OPEN: Layout 1/2/3 và order đúng, gỡ item không xóa chart/source"
+      }
+    },
+    {
+      "id": "DASH.ADD",
+      "configVersion": 1,
+      "label": "DASH.ADD",
+      "group": "DASH",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "config",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/DASH.ADD.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.11",
+        "output": "dashboard/chart refs → config",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có, đủ chart/local",
+        "gates": "W, mở dùng R; W; thêm/gỡ biểu đồ và lên/xuống/đổi vị trí theo bố cục đơn giản. Gỡ khỏi dashboard không xóa biểu đồ nguồn. Bố cục 1/2/3 cột đã chốt tại frontend §2; không kéo thả tự do.",
+        "implementation": "B072 / G06 / FE/API",
+        "contracts": "C01/C10/C14; S21; F21; V01/V02 notTested",
+        "acceptance": "K-DASH.ADD: Layout 1/2/3 và order đúng, gỡ item không xóa chart/source"
+      }
+    },
+    {
+      "id": "DASH.REMOVE",
+      "configVersion": 1,
+      "label": "DASH.REMOVE",
+      "group": "DASH",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "config",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/DASH.REMOVE.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.11",
+        "output": "dashboard/chart refs → config",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có, đủ chart/local",
+        "gates": "W, mở dùng R; W; thêm/gỡ biểu đồ và lên/xuống/đổi vị trí theo bố cục đơn giản. Gỡ khỏi dashboard không xóa biểu đồ nguồn. Bố cục 1/2/3 cột đã chốt tại frontend §2; không kéo thả tự do.",
+        "implementation": "B072 / G06 / FE/API",
+        "contracts": "C01/C10/C14; S21; F21; V01/V02 notTested",
+        "acceptance": "K-DASH.REMOVE: Layout 1/2/3 và order đúng, gỡ item không xóa chart/source"
+      }
+    },
+    {
+      "id": "DASH.ORDER",
+      "configVersion": 1,
+      "label": "DASH.ORDER",
+      "group": "DASH",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "config",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/DASH.ORDER.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.11",
+        "output": "dashboard/chart refs → config",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có, đủ chart/local",
+        "gates": "W, mở dùng R; W; thêm/gỡ biểu đồ và lên/xuống/đổi vị trí theo bố cục đơn giản. Gỡ khỏi dashboard không xóa biểu đồ nguồn. Bố cục 1/2/3 cột đã chốt tại frontend §2; không kéo thả tự do.",
+        "implementation": "B072 / G06 / FE/API",
+        "contracts": "C01/C10/C14; S21; F21; V01/V02 notTested",
+        "acceptance": "K-DASH.ORDER: Layout 1/2/3 và order đúng, gỡ item không xóa chart/source"
+      }
+    },
+    {
+      "id": "VIEW3D.ROTATE",
+      "configVersion": 1,
+      "label": "VIEW3D.ROTATE",
+      "group": "VIEW3D",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "view",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/VIEW3D.ROTATE.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.11",
+        "output": "scene/source refs → view",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có với assets/data local",
+        "gates": "R + renderer/scene; rotate không chọn/chạy operation",
+        "implementation": "B074 (khung B040) / G03/G06 / V3/FE",
+        "contracts": "C01/C05/C14/C15; S24; F20/F21; V01/V04 notTested",
+        "acceptance": "K-VIEW3D.ROTATE: Xoay/zoom/pick/reset không version/đổi nguồn; fallback giữ context/task, row đúng"
+      }
+    },
+    {
+      "id": "VIEW3D.ZOOM",
+      "configVersion": 1,
+      "label": "VIEW3D.ZOOM",
+      "group": "VIEW3D",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "view",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/VIEW3D.ZOOM.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.11",
+        "output": "scene/source refs → view",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có với assets/data local",
+        "gates": "R + renderer/scene; zoom chỉ canvas, không chiếm con lăn form/bảng",
+        "implementation": "B074 (khung B040) / G03/G06 / V3/FE",
+        "contracts": "C01/C05/C14/C15; S24; F20/F21; V01/V04 notTested",
+        "acceptance": "K-VIEW3D.ZOOM: Xoay/zoom/pick/reset không version/đổi nguồn; fallback giữ context/task, row đúng"
+      }
+    },
+    {
+      "id": "VIEW3D.PICK",
+      "configVersion": 1,
+      "label": "VIEW3D.PICK",
+      "group": "VIEW3D",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "view",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/VIEW3D.PICK.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.11",
+        "output": "scene/source refs → view",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có với assets/data local",
+        "gates": "R + metadata/renderer; PICK cần row mapping; R; điều khiển góc nhìn và xem chi tiết điểm, không đổi dữ liệu; lưu góc nhìn chỉ khi chọn lưu cấu hình.",
+        "implementation": "B074 (khung B040) / G03/G06 / V3/FE",
+        "contracts": "C01/C05/C14/C15; S24; F20/F21; V01/V04 notTested",
+        "acceptance": "K-VIEW3D.PICK: Xoay/zoom/pick/reset không version/đổi nguồn; fallback giữ context/task, row đúng"
+      }
+    },
+    {
+      "id": "VIEW3D.RESET",
+      "configVersion": 1,
+      "label": "VIEW3D.RESET",
+      "group": "VIEW3D",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "view",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/VIEW3D.RESET.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.11",
+        "output": "scene/source refs → view",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có với assets/data local",
+        "gates": "R + renderer/scene; đặt camera về mặc định, không reset dataset",
+        "implementation": "B074 (khung B040) / G03/G06 / V3/FE",
+        "contracts": "C01/C05/C14/C15; S24; F20/F21; V01/V04 notTested",
+        "acceptance": "K-VIEW3D.RESET: Xoay/zoom/pick/reset không version/đổi nguồn; fallback giữ context/task, row đúng"
+      }
+    },
+    {
+      "id": "VIEW3D.SAVE_LOCAL_CAMERA",
+      "configVersion": 1,
+      "label": "VIEW3D.SAVE_LOCAL_CAMERA",
+      "group": "VIEW3D",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "config",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/VIEW3D.SAVE_LOCAL_CAMERA.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§Phụ lục v2",
+        "output": "camera/viewId → config(cá nhân local, không project sync)",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có với assets/data local",
+        "gates": "R + camera hợp lệ + hành động lưu rõ; khóa local preferences theo account/profile/project/view",
+        "implementation": "B074 (khung B040) / G03/G06 / V3/FE",
+        "contracts": "C01/C05/C14/C15; S24; F20/F21; V01/V04 notTested",
+        "acceptance": "K-VIEW3D.SAVE_LOCAL_CAMERA: Chỉ lưu khi bấm rõ; tab read-only được lưu cá nhân; không version/outbox"
+      }
+    },
+    {
+      "id": "VERSION.LIST",
+      "configVersion": 1,
+      "label": "VERSION.LIST",
+      "group": "VERSION",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "view",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/VERSION.LIST.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.12",
+        "output": "version refs → view",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có với metadata/content tương ứng local",
+        "gates": "R, chuyển pointer cần W; R; xem V0, quan hệ cha/nhánh, nguồn nối/ghép và khác biệt có ý nghĩa.",
+        "implementation": "B070 / G06 / V3/FE/API",
+        "contracts": "C01/C03/C05/C11/C15; S13/S24; F04/F15/F20; V01/V02/V04 notTested",
+        "acceptance": "K-VERSION.LIST: Nhiều nguồn/nhánh đúng, thiếu byte báo rõ; compare không coi cùng vị trí là cùng row"
+      }
+    },
+    {
+      "id": "VERSION.COMPARE",
+      "configVersion": 1,
+      "label": "VERSION.COMPARE",
+      "group": "VERSION",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "view",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/VERSION.COMPARE.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.12",
+        "output": "version refs → view",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có với metadata/content tương ứng local",
+        "gates": "R, chuyển pointer cần W; R; xem V0, quan hệ cha/nhánh, nguồn nối/ghép và khác biệt có ý nghĩa.",
+        "implementation": "B070 / G06 / V3/FE/API",
+        "contracts": "C01/C03/C05/C11/C15; S13/S24; F04/F15/F20; V01/V02/V04 notTested",
+        "acceptance": "K-VERSION.COMPARE: Nhiều nguồn/nhánh đúng, thiếu byte báo rõ; compare không coi cùng vị trí là cùng row"
+      }
+    },
+    {
+      "id": "VERSION.UNDO",
+      "configVersion": 1,
+      "label": "VERSION.UNDO",
+      "group": "VERSION",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "config",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/VERSION.UNDO.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.12",
+        "output": "selected version → config(current pointer)",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có với metadata/content tương ứng local",
+        "gates": "W + version xác định/đủ nội dung khi xử lý tiếp; W; chuyển phiên bản đang làm việc; không xóa version mới hơn. Xử lý tiếp từ bản cũ tạo nhánh.",
+        "implementation": "B042, B043 / G03 / V3/FE/API",
+        "contracts": "C01/C03/C05/C11/C15; S13/S24; F04/F15/F20; V01/V02/V04 notTested",
+        "acceptance": "K-VERSION.UNDO: Không xóa phiên bản mới; biến đổi tiếp mới tạo branch; source của chart/model cũ giữ"
+      }
+    },
+    {
+      "id": "VERSION.SELECT",
+      "configVersion": 1,
+      "label": "VERSION.SELECT",
+      "group": "VERSION",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "config",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/VERSION.SELECT.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.12",
+        "output": "selected version → config(current pointer)",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có với metadata/content tương ứng local",
+        "gates": "W + version xác định/đủ nội dung khi xử lý tiếp; W; chuyển phiên bản đang làm việc; không xóa version mới hơn. Xử lý tiếp từ bản cũ tạo nhánh.",
+        "implementation": "B042, B043 / G03 / V3/FE/API",
+        "contracts": "C01/C03/C05/C11/C15; S13/S24; F04/F15/F20; V01/V02/V04 notTested",
+        "acceptance": "K-VERSION.SELECT: Không xóa phiên bản mới; biến đổi tiếp mới tạo branch; source của chart/model cũ giữ"
+      }
+    },
+    {
+      "id": "EXPORT.DATA",
+      "configVersion": 1,
+      "label": "EXPORT.DATA",
+      "group": "EXPORT",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "artifact",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/EXPORT.DATA.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.13",
+        "output": "version/result refs → artifact (tệp tải, không buộc lưu project)",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có nếu đủ data/exporter/font",
+        "gates": "R + D + exporter capability/assets; chọn dataset/phiên bản → CSV/JSON → kiểm tra → tải; R + D.",
+        "implementation": "B073 (model B064) / G05/G06 / EXP/FE",
+        "contracts": "C01/C03/C12/C14; S18/S19/S22; F18/F22/F23; V01/V04 notTested",
+        "acceptance": "K-EXPORT.DATA: Đúng nguồn/precision/format đã verify, không bắt server/AI hoặc lưu report"
+      }
+    },
+    {
+      "id": "EXPORT.RESULT",
+      "configVersion": 1,
+      "label": "EXPORT.RESULT",
+      "group": "EXPORT",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "artifact",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/EXPORT.RESULT.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.13",
+        "output": "version/result refs → artifact (tệp tải, không buộc lưu project)",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có nếu đủ data/exporter/font",
+        "gates": "R + D + exporter capability/assets; chọn chart/model/run → định dạng thực tế → tải; R + D.",
+        "implementation": "B073 (model B064) / G05/G06 / EXP/FE",
+        "contracts": "C01/C03/C12/C14; S18/S19/S22; F18/F22/F23; V01/V04 notTested",
+        "acceptance": "K-EXPORT.RESULT: Đúng nguồn/precision/format đã verify, không bắt server/AI hoặc lưu report"
+      }
+    },
+    {
+      "id": "REPORT.CONFIG",
+      "configVersion": 1,
+      "label": "REPORT.CONFIG",
+      "group": "REPORT",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "config",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/REPORT.CONFIG.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.13",
+        "output": "sections/source revisions/conclusion → config",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có nếu đủ source/font/exporter",
+        "gates": "R để draft cá nhân, W nếu lưu project; chọn phần chất lượng, bước xử lý, biểu đồ, tham số, chỉ số và kết luận; chọn nguồn/phiên bản/lượt chạy rõ ràng.",
+        "implementation": "B073 / G06 / EXP/FE/API",
+        "contracts": "C01/C12/C13/C14; S19/S22; F22/F23/F31; V01/V04 notTested",
+        "acceptance": "K-REPORT.CONFIG: Đúng phần/nguồn/metric/conclusion duyệt, font Việt offline, không AI bắt buộc"
+      }
+    },
+    {
+      "id": "REPORT.PREVIEW",
+      "configVersion": 1,
+      "label": "REPORT.PREVIEW",
+      "group": "REPORT",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "view",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/REPORT.PREVIEW.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.13",
+        "output": "report selection+resolved source → view",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có nếu đủ source/font/exporter",
+        "gates": "R + D; R + D để tạo/tải, W nếu lưu artifact trong dự án; PDF/font tiếng Việt/tài nguyên dùng được offline. Kết luận do người dùng nhập hoặc AI đã duyệt, không bắt buộc gọi AI.",
+        "implementation": "B073 / G06 / EXP/FE/API",
+        "contracts": "C01/C12/C13/C14; S19/S22; F22/F23/F31; V01/V04 notTested",
+        "acceptance": "K-REPORT.PREVIEW: Đúng phần/nguồn/metric/conclusion duyệt, font Việt offline, không AI bắt buộc"
+      }
+    },
+    {
+      "id": "REPORT.GENERATE",
+      "configVersion": 1,
+      "label": "REPORT.GENERATE",
+      "group": "REPORT",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "artifact",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/REPORT.GENERATE.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.13",
+        "output": "report snapshot/PDF ref → artifact(tệp PDF); lưu project mới cần W",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có nếu đủ source/font/exporter",
+        "gates": "R + D; lưu project cần W; R + D để tạo/tải, W nếu lưu artifact trong dự án; PDF/font tiếng Việt/tài nguyên dùng được offline. Kết luận do người dùng nhập hoặc AI đã duyệt, không bắt buộc gọi AI.",
+        "implementation": "B073 / G06 / EXP/FE/API",
+        "contracts": "C01/C12/C13/C14; S19/S22; F22/F23/F31; V01/V04 notTested",
+        "acceptance": "K-REPORT.GENERATE: PDF đủ font/sections/source/metrics, download không bắt save report, không AI bắt buộc"
+      }
+    },
+    {
+      "id": "REPORT.DOWNLOAD",
+      "configVersion": 1,
+      "label": "REPORT.DOWNLOAD",
+      "group": "REPORT",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "artifact",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/REPORT.DOWNLOAD.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§4.13",
+        "output": "report snapshot/PDF ref → artifact(tệp PDF); lưu project mới cần W",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có nếu đủ source/font/exporter",
+        "gates": "R + D; lưu project cần W; R + D để tạo/tải, W nếu lưu artifact trong dự án; PDF/font tiếng Việt/tài nguyên dùng được offline. Kết luận do người dùng nhập hoặc AI đã duyệt, không bắt buộc gọi AI.",
+        "implementation": "B073 / G06 / EXP/FE/API",
+        "contracts": "C01/C12/C13/C14; S19/S22; F22/F23/F31; V01/V04 notTested",
+        "acceptance": "K-REPORT.DOWNLOAD: PDF đủ font/sections/source/metrics, download không bắt save report, không AI bắt buộc"
+      }
+    },
+    {
+      "id": "OFFLINE.PREPARE",
+      "configVersion": 1,
+      "label": "OFFLINE.PREPARE",
+      "group": "OFFLINE",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "control",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/OFFLINE.PREPARE.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§6",
+        "output": "manifest/status → control",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Tùy hành động; xem status/gỡ sạch có thể offline",
+        "gates": "R; prepare W+S+quota; W + S, đủ dung lượng; Tải toàn bộ tài nguyên dự án tại thời điểm chuẩn bị; tiến độ và kiểm tra đầy đủ",
+        "implementation": "B080 / G07 / LOC/API/FE",
+        "contracts": "C01/C06/C10/C13; S08/S23; F09/F23; V01/V02/V04 notTested",
+        "acceptance": "K-OFFLINE.PREPARE: Ready chỉ khi dependencies/byte đủ, không tự xóa unsynced hoặc server"
+      }
+    },
+    {
+      "id": "OFFLINE.STATUS",
+      "configVersion": 1,
+      "label": "OFFLINE.STATUS",
+      "group": "OFFLINE",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "view",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/OFFLINE.STATUS.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§6",
+        "output": "local manifest/dependencies → view",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có, kiểm byte thực local",
+        "gates": "R; R; Phân biệt đủ cho màn hình/tác vụ hiện tại và đủ toàn bộ dự án",
+        "implementation": "B080 / G07 / LOC/API/FE",
+        "contracts": "C01/C06/C10/C13; S08/S23; F09/F23; V01/V02/V04 notTested",
+        "acceptance": "K-OFFLINE.STATUS: Phân biệt currentContext/fullProject, missing byte/build không ready"
+      }
+    },
+    {
+      "id": "OFFLINE.REMOVE",
+      "configVersion": 1,
+      "label": "OFFLINE.REMOVE",
+      "group": "OFFLINE",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "control",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/OFFLINE.REMOVE.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§6",
+        "output": "offline local refs → control",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có cho bản sạch local",
+        "gates": "R + scope local sạch/không tác vụ ghi + xác nhận; phối hợp local gate; Đề xuất; chỉ khi không còn thay đổi chưa đồng bộ hoặc tác vụ ghi; Giải phóng bản offline theo phạm vi rõ; không xóa tài nguyên máy chủ",
+        "implementation": "B080 / G07 / LOC/API/FE",
+        "contracts": "C01/C06/C10/C13; S08/S23; F09/F23; V01/V02/V04 notTested",
+        "acceptance": "K-OFFLINE.REMOVE: Chỉ gỡ phạm vi đã đồng bộ và tài nguyên không còn ref; không xóa server/unsynced"
+      }
+    },
+    {
+      "id": "SYNC.NOW",
+      "configVersion": 1,
+      "label": "SYNC.NOW",
+      "group": "SYNC",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "control",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/SYNC.NOW.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§6",
+        "output": "pending mutations/snapshot → control",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Không gửi offline; xem conflict local được",
+        "gates": "S + đúng owner + sync coordinator cho gửi, R để xem; S, đúng tài khoản; có thay đổi chờ; Chủ động đồng bộ snapshot đầu ra hoàn chỉnh, giữ phát sinh mới cho lượt sau",
+        "implementation": "B082 (nền B024/B033) / G02L/G02S/G07 / SYN/FE/API",
+        "contracts": "C07/C09/C10/C11; S08/S11/S16; F13/F15/F28; V01/V02/V04 notTested",
+        "acceptance": "K-SYNC.NOW: ACK đúng snapshot/hash/atomic group, mất ACK không trùng, giữ hai phía không merge"
+      }
+    },
+    {
+      "id": "SYNC.RETRY",
+      "configVersion": 1,
+      "label": "SYNC.RETRY",
+      "group": "SYNC",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "control",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/SYNC.RETRY.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§6",
+        "output": "pending mutations/snapshot → control",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Không gửi offline; xem conflict local được",
+        "gates": "S + đúng owner + sync coordinator cho gửi, R để xem; S; lượt trước lỗi; Giữ dữ liệu/hàng đợi, không gửi trùng",
+        "implementation": "B082 (nền B024/B033) / G02L/G02S/G07 / SYN/FE/API",
+        "contracts": "C07/C09/C10/C11; S08/S11/S16; F13/F15/F28; V01/V02/V04 notTested",
+        "acceptance": "K-SYNC.RETRY: ACK đúng snapshot/hash/atomic group, mất ACK không trùng, giữ hai phía không merge"
+      }
+    },
+    {
+      "id": "SYNC.CONFLICT",
+      "configVersion": 1,
+      "label": "SYNC.CONFLICT",
+      "group": "SYNC",
+      "inputKinds": [
+        "context"
+      ],
+      "outputKind": "view",
+      "configSchemaId": "https://dashboard.invalid/contracts/v1/operations/SYNC.CONFLICT.v1.json",
+      "defaults": null,
+      "preconditions": [],
+      "resourceEstimator": null,
+      "previewHandler": null,
+      "executor": null,
+      "cancelMode": "unavailable",
+      "offlineCapable": false,
+      "learnsParameters": false,
+      "createsVersion": false,
+      "capability": {
+        "status": "unavailable",
+        "reason": "SCHEMA_AND_EXECUTOR_PENDING_TASK"
+      },
+      "documentation": {
+        "source": "docs/g00/danh_muc_thao_tac.md",
+        "section": "§6",
+        "output": "conflict descriptors → view; chọn tiếp cần W/revision",
+        "fitPolicy": "Không",
+        "offlinePolicy": "Có với conflict metadata local; không sync offline",
+        "gates": "R xem; lựa chọn ghi qua mutation mới; R; Giữ cả hai phía, chọn nhánh làm việc; không ghi đè/tự gộp",
+        "implementation": "B082 (nền B024/B033) / G02L/G02S/G07 / SYN/FE/API",
+        "contracts": "C07/C09/C10/C11; S08/S11/S16; F13/F15/F28; V01/V02/V04 notTested",
+        "acceptance": "K-SYNC.CONFLICT: Giữ server/copy/branch, validate source khi chọn, không merge hoặc re-ID deleted"
+      }
+    }
+  ]
+}

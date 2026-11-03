@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dashboard.invalid/contracts/v1/auth-deferred.json",
+  "type": "object",
+  "properties": {
+    "revocationHandle": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{16,256}$"
+    }
+  },
+  "required": [
+    "revocationHandle"
+  ],
+  "additionalProperties": false
+}

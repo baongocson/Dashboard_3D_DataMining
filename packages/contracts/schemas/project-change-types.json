@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dashboard.invalid/contracts/v1/project-change-types.json",
+  "$ref": "https://dashboard.invalid/contracts/v1/project-change-types.json#/$defs/change",
+  "$defs": {
+    "change": {
+      "type": "object",
+      "properties": {
+        "sequence": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/revision"
+        },
+        "metadataRevision": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/revision"
+        },
+        "mutationId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+        },
+        "kind": {
+          "enum": [
+            "project.create",
+            "project.rename",
+            "dataset.create",
+            "dataset.rename",
+            "dataset.version.create"
+          ]
+        },
+        "payloadHash": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/sha256"
+        },
+        "entityIds": {
+          "type": "array",
+          "items": {
+            "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+          },
+          "uniqueItems": true
+        },
+        "revisions": {
+          "$ref": "https://dashboard.invalid/contracts/v1/sync-ack.json#/properties/acknowledged/items/properties/revisions"
+        },
+        "outcome": {
+          "$ref": "https://dashboard.invalid/contracts/v1/sync-ack.json#/properties/acknowledged/items/properties/outcome"
+        },
+        "conflictRefs": {
+          "$ref": "https://dashboard.invalid/contracts/v1/sync-ack.json#/properties/acknowledged/items/properties/conflictRefs"
+        },
+        "createdAt": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/utc"
+        }
+      },
+      "required": [
+        "sequence",
+        "metadataRevision",
+        "mutationId",
+        "kind",
+        "payloadHash",
+        "entityIds",
+        "revisions",
+        "outcome",
+        "conflictRefs",
+        "createdAt"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

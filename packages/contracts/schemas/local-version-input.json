@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dashboard.invalid/contracts/v1/local-version-input.json",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "versionId": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+    },
+    "datasetId": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+    },
+    "branchId": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+    },
+    "parentVersionId": {
+      "anyOf": [
+        {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "sourceVersions": {
+      "type": "array",
+      "items": {
+        "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/sourceRef"
+      }
+    },
+    "tableManifestId": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+    },
+    "rowCount": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/revision"
+    },
+    "columnCount": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/revision"
+    },
+    "operationSnapshot": {
+      "$ref": "https://dashboard.invalid/contracts/v1/operation-config.json"
+    },
+    "rowLineageArtifactId": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "versionId",
+    "datasetId",
+    "branchId",
+    "parentVersionId",
+    "sourceVersions",
+    "tableManifestId",
+    "rowCount",
+    "columnCount",
+    "operationSnapshot"
+  ],
+  "additionalProperties": false
+}

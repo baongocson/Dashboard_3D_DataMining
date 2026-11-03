@@ -1,0 +1,355 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dashboard.invalid/contracts/v1/worker-event.json",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "protocolVersion": {
+          "const": 1
+        },
+        "taskId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+        },
+        "runId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+        },
+        "stepId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+        },
+        "generation": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/revision"
+        },
+        "fence": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/revision"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "type": {
+          "const": "STARTED"
+        },
+        "data": {
+          "type": "object",
+          "properties": {},
+          "required": [],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "protocolVersion",
+        "taskId",
+        "runId",
+        "stepId",
+        "generation",
+        "fence",
+        "sequence",
+        "type",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "protocolVersion": {
+          "const": 1
+        },
+        "taskId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+        },
+        "runId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+        },
+        "stepId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+        },
+        "generation": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/revision"
+        },
+        "fence": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/revision"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "type": {
+          "const": "PROGRESS"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "phase": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            },
+            "completedUnits": {
+              "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/revision"
+            },
+            "totalUnits": {
+              "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/revision"
+            }
+          },
+          "required": [
+            "phase"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "protocolVersion",
+        "taskId",
+        "runId",
+        "stepId",
+        "generation",
+        "fence",
+        "sequence",
+        "type",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "protocolVersion": {
+          "const": 1
+        },
+        "taskId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+        },
+        "runId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+        },
+        "stepId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+        },
+        "generation": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/revision"
+        },
+        "fence": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/revision"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "type": {
+          "const": "WARNING"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            }
+          },
+          "required": [
+            "code"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "protocolVersion",
+        "taskId",
+        "runId",
+        "stepId",
+        "generation",
+        "fence",
+        "sequence",
+        "type",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "protocolVersion": {
+          "const": 1
+        },
+        "taskId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+        },
+        "runId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+        },
+        "stepId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+        },
+        "generation": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/revision"
+        },
+        "fence": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/revision"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "type": {
+          "const": "RESULT"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "stagedArtifactRefs": {
+              "type": "array",
+              "items": {
+                "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+              },
+              "uniqueItems": true
+            },
+            "summary": {
+              "type": "object",
+              "properties": {
+                "rowCount": {
+                  "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/revision"
+                },
+                "columnCount": {
+                  "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/revision"
+                }
+              },
+              "required": [
+                "rowCount",
+                "columnCount"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "stagedArtifactRefs",
+            "summary"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "protocolVersion",
+        "taskId",
+        "runId",
+        "stepId",
+        "generation",
+        "fence",
+        "sequence",
+        "type",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "protocolVersion": {
+          "const": 1
+        },
+        "taskId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+        },
+        "runId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+        },
+        "stepId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+        },
+        "generation": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/revision"
+        },
+        "fence": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/revision"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "type": {
+          "const": "FAILED"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "$ref": "https://dashboard.invalid/contracts/v1/error-envelope.json#/properties/error/properties/code"
+            }
+          },
+          "required": [
+            "code"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "protocolVersion",
+        "taskId",
+        "runId",
+        "stepId",
+        "generation",
+        "fence",
+        "sequence",
+        "type",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "protocolVersion": {
+          "const": 1
+        },
+        "taskId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+        },
+        "runId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+        },
+        "stepId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+        },
+        "generation": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/revision"
+        },
+        "fence": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/revision"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "type": {
+          "const": "CANCELLED"
+        },
+        "data": {
+          "type": "object",
+          "properties": {},
+          "required": [],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "protocolVersion",
+        "taskId",
+        "runId",
+        "stepId",
+        "generation",
+        "fence",
+        "sequence",
+        "type",
+        "data"
+      ],
+      "additionalProperties": false
+    }
+  ]
+}

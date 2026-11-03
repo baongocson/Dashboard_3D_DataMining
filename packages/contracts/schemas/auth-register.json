@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dashboard.invalid/contracts/v1/auth-register.json",
+  "type": "object",
+  "properties": {
+    "email": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 254
+    },
+    "displayName": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100
+    },
+    "password": {
+      "type": "string",
+      "minLength": 15,
+      "maxLength": 128
+    },
+    "confirmPassword": {
+      "type": "string",
+      "minLength": 15,
+      "maxLength": 128
+    }
+  },
+  "required": [
+    "email",
+    "displayName",
+    "password",
+    "confirmPassword"
+  ],
+  "additionalProperties": false
+}

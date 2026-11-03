@@ -1,0 +1,134 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dashboard.invalid/contracts/v1/project-change-page.json",
+  "type": "object",
+  "properties": {
+    "projectId": {
+      "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+    },
+    "serverGeneration": {
+      "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+    },
+    "manifestId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{43}$"
+    },
+    "manifestHash": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/sha256"
+    },
+    "rangeId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{43}$"
+    },
+    "rangeHash": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/sha256"
+    },
+    "fromSequence": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/revision"
+    },
+    "throughSequence": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/revision"
+    },
+    "fromMetadataRevision": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/revision"
+    },
+    "throughMetadataRevision": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/revision"
+    },
+    "pageAfterSequence": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/revision"
+    },
+    "cursor": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{43}$"
+    },
+    "cursorExpiresAt": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/utc"
+    },
+    "rangeExpiresAt": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/utc"
+    },
+    "retentionDays": {
+      "const": 90
+    },
+    "pageSize": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "changes": {
+      "type": "array",
+      "items": {
+        "$ref": "https://dashboard.invalid/contracts/v1/project-change-types.json#/$defs/change"
+      },
+      "maxItems": 100
+    },
+    "nextCursor": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{43}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "resumeCursor": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{43}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "resumeExpiresAt": {
+      "anyOf": [
+        {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/utc"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "complete": {
+      "type": "boolean"
+    },
+    "acknowledgesOutbox": {
+      "const": false
+    },
+    "mutationsApplied": {
+      "const": false
+    }
+  },
+  "required": [
+    "projectId",
+    "serverGeneration",
+    "manifestId",
+    "manifestHash",
+    "rangeId",
+    "rangeHash",
+    "fromSequence",
+    "throughSequence",
+    "fromMetadataRevision",
+    "throughMetadataRevision",
+    "pageAfterSequence",
+    "cursor",
+    "cursorExpiresAt",
+    "rangeExpiresAt",
+    "retentionDays",
+    "pageSize",
+    "changes",
+    "nextCursor",
+    "resumeCursor",
+    "resumeExpiresAt",
+    "complete",
+    "acknowledgesOutbox",
+    "mutationsApplied"
+  ],
+  "additionalProperties": false
+}

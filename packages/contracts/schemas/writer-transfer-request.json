@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dashboard.invalid/contracts/v1/writer-transfer-request.json",
+  "type": "object",
+  "properties": {
+    "protocolVersion": {
+      "const": 1
+    },
+    "type": {
+      "const": "TRANSFER_REQUEST"
+    },
+    "requestId": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+    },
+    "ownerId": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+    },
+    "projectId": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+    },
+    "senderId": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+    }
+  },
+  "required": [
+    "protocolVersion",
+    "type",
+    "requestId",
+    "ownerId",
+    "projectId",
+    "senderId"
+  ],
+  "additionalProperties": false
+}

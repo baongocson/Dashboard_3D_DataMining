@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dashboard.invalid/contracts/v1/local-outbox.json",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+    },
+    "ownerId": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+    },
+    "projectId": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+    },
+    "mutation": {
+      "$ref": "https://dashboard.invalid/contracts/v1/mutation-envelope.json"
+    },
+    "artifactDescriptors": {
+      "type": "array",
+      "items": {
+        "$ref": "https://dashboard.invalid/contracts/v1/artifact-descriptor.json"
+      }
+    },
+    "serverGeneration": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+    },
+    "status": {
+      "enum": [
+        "pending",
+        "acknowledged",
+        "blockedDeleted"
+      ]
+    },
+    "commitId": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+    }
+  },
+  "required": [
+    "id",
+    "ownerId",
+    "projectId",
+    "mutation",
+    "artifactDescriptors",
+    "serverGeneration",
+    "status",
+    "commitId"
+  ],
+  "additionalProperties": false
+}

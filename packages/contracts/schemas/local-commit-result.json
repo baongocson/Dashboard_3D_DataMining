@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dashboard.invalid/contracts/v1/local-commit-result.json",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "status": {
+          "const": "localCommitted"
+        },
+        "commitId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+        },
+        "entityIds": {
+          "type": "array",
+          "items": {
+            "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+          }
+        },
+        "artifactIds": {
+          "type": "array",
+          "items": {
+            "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+          }
+        },
+        "outboxIds": {
+          "type": "array",
+          "items": {
+            "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+          }
+        },
+        "alreadyCommitted": {
+          "type": "boolean"
+        },
+        "viewPointerUpdated": {
+          "type": "boolean"
+        },
+        "durability": {
+          "enum": [
+            "strict",
+            "relaxed",
+            "default"
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "commitId",
+        "entityIds",
+        "artifactIds",
+        "outboxIds",
+        "alreadyCommitted",
+        "viewPointerUpdated",
+        "durability"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "status": {
+          "const": "cancelled"
+        },
+        "taskId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+        },
+        "commitId": {
+          "type": "null"
+        }
+      },
+      "required": [
+        "status",
+        "taskId",
+        "commitId"
+      ],
+      "additionalProperties": false
+    }
+  ]
+}

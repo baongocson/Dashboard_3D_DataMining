@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dashboard.invalid/contracts/v1/mutation-envelope.json",
+  "type": "object",
+  "properties": {
+    "mutationId": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "kind": {
+      "enum": [
+        "project.create",
+        "project.rename",
+        "dataset.create",
+        "dataset.rename",
+        "dataset.version.create",
+        "dataset.head.select",
+        "workflow.save",
+        "run.create",
+        "run.update",
+        "run.step.commit",
+        "chart.save",
+        "chart.delete",
+        "dashboard.save",
+        "model.save",
+        "report.save",
+        "reopenState.save",
+        "ai.acceptance.record"
+      ]
+    },
+    "projectId": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "entityId": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "schemaVersion": {
+      "const": 1
+    },
+    "baseRevision": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "dependencies": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+      },
+      "uniqueItems": true
+    },
+    "payload": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "https://dashboard.invalid/contracts/v1/json-value.json"
+      }
+    },
+    "payloadHash": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/sha256"
+    }
+  },
+  "required": [
+    "mutationId",
+    "kind",
+    "projectId",
+    "entityId",
+    "schemaVersion",
+    "baseRevision",
+    "dependencies",
+    "payload",
+    "payloadHash"
+  ],
+  "additionalProperties": false
+}

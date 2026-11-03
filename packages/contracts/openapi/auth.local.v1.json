@@ -1,0 +1,2672 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Dashboard B030 local-dev auth only",
+    "version": "0.1.0",
+    "description": "C07/C18, O01/O02, primary S09 JSON Schema. This is not public auth readiness or full API. Fake mail profile rejects production/non-loopback origin. Strict JSON: no duplicate keys, unsafe integers, extra fields or coercion. Unknown error403 preserves local outbox; no Clear-Site-Data."
+  },
+  "servers": [
+    {
+      "url": "/api/v1"
+    }
+  ],
+  "paths": {
+    "/auth/csrf": {
+      "get": {
+        "operationId": "get__auth_csrf",
+        "description": "Public bootstrap; no preexisting session. Nonce cookie HttpOnly/Secure/SameSite=Lax, signed token600s.",
+        "tags": [
+          "B030-local-auth"
+        ],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Validated S09 result; serverNow UTC; accepted is not delivered.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "const": "no-store"
+                }
+              },
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Set-Cookie": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "__Host cookie; Secure; HttpOnly; SameSite=Lax; Path=/; never cached."
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/success-envelope"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/auth-csrf"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "operationId": "post__auth_register",
+        "description": "Pending24h, password hash only; no slot until verify; no auto-login.",
+        "tags": [
+          "B030-local-auth"
+        ],
+        "security": [
+          {
+            "csrfCookie": [],
+            "csrfHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Origin",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Exact configured same-origin HTTPS loopback in development; not wildcard."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/auth-register"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Validated S09 result; serverNow UTC; accepted is not delivered.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "const": "no-store"
+                }
+              },
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/success-envelope"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/auth-challenge"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/otp/resend": {
+      "post": {
+        "operationId": "post__auth_otp_resend",
+        "description": "Cooldown60s; new generation; total5 sends/email/purpose/hour (includes initial); retry only after permitted cooldown.",
+        "tags": [
+          "B030-local-auth"
+        ],
+        "security": [
+          {
+            "csrfCookie": [],
+            "csrfHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Origin",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Exact configured same-origin HTTPS loopback in development; not wildcard."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/auth-resend"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Validated S09 result; serverNow UTC; accepted is not delivered.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "const": "no-store"
+                }
+              },
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/success-envelope"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/auth-challenge"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/register/verify": {
+      "post": {
+        "operationId": "post__auth_register_verify",
+        "description": "Register purpose only, one-use OTP300s/5 wrong, activation counter<100 in same transaction.",
+        "tags": [
+          "B030-local-auth"
+        ],
+        "security": [
+          {
+            "csrfCookie": [],
+            "csrfHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Origin",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Exact configured same-origin HTTPS loopback in development; not wildcard."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/auth-verify"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Validated S09 result; serverNow UTC; accepted is not delivered.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "const": "no-store"
+                }
+              },
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/success-envelope"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/auth-verified"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "operationId": "post__auth_login",
+        "description": "Credential check without preexisting session, opaque cookie; new login atomically revokes previous. Handle returned only on issuance.",
+        "tags": [
+          "B030-local-auth"
+        ],
+        "security": [
+          {
+            "csrfCookie": [],
+            "csrfHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Origin",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Exact configured same-origin HTTPS loopback in development; not wildcard."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/auth-login"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Validated S09 result; serverNow UTC; accepted is not delivered.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "const": "no-store"
+                }
+              },
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Set-Cookie": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "__Host cookie; Secure; HttpOnly; SameSite=Lax; Path=/; never cached."
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/success-envelope"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/auth-login-result"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/password/forgot": {
+      "post": {
+        "operationId": "post__auth_password_forgot",
+        "description": "Uniform public shape for known/unknown email, no identity flag. fake-local accepts both; delivery not proven.",
+        "tags": [
+          "B030-local-auth"
+        ],
+        "security": [
+          {
+            "csrfCookie": [],
+            "csrfHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Origin",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Exact configured same-origin HTTPS loopback in development; not wildcard."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/auth-forgot"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Validated S09 result; serverNow UTC; accepted is not delivered.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "const": "no-store"
+                }
+              },
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/success-envelope"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/auth-challenge"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/password/verify": {
+      "post": {
+        "operationId": "post__auth_password_verify",
+        "description": "Reset purpose only; grant300s/one-use/passwordGeneration. Unknown identity decoy grant has no authority.",
+        "tags": [
+          "B030-local-auth"
+        ],
+        "security": [
+          {
+            "csrfCookie": [],
+            "csrfHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Origin",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Exact configured same-origin HTTPS loopback in development; not wildcard."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/auth-verify"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Validated S09 result; serverNow UTC; accepted is not delivered.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "const": "no-store"
+                }
+              },
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/success-envelope"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/auth-reset-grant"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/password/reset": {
+      "post": {
+        "operationId": "post__auth_password_reset",
+        "description": "Password/grant/epoch atomic; no auto-login or local deletion.",
+        "tags": [
+          "B030-local-auth"
+        ],
+        "security": [
+          {
+            "csrfCookie": [],
+            "csrfHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Origin",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Exact configured same-origin HTTPS loopback in development; not wildcard."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/auth-password-reset"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Validated S09 result; serverNow UTC; accepted is not delivered.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "const": "no-store"
+                }
+              },
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/success-envelope"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/auth-reset-result"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/session": {
+      "get": {
+        "operationId": "get__auth_session",
+        "description": "Session token hash/owner/epoch/expiry/currentSession checks. No handle in introspection.",
+        "tags": [
+          "B030-local-auth"
+        ],
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Validated S09 result; serverNow UTC; accepted is not delivered.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "const": "no-store"
+                }
+              },
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/success-envelope"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/auth-session"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/me": {
+      "get": {
+        "operationId": "get__me",
+        "description": "Self profile only; no owner query parameter.",
+        "tags": [
+          "B030-local-auth"
+        ],
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Validated S09 result; serverNow UTC; accepted is not delivered.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "const": "no-store"
+                }
+              },
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/success-envelope"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/auth-profile"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "patch__me",
+        "description": "Display name only; conditional user+session fence in transaction.",
+        "tags": [
+          "B030-local-auth"
+        ],
+        "security": [
+          {
+            "sessionCookie": [],
+            "csrfCookie": [],
+            "csrfHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Origin",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Exact configured same-origin HTTPS loopback in development; not wildcard."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/auth-profile-patch"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Validated S09 result; serverNow UTC; accepted is not delivered.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "const": "no-store"
+                }
+              },
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/success-envelope"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/auth-profile"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "operationId": "post__auth_logout",
+        "description": "Server revoke only. Browser dirty/outbox branches belong B022/B043; API never asserts local is clean or clears site data.",
+        "tags": [
+          "B030-local-auth"
+        ],
+        "security": [
+          {
+            "sessionCookie": [],
+            "csrfCookie": [],
+            "csrfHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Origin",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Exact configured same-origin HTTPS loopback in development; not wildcard."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/auth-empty"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Validated S09 result; serverNow UTC; accepted is not delivered.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "const": "no-store"
+                }
+              },
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Set-Cookie": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "__Host cookie; Secure; HttpOnly; SameSite=Lax; Path=/; never cached."
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/success-envelope"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/auth-revoked"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/revoke-deferred": {
+      "post": {
+        "operationId": "post__auth_revoke_deferred",
+        "description": "Idempotent handle can revoke only its original session; no current cookie required or new-session effect.",
+        "tags": [
+          "B030-local-auth"
+        ],
+        "security": [
+          {
+            "csrfCookie": [],
+            "csrfHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Origin",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Exact configured same-origin HTTPS loopback in development; not wildcard."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/auth-deferred"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Validated S09 result; serverNow UTC; accepted is not delivered.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "const": "no-store"
+                }
+              },
+              "X-Request-Id": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/success-envelope"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/auth-revoked"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Safe C18 error. OTP_INVALID/EXPIRED/ATTEMPTS_EXCEEDED; AUTH_REQUIRED/SESSION_EXPIRED/REVOKED; CSRF_INVALID; ACCOUNT_LIMIT_REACHED; RATE_LIMITED; VALIDATION_FAILED; UPSTREAM_UNAVAILABLE as applicable. No raw fields or account existence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "common": {
+        "$defs": {
+          "uuid": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "utc": {
+            "type": "string",
+            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?Z$"
+          },
+          "sourceRef": {
+            "type": "object",
+            "properties": {
+              "datasetId": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+              },
+              "versionId": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+              },
+              "role": {
+                "enum": [
+                  "primary",
+                  "left",
+                  "right",
+                  "concat"
+                ]
+              },
+              "sourceOrder": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              }
+            },
+            "required": [
+              "datasetId",
+              "versionId"
+            ],
+            "additionalProperties": false
+          },
+          "columnRef": {
+            "type": "object",
+            "properties": {
+              "datasetId": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+              },
+              "versionId": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+              },
+              "columnId": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+              }
+            },
+            "required": [
+              "datasetId",
+              "versionId",
+              "columnId"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "uuid": {
+        "$ref": "#/components/schemas/common/$defs/uuid"
+      },
+      "json-value": {
+        "$defs": {
+          "jsonValue": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/json-value/$defs/jsonValue"
+                }
+              },
+              {
+                "type": "object",
+                "additionalProperties": {
+                  "$ref": "#/components/schemas/json-value/$defs/jsonValue"
+                }
+              }
+            ]
+          }
+        },
+        "$ref": "#/components/schemas/json-value/$defs/jsonValue"
+      },
+      "success-envelope": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/json-value"
+          },
+          "serverNow": {
+            "$ref": "#/components/schemas/common/$defs/utc"
+          },
+          "requestId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          }
+        },
+        "required": [
+          "data",
+          "requestId",
+          "serverNow"
+        ],
+        "additionalProperties": false
+      },
+      "error-envelope": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "enum": [
+                  "VALIDATION_FAILED",
+                  "UNSUPPORTED_OPERATION",
+                  "INVALID_SOURCE",
+                  "AUTH_REQUIRED",
+                  "SESSION_EXPIRED",
+                  "SESSION_REVOKED",
+                  "FORBIDDEN",
+                  "RESOURCE_NOT_FOUND",
+                  "CSRF_INVALID",
+                  "REVISION_CONFLICT",
+                  "IDEMPOTENCY_MISMATCH",
+                  "DEPENDENCY_EXISTS",
+                  "ACCOUNT_LIMIT_REACHED",
+                  "RESOURCE_DELETED",
+                  "CURSOR_EXPIRED",
+                  "RECONCILIATION_REQUIRED",
+                  "INPUT_FILE_TOO_LARGE",
+                  "ARTIFACT_LIMIT_EXCEEDED",
+                  "PAYLOAD_TOO_LARGE",
+                  "OTP_INVALID",
+                  "OTP_EXPIRED",
+                  "OTP_ATTEMPTS_EXCEEDED",
+                  "ARTIFACT_NOT_READY",
+                  "HASH_MISMATCH",
+                  "RATE_LIMITED",
+                  "AI_QUOTA_EXCEEDED",
+                  "STORAGE_CAPACITY_EXCEEDED",
+                  "STORAGE_UNAVAILABLE",
+                  "MAIL_UNAVAILABLE",
+                  "AI_UNAVAILABLE",
+                  "CLIENT_SCHEMA_UNSUPPORTED",
+                  "LOCAL_QUOTA_EXCEEDED",
+                  "WRITER_FENCE_LOST",
+                  "PREVIEW_STALE",
+                  "RESOURCE_LIMIT_EXCEEDED",
+                  "OFFLINE_RESOURCE_MISSING",
+                  "CONSENT_INVALID",
+                  "LEDGER_UNAVAILABLE",
+                  "UPSTREAM_UNAVAILABLE",
+                  "MUTATION_NOT_REQUESTED",
+                  "DEPENDENCY_NOT_READY"
+                ]
+              },
+              "message": {
+                "type": "string",
+                "minLength": 1
+              },
+              "details": {
+                "type": "object",
+                "properties": {
+                  "path": {
+                    "type": "string"
+                  },
+                  "field": {
+                    "type": "string"
+                  },
+                  "scope": {
+                    "enum": [
+                      "field",
+                      "source",
+                      "resource",
+                      "account",
+                      "project"
+                    ]
+                  },
+                  "limit": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "actualCount": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "entityIds": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+                    }
+                  },
+                  "requiresReconciliation": {
+                    "type": "boolean"
+                  },
+                  "requiresNewSnapshot": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [],
+                "additionalProperties": false
+              },
+              "retryable": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "code",
+              "message",
+              "retryable"
+            ],
+            "additionalProperties": false
+          },
+          "requestId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          },
+          "serverNow": {
+            "$ref": "#/components/schemas/common/$defs/utc"
+          }
+        },
+        "required": [
+          "error",
+          "requestId",
+          "serverNow"
+        ],
+        "additionalProperties": false
+      },
+      "auth-register": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 254
+          },
+          "displayName": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "password": {
+            "type": "string",
+            "minLength": 15,
+            "maxLength": 128
+          },
+          "confirmPassword": {
+            "type": "string",
+            "minLength": 15,
+            "maxLength": 128
+          }
+        },
+        "required": [
+          "email",
+          "displayName",
+          "password",
+          "confirmPassword"
+        ],
+        "additionalProperties": false
+      },
+      "auth-login": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 254
+          },
+          "password": {
+            "type": "string",
+            "minLength": 15,
+            "maxLength": 128
+          },
+          "deviceId": {
+            "$ref": "#/components/schemas/uuid"
+          }
+        },
+        "required": [
+          "email",
+          "password",
+          "deviceId"
+        ],
+        "additionalProperties": false
+      },
+      "auth-forgot": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 254
+          }
+        },
+        "required": [
+          "email"
+        ],
+        "additionalProperties": false
+      },
+      "auth-resend": {
+        "type": "object",
+        "properties": {
+          "challengeId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{16,256}$"
+          },
+          "purpose": {
+            "enum": [
+              "register",
+              "reset"
+            ]
+          }
+        },
+        "required": [
+          "challengeId",
+          "purpose"
+        ],
+        "additionalProperties": false
+      },
+      "auth-verify": {
+        "type": "object",
+        "properties": {
+          "challengeId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{16,256}$"
+          },
+          "purpose": {
+            "enum": [
+              "register",
+              "reset"
+            ]
+          },
+          "generation": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991
+          },
+          "otp": {
+            "type": "string",
+            "pattern": "^[0-9]{6}$"
+          }
+        },
+        "required": [
+          "challengeId",
+          "purpose",
+          "generation",
+          "otp"
+        ],
+        "additionalProperties": false
+      },
+      "auth-password-reset": {
+        "type": "object",
+        "properties": {
+          "grant": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{16,256}$"
+          },
+          "password": {
+            "type": "string",
+            "minLength": 15,
+            "maxLength": 128
+          },
+          "confirmPassword": {
+            "type": "string",
+            "minLength": 15,
+            "maxLength": 128
+          }
+        },
+        "required": [
+          "grant",
+          "password",
+          "confirmPassword"
+        ],
+        "additionalProperties": false
+      },
+      "auth-profile-patch": {
+        "type": "object",
+        "properties": {
+          "displayName": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          }
+        },
+        "required": [
+          "displayName"
+        ],
+        "additionalProperties": false
+      },
+      "auth-empty": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      },
+      "auth-deferred": {
+        "type": "object",
+        "properties": {
+          "revocationHandle": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{16,256}$"
+          }
+        },
+        "required": [
+          "revocationHandle"
+        ],
+        "additionalProperties": false
+      },
+      "auth-csrf": {
+        "type": "object",
+        "properties": {
+          "csrfToken": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{16,256}$"
+          },
+          "expiresAt": {
+            "$ref": "#/components/schemas/common/$defs/utc"
+          }
+        },
+        "required": [
+          "csrfToken",
+          "expiresAt"
+        ],
+        "additionalProperties": false
+      },
+      "auth-challenge": {
+        "type": "object",
+        "properties": {
+          "challengeId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{16,256}$"
+          },
+          "purpose": {
+            "enum": [
+              "register",
+              "reset"
+            ]
+          },
+          "generation": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991
+          },
+          "serverNow": {
+            "$ref": "#/components/schemas/common/$defs/utc"
+          },
+          "expiresAt": {
+            "$ref": "#/components/schemas/common/$defs/utc"
+          },
+          "resendAvailableAt": {
+            "$ref": "#/components/schemas/common/$defs/utc"
+          },
+          "attemptsRemaining": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 5
+          },
+          "sendStatus": {
+            "enum": [
+              "accepted",
+              "failed",
+              "unknown"
+            ]
+          }
+        },
+        "required": [
+          "challengeId",
+          "purpose",
+          "generation",
+          "serverNow",
+          "expiresAt",
+          "resendAvailableAt",
+          "attemptsRemaining",
+          "sendStatus"
+        ],
+        "additionalProperties": false
+      },
+      "auth-profile": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "$ref": "#/components/schemas/uuid"
+          },
+          "email": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 254
+          },
+          "displayName": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          }
+        },
+        "required": [
+          "userId",
+          "email",
+          "displayName"
+        ],
+        "additionalProperties": false
+      },
+      "auth-session": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "$ref": "#/components/schemas/uuid"
+          },
+          "sessionId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{16,256}$"
+          },
+          "authEpoch": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "expiresAt": {
+            "$ref": "#/components/schemas/common/$defs/utc"
+          },
+          "serverGeneration": {
+            "$ref": "#/components/schemas/uuid"
+          },
+          "offlineEntitlement": {
+            "type": "object",
+            "properties": {
+              "ownerId": {
+                "$ref": "#/components/schemas/uuid"
+              },
+              "issuedAt": {
+                "$ref": "#/components/schemas/common/$defs/utc"
+              },
+              "profileBound": {
+                "const": true
+              },
+              "onlineExpiryRevokesLocal": {
+                "const": false
+              }
+            },
+            "required": [
+              "ownerId",
+              "issuedAt",
+              "profileBound",
+              "onlineExpiryRevokesLocal"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "userId",
+          "sessionId",
+          "authEpoch",
+          "expiresAt",
+          "serverGeneration",
+          "offlineEntitlement"
+        ],
+        "additionalProperties": false
+      },
+      "auth-login-result": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "$ref": "#/components/schemas/uuid"
+          },
+          "sessionId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{16,256}$"
+          },
+          "authEpoch": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "expiresAt": {
+            "$ref": "#/components/schemas/common/$defs/utc"
+          },
+          "serverGeneration": {
+            "$ref": "#/components/schemas/uuid"
+          },
+          "offlineEntitlement": {
+            "type": "object",
+            "properties": {
+              "ownerId": {
+                "$ref": "#/components/schemas/uuid"
+              },
+              "issuedAt": {
+                "$ref": "#/components/schemas/common/$defs/utc"
+              },
+              "profileBound": {
+                "const": true
+              },
+              "onlineExpiryRevokesLocal": {
+                "const": false
+              }
+            },
+            "required": [
+              "ownerId",
+              "issuedAt",
+              "profileBound",
+              "onlineExpiryRevokesLocal"
+            ],
+            "additionalProperties": false
+          },
+          "revocationHandle": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{16,256}$"
+          }
+        },
+        "required": [
+          "userId",
+          "sessionId",
+          "authEpoch",
+          "expiresAt",
+          "serverGeneration",
+          "offlineEntitlement",
+          "revocationHandle"
+        ],
+        "additionalProperties": false
+      },
+      "auth-verified": {
+        "type": "object",
+        "properties": {
+          "activated": {
+            "type": "boolean"
+          },
+          "autoLogin": {
+            "const": false
+          }
+        },
+        "required": [
+          "activated",
+          "autoLogin"
+        ],
+        "additionalProperties": false
+      },
+      "auth-reset-grant": {
+        "type": "object",
+        "properties": {
+          "grant": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{16,256}$"
+          },
+          "expiresAt": {
+            "$ref": "#/components/schemas/common/$defs/utc"
+          },
+          "autoLogin": {
+            "const": false
+          }
+        },
+        "required": [
+          "grant",
+          "expiresAt",
+          "autoLogin"
+        ],
+        "additionalProperties": false
+      },
+      "auth-reset-result": {
+        "type": "object",
+        "properties": {
+          "passwordChanged": {
+            "const": true
+          },
+          "autoLogin": {
+            "const": false
+          }
+        },
+        "required": [
+          "passwordChanged",
+          "autoLogin"
+        ],
+        "additionalProperties": false
+      },
+      "auth-revoked": {
+        "type": "object",
+        "properties": {
+          "revoked": {
+            "const": true
+          }
+        },
+        "required": [
+          "revoked"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "securitySchemes": {
+      "sessionCookie": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "__Host-dashboard_session"
+      },
+      "csrfCookie": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "__Host-dashboard_csrf"
+      },
+      "csrfHeader": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-CSRF-Token"
+      }
+    }
+  }
+}

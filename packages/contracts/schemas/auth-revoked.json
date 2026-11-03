@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dashboard.invalid/contracts/v1/auth-revoked.json",
+  "type": "object",
+  "properties": {
+    "revoked": {
+      "const": true
+    }
+  },
+  "required": [
+    "revoked"
+  ],
+  "additionalProperties": false
+}

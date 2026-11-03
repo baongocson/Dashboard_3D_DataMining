@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dashboard.invalid/contracts/v1/auth-resend.json",
+  "type": "object",
+  "properties": {
+    "challengeId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{16,256}$"
+    },
+    "purpose": {
+      "enum": [
+        "register",
+        "reset"
+      ]
+    }
+  },
+  "required": [
+    "challengeId",
+    "purpose"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dashboard.invalid/contracts/v1/ops-capabilities.json",
+  "type": "object",
+  "properties": {
+    "profile": {
+      "const": "local-dev"
+    },
+    "registryVersion": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "limits": {
+      "type": "object",
+      "properties": {
+        "profileVersion": {
+          "const": "local-dev-v1"
+        },
+        "inputSourceMaxBytes": {
+          "const": 20000000
+        },
+        "metadataBodyMaxBytes": {
+          "const": 1048576
+        },
+        "chunkMaxBytes": {
+          "const": 4194304
+        },
+        "artifactMaxBytes": {
+          "const": 268435456
+        },
+        "workerMemoryBudgetBytes": {
+          "const": 536870912
+        },
+        "denseMatrixMaxCells": {
+          "const": 10000000
+        },
+        "sparseMaxNnz": {
+          "const": 10000000
+        },
+        "featureMaxCount": {
+          "const": 20000
+        },
+        "outputRowMaxCount": {
+          "const": 1000000
+        },
+        "exactPairwiseMaxPairs": {
+          "const": 2000000
+        },
+        "mutationsPerBatch": {
+          "const": 100
+        },
+        "mutationsPerAtomicGroup": {
+          "const": 20
+        },
+        "perInstanceUploads": {
+          "const": 8
+        },
+        "perProjectWriteTasks": {
+          "const": 1
+        },
+        "stagingGraceMs": {
+          "const": 86400000
+        },
+        "uploadExpiryMs": {
+          "const": 3600000
+        }
+      },
+      "required": [
+        "profileVersion",
+        "inputSourceMaxBytes",
+        "metadataBodyMaxBytes",
+        "chunkMaxBytes",
+        "artifactMaxBytes",
+        "workerMemoryBudgetBytes",
+        "denseMatrixMaxCells",
+        "sparseMaxNnz",
+        "featureMaxCount",
+        "outputRowMaxCount",
+        "exactPairwiseMaxPairs",
+        "mutationsPerBatch",
+        "mutationsPerAtomicGroup",
+        "perInstanceUploads",
+        "perProjectWriteTasks",
+        "stagingGraceMs",
+        "uploadExpiryMs"
+      ],
+      "additionalProperties": false
+    },
+    "publicAuthEnabled": {
+      "const": false
+    },
+    "productAdaptersEnabled": {
+      "const": false
+    }
+  },
+  "required": [
+    "profile",
+    "registryVersion",
+    "limits",
+    "publicAuthEnabled",
+    "productAdaptersEnabled"
+  ],
+  "additionalProperties": false
+}

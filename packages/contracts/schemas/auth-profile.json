@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dashboard.invalid/contracts/v1/auth-profile.json",
+  "type": "object",
+  "properties": {
+    "userId": {
+      "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+    },
+    "email": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 254
+    },
+    "displayName": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100
+    }
+  },
+  "required": [
+    "userId",
+    "email",
+    "displayName"
+  ],
+  "additionalProperties": false
+}

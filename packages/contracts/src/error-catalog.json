@@ -1,0 +1,346 @@
+[
+  {
+    "id": "E01",
+    "code": "VALIDATION_FAILED",
+    "category": "error",
+    "origin": "UI/ENG/API 400/422",
+    "policy": "Sửa field/config/domain, giữ nguồn/commit trước; không auto drop/null",
+    "evidence": "F02/F17/F29; B020/B050–B057"
+  },
+  {
+    "id": "E02",
+    "code": "UNSUPPORTED_OPERATION",
+    "category": "error",
+    "origin": "Registry/API 422",
+    "policy": "Không chạy phương pháp chưa capability, không thay thuật toán ngầm",
+    "evidence": "F05/F32; B020/B035"
+  },
+  {
+    "id": "E03",
+    "code": "INVALID_SOURCE",
+    "category": "error",
+    "origin": "ENG/API 422",
+    "policy": "Giữ local; chọn/kiểm nguồn refs/schema/lineage hợp lệ",
+    "evidence": "F01/F04; B031/B041"
+  },
+  {
+    "id": "E04",
+    "code": "AUTH_REQUIRED",
+    "category": "error",
+    "origin": "API 401",
+    "policy": "Dừng gửi, giữ outbox; đăng nhập đúng owner",
+    "evidence": "F01/F08; B030/B043"
+  },
+  {
+    "id": "E05",
+    "code": "SESSION_EXPIRED",
+    "category": "error",
+    "origin": "API 401",
+    "policy": "Giữ local/offline entitlement, reauth; không mở sync gate cũ tự động",
+    "evidence": "F11; B030/B082"
+  },
+  {
+    "id": "E06",
+    "code": "SESSION_REVOKED",
+    "category": "error",
+    "origin": "API 401",
+    "policy": "Fence chặn commit, giữ local; đúng owner reauth",
+    "evidence": "F11; B030/B033"
+  },
+  {
+    "id": "E07",
+    "code": "FORBIDDEN",
+    "category": "error",
+    "origin": "API 403 hoặc 404 thống nhất",
+    "policy": "Không retry/tiết lộ owner khác; không đổi owner payload",
+    "evidence": "F01; B030/B031"
+  },
+  {
+    "id": "E08",
+    "code": "RESOURCE_NOT_FOUND",
+    "category": "error",
+    "origin": "API 404",
+    "policy": "Không coi là offline/không tồn tại owner khác; giữ dữ liệu local chưa sync",
+    "evidence": "F01; B031"
+  },
+  {
+    "id": "E09",
+    "code": "CSRF_INVALID",
+    "category": "error",
+    "origin": "API 403",
+    "policy": "Lấy bootstrap hợp lệ, không retry mutation mù; no secret details",
+    "evidence": "F10/F24; B030/B035"
+  },
+  {
+    "id": "E10",
+    "code": "REVISION_CONFLICT",
+    "category": "error",
+    "origin": "API 409 khi chưa preserve",
+    "policy": "Đối chiếu/nhánh/copy; đã preserve phải ACK outcome, giữ hai phía",
+    "evidence": "F15; B033/B082"
+  },
+  {
+    "id": "E11",
+    "code": "IDEMPOTENCY_MISMATCH",
+    "category": "error",
+    "origin": "API 409",
+    "policy": "Không retry cùng ID với nội dung khác; giữ cả bằng chứng/local",
+    "evidence": "F13/F14; B033"
+  },
+  {
+    "id": "E12",
+    "code": "DEPENDENCY_EXISTS",
+    "category": "error",
+    "origin": "API 409",
+    "policy": "Không cascade; hiển thị refs hợp lệ và xử lý trước",
+    "evidence": "F21/F27; B071/B100"
+  },
+  {
+    "id": "E13",
+    "code": "ACCOUNT_LIMIT_REACHED",
+    "category": "error",
+    "origin": "API 409",
+    "policy": "Không activate >100 hoặc xóa account cũ; không retry mù",
+    "evidence": "F10; B030"
+  },
+  {
+    "id": "E14",
+    "code": "RESOURCE_DELETED",
+    "category": "error",
+    "origin": "API 410",
+    "policy": "blockedDeleted giữ byte local, không re-ID/sync liên tục",
+    "evidence": "F15/F27; B082/B103"
+  },
+  {
+    "id": "E15",
+    "code": "CURSOR_EXPIRED",
+    "category": "error",
+    "origin": "API 410",
+    "policy": "Full snapshot/reconcile, giữ outbox, không tự coi server trống",
+    "evidence": "F28; B033/B080"
+  },
+  {
+    "id": "E16",
+    "code": "RECONCILIATION_REQUIRED",
+    "category": "error",
+    "origin": "API 410",
+    "policy": "Đối chiếu IDs/hash/generation trước retry; giữ local",
+    "evidence": "F13/F28; B082/B102"
+  },
+  {
+    "id": "E17",
+    "code": "INPUT_FILE_TOO_LARGE",
+    "category": "error",
+    "origin": "API/UI 413",
+    "policy": "Chặn nguồn >20.000.000, không chunk để vượt; giữ dự án cũ",
+    "evidence": "F14; B041"
+  },
+  {
+    "id": "E18",
+    "code": "ARTIFACT_LIMIT_EXCEEDED",
+    "category": "error",
+    "origin": "API/LOC 413 khi API",
+    "policy": "Dùng ngưỡng output riêng đã công bố, không tự giảm mẫu",
+    "evidence": "F05/F14; B032/B053"
+  },
+  {
+    "id": "E19",
+    "code": "PAYLOAD_TOO_LARGE",
+    "category": "error",
+    "origin": "API/proxy 413",
+    "policy": "Metadata/HTTP bound, không đổi limit toàn hệ thống thành 20MB",
+    "evidence": "F24; B035/B110"
+  },
+  {
+    "id": "E20",
+    "code": "OTP_INVALID",
+    "category": "error",
+    "origin": "API 422",
+    "policy": "Trừ attempts nguyên tử, không lộ OTP/email existence",
+    "evidence": "F10; B030"
+  },
+  {
+    "id": "E21",
+    "code": "OTP_EXPIRED",
+    "category": "error",
+    "origin": "API 422",
+    "policy": "Resend theo cooldown, mã cũ không sống lại",
+    "evidence": "F10; B030"
+  },
+  {
+    "id": "E22",
+    "code": "OTP_ATTEMPTS_EXCEEDED",
+    "category": "error",
+    "origin": "API 422",
+    "policy": "Không verify sau 5 sai/mã, resend đúng policy",
+    "evidence": "F10; B030"
+  },
+  {
+    "id": "E23",
+    "code": "ARTIFACT_NOT_READY",
+    "category": "error",
+    "origin": "API 422/pending ACK",
+    "policy": "Giữ outbox/group, không công bố version hay ACK nửa group",
+    "evidence": "F12/F13; B032/B033"
+  },
+  {
+    "id": "E24",
+    "code": "HASH_MISMATCH",
+    "category": "error",
+    "origin": "API/LOC 422 khi API",
+    "policy": "Không ready/commit; kiểm byte/reupload chủ động đúng identity",
+    "evidence": "F03/F14; B020/B032"
+  },
+  {
+    "id": "E25",
+    "code": "RATE_LIMITED",
+    "category": "error",
+    "origin": "API 429",
+    "policy": "Retry-After nếu biết; không spam/khóa cả NAT bằng ngưỡng chưa đo",
+    "evidence": "F10/F32; B030/B111"
+  },
+  {
+    "id": "E26",
+    "code": "AI_QUOTA_EXCEEDED",
+    "category": "error",
+    "origin": "API 429",
+    "policy": "Không fallback provider/key; chưa dispatch có thể người dùng chọn lại",
+    "evidence": "F26; B090/B093"
+  },
+  {
+    "id": "E27",
+    "code": "STORAGE_CAPACITY_EXCEEDED",
+    "category": "error",
+    "origin": "API 503",
+    "policy": "Giữ commit trước/local/outbox; không tự xóa history",
+    "evidence": "F09/F14; B032"
+  },
+  {
+    "id": "E28",
+    "code": "STORAGE_UNAVAILABLE",
+    "category": "error",
+    "origin": "API 503",
+    "policy": "Giữ outbox; lỗi core sync đóng gate theo C09, lỗi AI riêng không giả offline toàn app",
+    "evidence": "F14; B032/B033"
+  },
+  {
+    "id": "E29",
+    "code": "MAIL_UNAVAILABLE",
+    "category": "error",
+    "origin": "API 503",
+    "policy": "Không activate/delivered giả; resend theo cooldown, giữ local",
+    "evidence": "F10; B017/B030"
+  },
+  {
+    "id": "E30",
+    "code": "AI_UNAVAILABLE",
+    "category": "error",
+    "origin": "API 503",
+    "policy": "Core vẫn dùng; detail reason key/model/unconfigured an toàn; không auto đổi dịch vụ",
+    "evidence": "F25/F26; B090–B093"
+  },
+  {
+    "id": "E31",
+    "code": "CLIENT_SCHEMA_UNSUPPORTED",
+    "category": "error",
+    "origin": "API 409 theo C18",
+    "policy": "Upgrade/reconcile có bảo toàn outbox; không xóa site data",
+    "evidence": "F28; B081/B082"
+  },
+  {
+    "id": "E32",
+    "code": "LOCAL_QUOTA_EXCEEDED",
+    "category": "error",
+    "origin": "LOC, không HTTP mặc định",
+    "policy": "Không success; bản trước/unsynced giữ, gỡ offline sạch có xác nhận",
+    "evidence": "F09; B021/B080"
+  },
+  {
+    "id": "E33",
+    "code": "WRITER_FENCE_LOST",
+    "category": "error",
+    "origin": "LOC/điều phối",
+    "policy": "Không late commit, bỏ staging an toàn; xin writer không cướp lock",
+    "evidence": "F07/F08; B022"
+  },
+  {
+    "id": "E34",
+    "code": "PREVIEW_STALE",
+    "category": "error",
+    "origin": "Điều phối",
+    "policy": "Xem trước lại đúng config/source, không dùng confirmation cũ",
+    "evidence": "F06; B023"
+  },
+  {
+    "id": "E35",
+    "code": "TASK_INTERRUPTED",
+    "category": "lifecycle",
+    "origin": "Recovery event",
+    "policy": "Không auto resume; mở commit gần nhất, giữ bước trước",
+    "evidence": "F06/F30; B021/B056"
+  },
+  {
+    "id": "E36",
+    "code": "RESOURCE_LIMIT_EXCEEDED",
+    "category": "error",
+    "origin": "ENG/LOC, API422 nếu cần",
+    "policy": "Chặn trước allocate/compute quá cost, không tự sample/feature drop",
+    "evidence": "F05/F19; B023/B053/B063"
+  },
+  {
+    "id": "E37",
+    "code": "OFFLINE_RESOURCE_MISSING",
+    "category": "error",
+    "origin": "LOC/SW",
+    "policy": "Không ready giả, chỉ mở nội dung đủ; không fetch ẩn",
+    "evidence": "F09/F23; B080/B081"
+  },
+  {
+    "id": "E38",
+    "code": "CONSENT_INVALID",
+    "category": "error",
+    "origin": "AI/API 422",
+    "policy": "Dựng/duyệt lại exact payload/provider/epoch; không dispatch",
+    "evidence": "F25; B091"
+  },
+  {
+    "id": "E39",
+    "code": "AI_REQUEST_UNKNOWN",
+    "category": "lifecycle",
+    "origin": "AI lifecycle/UI",
+    "policy": "Poll requestId hiện tại, không tự gọi provider lần hai/đổi key",
+    "evidence": "F26; B091"
+  },
+  {
+    "id": "E40",
+    "code": "LEDGER_UNAVAILABLE",
+    "category": "error",
+    "origin": "OPS/API 503",
+    "policy": "Chặn nhận xóa, giữ pending/maintenance; không mở ghi restore thiếu ledger",
+    "evidence": "F27; B101/B102"
+  },
+  {
+    "id": "E41",
+    "code": "UPSTREAM_UNAVAILABLE",
+    "category": "error",
+    "origin": "Nginx 502/503/504",
+    "policy": "JSON/no-store/requestId; core unavailable đóng sync gate, không retry mutation/AI ở proxy",
+    "evidence": "F24; B035/B110"
+  },
+  {
+    "id": "E42",
+    "code": "MUTATION_NOT_REQUESTED",
+    "category": "error",
+    "origin": "Sync pending result",
+    "policy": "Giữ outbox và nhóm bị bỏ khỏi ID-only request; không tự thêm hoặc retry",
+    "evidence": "C10; B033"
+  },
+  {
+    "id": "E43",
+    "code": "DEPENDENCY_NOT_READY",
+    "category": "error",
+    "origin": "Sync pending result",
+    "policy": "Dependency đã khai báo chưa commit; không đoán revision, giữ nhóm và chờ retry chủ động",
+    "evidence": "C10/C11; B033"
+  }
+]

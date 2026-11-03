@@ -1,0 +1,1586 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "B032 local-dev private storage",
+    "version": "0.1.0",
+    "description": "O05. Private server-generated keys, immutable retained byte attempts. 4MiB exact chunks; source max20,000,000B, output max256MiB; real byte/hash verification outside DB transaction. Metadata attachment alone changes verified→ready. Operation lease5min bounded by upload expiry1h; at most2 account/8 instance active operations. No public URLs, parser/model execution or cloud. Cleanup retain-only: no physical deletion authorization or proof. Local HTTP test is not public HTTPS/Nginx/browser-cookie readiness."
+  },
+  "servers": [
+    {
+      "url": "/api/v1"
+    }
+  ],
+  "paths": {
+    "/artifacts/uploads": {
+      "post": {
+        "operationId": "storage_post__artifacts_uploads",
+        "tags": [
+          "B032-local-private-storage"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Origin",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Exact configured local HTTPS origin, signed CSRF bootstrap and session cookie required."
+          }
+        ],
+        "security": [
+          {
+            "sessionCookie": [],
+            "csrfCookie": [],
+            "csrfHeader": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/storage-request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Validated S12 JSON/no-store. Complete is verified staging, never metadata ACK/ready. Cancel retains bytes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/success-envelope"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/storage-view"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/artifacts/uploads/{id}": {
+      "get": {
+        "operationId": "storage_get__artifacts_uploads__id_",
+        "tags": [
+          "B032-local-private-storage"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_-]{43}$"
+            }
+          }
+        ],
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Validated S12 JSON/no-store. Complete is verified staging, never metadata ACK/ready. Cancel retains bytes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/success-envelope"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/storage-view"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "storage_delete__artifacts_uploads__id_",
+        "tags": [
+          "B032-local-private-storage"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_-]{43}$"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Origin",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Exact configured local HTTPS origin, signed CSRF bootstrap and session cookie required."
+          }
+        ],
+        "security": [
+          {
+            "sessionCookie": [],
+            "csrfCookie": [],
+            "csrfHeader": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/auth-empty"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Validated S12 JSON/no-store. Complete is verified staging, never metadata ACK/ready. Cancel retains bytes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/success-envelope"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/storage-cancel"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/artifacts/uploads/{id}/chunks/{index}": {
+      "put": {
+        "operationId": "storage_put__artifacts_uploads__id__chunks__index_",
+        "tags": [
+          "B032-local-private-storage"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_-]{43}$"
+            }
+          },
+          {
+            "in": "path",
+            "name": "index",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 63
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-Chunk-Offset",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 268435456
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-Chunk-Length",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 4194304
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-Chunk-Sha256",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Origin",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Exact configured local HTTPS origin, signed CSRF bootstrap and session cookie required."
+          }
+        ],
+        "security": [
+          {
+            "sessionCookie": [],
+            "csrfCookie": [],
+            "csrfHeader": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/octet-stream": {
+              "schema": {
+                "type": "string",
+                "format": "binary",
+                "maxLength": 4194304
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Validated S12 JSON/no-store. Complete is verified staging, never metadata ACK/ready. Cancel retains bytes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/success-envelope"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/storage-chunk"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/artifacts/uploads/{id}/complete": {
+      "post": {
+        "operationId": "storage_post__artifacts_uploads__id__complete",
+        "tags": [
+          "B032-local-private-storage"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_-]{43}$"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Origin",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Exact configured local HTTPS origin, signed CSRF bootstrap and session cookie required."
+          }
+        ],
+        "security": [
+          {
+            "sessionCookie": [],
+            "csrfCookie": [],
+            "csrfHeader": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/auth-empty"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Validated S12 JSON/no-store. Complete is verified staging, never metadata ACK/ready. Cancel retains bytes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/success-envelope"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/storage-view"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/artifacts/{id}/content": {
+      "get": {
+        "operationId": "storage_get__artifacts__id__content",
+        "tags": [
+          "B032-local-private-storage"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/uuid"
+            }
+          }
+        ],
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Owner/ref-ready attachment stream; whole hash verified before headers. application/octet-stream; attachment filename uses server-validated artifact UUID; no-store/nosniff.",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Safe C18 error. Size-specific413, storage unavailable/capacity503, chunk hash/mismatch422/409, generation/tombstone410. Preserve existing bytes/outbox; no Clear-Site-Data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error-envelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "storage-request": {
+        "$ref": "#/components/schemas/storage-types/$defs/request"
+      },
+      "storage-view": {
+        "$ref": "#/components/schemas/storage-types/$defs/view"
+      },
+      "storage-chunk": {
+        "$ref": "#/components/schemas/storage-types/$defs/chunk"
+      },
+      "storage-cancel": {
+        "$ref": "#/components/schemas/storage-types/$defs/cancel"
+      },
+      "auth-empty": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      },
+      "success-envelope": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/json-value"
+          },
+          "serverNow": {
+            "$ref": "#/components/schemas/common/$defs/utc"
+          },
+          "requestId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          }
+        },
+        "required": [
+          "data",
+          "requestId",
+          "serverNow"
+        ],
+        "additionalProperties": false
+      },
+      "error-envelope": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "enum": [
+                  "VALIDATION_FAILED",
+                  "UNSUPPORTED_OPERATION",
+                  "INVALID_SOURCE",
+                  "AUTH_REQUIRED",
+                  "SESSION_EXPIRED",
+                  "SESSION_REVOKED",
+                  "FORBIDDEN",
+                  "RESOURCE_NOT_FOUND",
+                  "CSRF_INVALID",
+                  "REVISION_CONFLICT",
+                  "IDEMPOTENCY_MISMATCH",
+                  "DEPENDENCY_EXISTS",
+                  "ACCOUNT_LIMIT_REACHED",
+                  "RESOURCE_DELETED",
+                  "CURSOR_EXPIRED",
+                  "RECONCILIATION_REQUIRED",
+                  "INPUT_FILE_TOO_LARGE",
+                  "ARTIFACT_LIMIT_EXCEEDED",
+                  "PAYLOAD_TOO_LARGE",
+                  "OTP_INVALID",
+                  "OTP_EXPIRED",
+                  "OTP_ATTEMPTS_EXCEEDED",
+                  "ARTIFACT_NOT_READY",
+                  "HASH_MISMATCH",
+                  "RATE_LIMITED",
+                  "AI_QUOTA_EXCEEDED",
+                  "STORAGE_CAPACITY_EXCEEDED",
+                  "STORAGE_UNAVAILABLE",
+                  "MAIL_UNAVAILABLE",
+                  "AI_UNAVAILABLE",
+                  "CLIENT_SCHEMA_UNSUPPORTED",
+                  "LOCAL_QUOTA_EXCEEDED",
+                  "WRITER_FENCE_LOST",
+                  "PREVIEW_STALE",
+                  "RESOURCE_LIMIT_EXCEEDED",
+                  "OFFLINE_RESOURCE_MISSING",
+                  "CONSENT_INVALID",
+                  "LEDGER_UNAVAILABLE",
+                  "UPSTREAM_UNAVAILABLE",
+                  "MUTATION_NOT_REQUESTED",
+                  "DEPENDENCY_NOT_READY"
+                ]
+              },
+              "message": {
+                "type": "string",
+                "minLength": 1
+              },
+              "details": {
+                "type": "object",
+                "properties": {
+                  "path": {
+                    "type": "string"
+                  },
+                  "field": {
+                    "type": "string"
+                  },
+                  "scope": {
+                    "enum": [
+                      "field",
+                      "source",
+                      "resource",
+                      "account",
+                      "project"
+                    ]
+                  },
+                  "limit": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "actualCount": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "entityIds": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+                    }
+                  },
+                  "requiresReconciliation": {
+                    "type": "boolean"
+                  },
+                  "requiresNewSnapshot": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [],
+                "additionalProperties": false
+              },
+              "retryable": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "code",
+              "message",
+              "retryable"
+            ],
+            "additionalProperties": false
+          },
+          "requestId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          },
+          "serverNow": {
+            "$ref": "#/components/schemas/common/$defs/utc"
+          }
+        },
+        "required": [
+          "error",
+          "requestId",
+          "serverNow"
+        ],
+        "additionalProperties": false
+      },
+      "uuid": {
+        "$ref": "#/components/schemas/common/$defs/uuid"
+      },
+      "storage-types": {
+        "$defs": {
+          "request": {
+            "type": "object",
+            "properties": {
+              "serverGeneration": {
+                "$ref": "#/components/schemas/uuid"
+              },
+              "descriptor": {
+                "$ref": "#/components/schemas/artifact-descriptor"
+              }
+            },
+            "required": [
+              "serverGeneration",
+              "descriptor"
+            ],
+            "additionalProperties": false
+          },
+          "view": {
+            "type": "object",
+            "properties": {
+              "uploadId": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]{43}$"
+              },
+              "artifactId": {
+                "$ref": "#/components/schemas/uuid"
+              },
+              "chunkSizeBytes": {
+                "const": 4194304
+              },
+              "expiresAt": {
+                "$ref": "#/components/schemas/common/$defs/utc"
+              },
+              "serverGeneration": {
+                "$ref": "#/components/schemas/uuid"
+              },
+              "state": {
+                "enum": [
+                  "declared",
+                  "uploading",
+                  "verifying",
+                  "verified",
+                  "cancelled"
+                ]
+              },
+              "receivedChunks": {
+                "type": "array",
+                "maxItems": 64,
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "index": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 9007199254740991
+                    },
+                    "offset": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 9007199254740991
+                    },
+                    "length": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 9007199254740991
+                    },
+                    "sha256": {
+                      "$ref": "#/components/schemas/common/$defs/sha256"
+                    }
+                  },
+                  "required": [
+                    "index",
+                    "offset",
+                    "length",
+                    "sha256"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "uploadId",
+              "artifactId",
+              "chunkSizeBytes",
+              "expiresAt",
+              "serverGeneration",
+              "state",
+              "receivedChunks"
+            ],
+            "additionalProperties": false
+          },
+          "chunk": {
+            "type": "object",
+            "properties": {
+              "uploadId": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]{43}$"
+              },
+              "index": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "sha256": {
+                "$ref": "#/components/schemas/common/$defs/sha256"
+              },
+              "received": {
+                "const": true
+              }
+            },
+            "required": [
+              "uploadId",
+              "index",
+              "sha256",
+              "received"
+            ],
+            "additionalProperties": false
+          },
+          "cancel": {
+            "type": "object",
+            "properties": {
+              "uploadId": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]{43}$"
+              },
+              "state": {
+                "enum": [
+                  "cancelled",
+                  "ready"
+                ]
+              },
+              "bytesRetained": {
+                "const": true
+              }
+            },
+            "required": [
+              "uploadId",
+              "state",
+              "bytesRetained"
+            ],
+            "additionalProperties": false
+          },
+          "cleanupQuery": {
+            "type": "object",
+            "properties": {
+              "limit": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 100
+              },
+              "cursor": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]{43}$"
+              }
+            },
+            "required": [],
+            "additionalProperties": false
+          },
+          "cleanupPage": {
+            "type": "object",
+            "properties": {
+              "mode": {
+                "const": "retain-only"
+              },
+              "physicalDeletionEnabled": {
+                "const": false
+              },
+              "entries": {
+                "type": "array",
+                "maxItems": 100,
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "artifactId": {
+                      "$ref": "#/components/schemas/uuid"
+                    },
+                    "eligibleForFuturePlan": {
+                      "type": "boolean"
+                    },
+                    "protectedReason": {
+                      "enum": [
+                        "reference",
+                        "activeLease",
+                        "grace",
+                        null
+                      ]
+                    }
+                  },
+                  "required": [
+                    "artifactId",
+                    "eligibleForFuturePlan",
+                    "protectedReason"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "hasMore": {
+                "type": "boolean"
+              },
+              "nextCursor": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9_-]{43}$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "mode",
+              "physicalDeletionEnabled",
+              "entries",
+              "hasMore",
+              "nextCursor"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "json-value": {
+        "$defs": {
+          "jsonValue": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/json-value/$defs/jsonValue"
+                }
+              },
+              {
+                "type": "object",
+                "additionalProperties": {
+                  "$ref": "#/components/schemas/json-value/$defs/jsonValue"
+                }
+              }
+            ]
+          }
+        },
+        "$ref": "#/components/schemas/json-value/$defs/jsonValue"
+      },
+      "common": {
+        "$defs": {
+          "uuid": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "utc": {
+            "type": "string",
+            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?Z$"
+          },
+          "sourceRef": {
+            "type": "object",
+            "properties": {
+              "datasetId": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+              },
+              "versionId": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+              },
+              "role": {
+                "enum": [
+                  "primary",
+                  "left",
+                  "right",
+                  "concat"
+                ]
+              },
+              "sourceOrder": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              }
+            },
+            "required": [
+              "datasetId",
+              "versionId"
+            ],
+            "additionalProperties": false
+          },
+          "columnRef": {
+            "type": "object",
+            "properties": {
+              "datasetId": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+              },
+              "versionId": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+              },
+              "columnId": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+              }
+            },
+            "required": [
+              "datasetId",
+              "versionId",
+              "columnId"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "artifact-descriptor": {
+        "type": "object",
+        "properties": {
+          "artifactId": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+          },
+          "purpose": {
+            "enum": [
+              "source",
+              "tableManifest",
+              "tableChunk",
+              "rowLineage",
+              "sparse",
+              "model",
+              "metrics",
+              "chartImage",
+              "pdf"
+            ]
+          },
+          "formatVersion": {
+            "type": "string",
+            "minLength": 1
+          },
+          "mediaType": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sizeBytes": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "sha256": {
+            "$ref": "#/components/schemas/common/$defs/sha256"
+          },
+          "projectId": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+          },
+          "dependencyArtifactIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            },
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "artifactId",
+          "purpose",
+          "formatVersion",
+          "mediaType",
+          "sizeBytes",
+          "sha256",
+          "projectId",
+          "dependencyArtifactIds"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "securitySchemes": {
+      "sessionCookie": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "__Host-dashboard_session"
+      },
+      "csrfCookie": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "__Host-dashboard_csrf"
+      },
+      "csrfHeader": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-CSRF-Token"
+      }
+    }
+  }
+}

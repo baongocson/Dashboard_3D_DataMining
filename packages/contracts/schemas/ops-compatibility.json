@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dashboard.invalid/contracts/v1/ops-compatibility.json",
+  "type": "object",
+  "properties": {
+    "serverGeneration": {
+      "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+    },
+    "contractVersions": {
+      "const": [
+        1
+      ]
+    },
+    "localSchemaVersion": {
+      "const": 1
+    },
+    "limitsProfileVersion": {
+      "const": "local-dev-v1"
+    },
+    "maintenance": {
+      "type": "boolean"
+    },
+    "releaseWindowVerified": {
+      "const": false
+    },
+    "requiresReconciliation": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "serverGeneration",
+    "contractVersions",
+    "localSchemaVersion",
+    "limitsProfileVersion",
+    "maintenance",
+    "releaseWindowVerified",
+    "requiresReconciliation"
+  ],
+  "additionalProperties": false
+}

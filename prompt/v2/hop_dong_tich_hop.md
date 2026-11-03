@@ -174,7 +174,9 @@ ACK: batchId/status(committed|partial|rejected), acknowledged[{mutationId,payloa
 
 ## C11. Revision conflict, tombstone và resync
 
-T: baseRevision của version create thuộc branch head; của config thuộc entity; project manifest revision là snapshot, không gây conflict tất cả entity không liên quan. Trong transaction kiểm tra tombstone project/dataset và session fence trước commit.
+T đã chốt A (ADR-B021-01, 2026-11-02): baseRevision của version create thuộc entity version mới (=0); guard branch head nằm riêng trong payload expectedHead. Config dùng revision của entity; project manifest revision là snapshot, không gây conflict tất cả entity không liên quan. Trong transaction kiểm tra tombstone project/dataset và session fence trước commit.
+
+expectedHead có hai dạng: known {kind:"known",branchId,versionId,revision} với revision server; hoặc dependency {kind:"dependency",branchId,fromMutationId}, trong đó fromMutationId phải thuộc dependencies. Server resolve receipt/commit identity đúng owner/project trong transaction, không sửa payload/hash/mutationId client. Dependency chưa commit thì pending; thiếu receipt cần reconciliation, không đoán revision. known versionId=null/revision=0 chỉ dùng branch mới/head rỗng hợp lệ, không ghi đè branch có head. Counter head local tách expectedLocalHeadVersionId/expectedLocalHeadRevision trong S08; không dùng làm server revision. Branch ID phải khớp version/guard và kết quả dependency thực; conflict branch vẫn theo quy tắc dưới.
 
 - Branch head thay đổi: giữ server head, tạo nhánh local có conflictOf/source snapshot; ID nhánh xung đột server lưu trong receipt, retry trả đúng nhánh cũ.
 - Workflow/chart/dashboard thay đổi: giữ server entity; tạo conflict copy ID ổn định ánh xạ mutationId, không tự đổi dashboard ref. Người dùng mở/chọn bản sao hoặc cập nhật bản gốc bằng mutation mới với revision hiện tại; sửa mapping/ref phải validate. Không có auto-merge.

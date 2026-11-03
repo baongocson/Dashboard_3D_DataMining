@@ -1,0 +1,9 @@
+{
+  "name": "@dashboard/contracts",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": "./src/index.mjs",
+  "scripts": { "build": "node scripts/build.mjs" },
+  "devDependencies": { "ajv": "8.20.0", "esbuild": "0.28.2" }
+}

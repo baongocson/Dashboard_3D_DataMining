@@ -1,0 +1,17 @@
+{
+  "name": "@dashboard/api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@dashboard/contracts": "file:../../packages/contracts",
+    "@fastify/cookie": "11.1.5",
+    "@node-rs/argon2": "2.2.2",
+    "fastify": "5.12.8",
+    "mongodb": "7.8.0"
+  },
+  "devDependencies": {
+    "@types/node": "24.19.2",
+    "typescript": "7.0.2"
+  }
+}

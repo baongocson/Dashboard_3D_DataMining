@@ -1,0 +1,13 @@
+// One-time S08 seed; primary schemas remain the resulting JSON, never overwrite existing.
+import {mkdir,writeFile} from 'node:fs/promises';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+const dir=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../schemas'),base='https://dashboard.invalid/contracts/v1/';
+const ref=n=>({$ref:base+n}),u={$ref:base+'common.json#/$defs/uuid'},r={$ref:base+'common.json#/$defs/revision'},nullable={anyOf:[u,{type:'null'}]},arr=items=>({type:'array',items}),obj=(properties,required=Object.keys(properties))=>({type:'object',properties,required,additionalProperties:false});
+const snapshot=obj({ownerId:u,projectId:u,datasetId:u,taskId:u,runId:u,stepId:u,branchId:u,fallbackBranchId:u,outputVersionId:u,mutationId:u,commitId:u,sourceVersionId:nullable,sourceRefs:arr({$ref:base+'common.json#/$defs/sourceRef'}),dependencyMutationIds:{...arr(u),uniqueItems:true},expectedHeadVersionId:nullable,expectedHeadRevision:r,contextRevisionAtStart:r,writerFence:r,localGeneration:r,serverGeneration:u});
+const version=obj({schemaVersion:{const:1},versionId:u,datasetId:u,branchId:u,parentVersionId:nullable,sourceVersions:arr({$ref:base+'common.json#/$defs/sourceRef'}),tableManifestId:u,rowCount:r,columnCount:r,operationSnapshot:ref('operation-config.json'),rowLineageArtifactId:u},['schemaVersion','versionId','datasetId','branchId','parentVersionId','sourceVersions','tableManifestId','rowCount','columnCount','operationSnapshot']);
+const marker=obj({id:u,commitId:u,taskId:u,ownerId:u,projectId:u,versionId:u,branchId:u,artifactIds:{...arr(u),uniqueItems:true},mutationId:u,payloadHash:{$ref:base+'common.json#/$defs/sha256'},createdAtClient:{$ref:base+'common.json#/$defs/utc'}});
+const outbox=obj({id:u,ownerId:u,projectId:u,mutation:ref('mutation-envelope.json'),artifactDescriptors:arr(ref('artifact-descriptor.json')),serverGeneration:u,status:{enum:['pending','acknowledged','blockedDeleted']},commitId:u});
+const result={oneOf:[obj({status:{const:'localCommitted'},commitId:u,entityIds:arr(u),artifactIds:arr(u),outboxIds:arr(u),alreadyCommitted:{type:'boolean'},viewPointerUpdated:{type:'boolean'},durability:{enum:['strict','relaxed','default']}}),obj({status:{const:'cancelled'},taskId:u,commitId:{type:'null'}})]};
+await mkdir(dir,{recursive:true});for(const [file,schema]of Object.entries({'uuid.json':u,'local-snapshot.json':snapshot,'local-version-input.json':version,'local-commit-marker.json':marker,'local-outbox.json':outbox,'local-commit-result.json':result}))await writeFile(path.join(dir,file),JSON.stringify({$schema:'https://json-schema.org/draft/2020-12/schema',$id:base+file,...schema},null,2)+'\n',{flag:'wx'});
+console.log('Seeded six S08 foundation schemas');

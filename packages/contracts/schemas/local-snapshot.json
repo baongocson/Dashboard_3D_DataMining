@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dashboard.invalid/contracts/v1/local-snapshot.json",
+  "type": "object",
+  "properties": {
+    "ownerId": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+    },
+    "projectId": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+    },
+    "datasetId": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+    },
+    "taskId": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+    },
+    "runId": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+    },
+    "stepId": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+    },
+    "branchId": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+    },
+    "fallbackBranchId": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+    },
+    "outputVersionId": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+    },
+    "mutationId": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+    },
+    "commitId": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+    },
+    "sourceVersionId": {
+      "anyOf": [
+        {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "sourceRefs": {
+      "type": "array",
+      "items": {
+        "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/sourceRef"
+      }
+    },
+    "dependencyMutationIds": {
+      "type": "array",
+      "items": {
+        "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+      },
+      "uniqueItems": true
+    },
+    "contextRevisionAtStart": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/revision"
+    },
+    "writerFence": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/revision"
+    },
+    "localGeneration": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/revision"
+    },
+    "serverGeneration": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+    },
+    "expectedLocalHeadVersionId": {
+      "anyOf": [
+        {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "expectedLocalHeadRevision": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/revision"
+    },
+    "expectedHead": {
+      "$ref": "https://dashboard.invalid/contracts/v1/expected-head.json"
+    }
+  },
+  "required": [
+    "ownerId",
+    "projectId",
+    "datasetId",
+    "taskId",
+    "runId",
+    "stepId",
+    "branchId",
+    "fallbackBranchId",
+    "outputVersionId",
+    "mutationId",
+    "commitId",
+    "sourceVersionId",
+    "sourceRefs",
+    "dependencyMutationIds",
+    "contextRevisionAtStart",
+    "writerFence",
+    "localGeneration",
+    "serverGeneration",
+    "expectedLocalHeadVersionId",
+    "expectedLocalHeadRevision",
+    "expectedHead"
+  ],
+  "additionalProperties": false
+}

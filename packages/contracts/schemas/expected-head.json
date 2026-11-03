@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dashboard.invalid/contracts/v1/expected-head.json",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "known"
+        },
+        "branchId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+        },
+        "versionId": {
+          "anyOf": [
+            {
+              "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "revision": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/revision"
+        }
+      },
+      "required": [
+        "kind",
+        "branchId",
+        "versionId",
+        "revision"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "dependency"
+        },
+        "branchId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+        },
+        "fromMutationId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+        }
+      },
+      "required": [
+        "kind",
+        "branchId",
+        "fromMutationId"
+      ],
+      "additionalProperties": false
+    }
+  ]
+}

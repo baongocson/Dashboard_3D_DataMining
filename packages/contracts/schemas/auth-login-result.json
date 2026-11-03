@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dashboard.invalid/contracts/v1/auth-login-result.json",
+  "type": "object",
+  "properties": {
+    "userId": {
+      "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+    },
+    "sessionId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{16,256}$"
+    },
+    "authEpoch": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "expiresAt": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/utc"
+    },
+    "serverGeneration": {
+      "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+    },
+    "offlineEntitlement": {
+      "type": "object",
+      "properties": {
+        "ownerId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+        },
+        "issuedAt": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/utc"
+        },
+        "profileBound": {
+          "const": true
+        },
+        "onlineExpiryRevokesLocal": {
+          "const": false
+        }
+      },
+      "required": [
+        "ownerId",
+        "issuedAt",
+        "profileBound",
+        "onlineExpiryRevokesLocal"
+      ],
+      "additionalProperties": false
+    },
+    "revocationHandle": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{16,256}$"
+    }
+  },
+  "required": [
+    "userId",
+    "sessionId",
+    "authEpoch",
+    "expiresAt",
+    "serverGeneration",
+    "offlineEntitlement",
+    "revocationHandle"
+  ],
+  "additionalProperties": false
+}

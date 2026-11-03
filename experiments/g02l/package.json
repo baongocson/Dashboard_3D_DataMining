@@ -1,0 +1,7 @@
+{
+  "name": "dashboard-g02l-checks",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "devDependencies": { "esbuild": "0.28.2", "playwright": "1.64.1" }
+}

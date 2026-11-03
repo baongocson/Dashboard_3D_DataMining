@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dashboard.invalid/contracts/v1/account-closing-event.json",
+  "type": "object",
+  "properties": {
+    "protocolVersion": {"const": 1},
+    "type": {"const": "ACCOUNT_CLOSING"},
+    "ownerId": {"$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"},
+    "generation": {"$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/revision"}
+  },
+  "required": ["protocolVersion", "type", "ownerId", "generation"],
+  "additionalProperties": false
+}

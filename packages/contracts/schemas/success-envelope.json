@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dashboard.invalid/contracts/v1/success-envelope.json",
+  "type": "object",
+  "properties": {
+    "data": {
+      "$ref": "https://dashboard.invalid/contracts/v1/json-value.json"
+    },
+    "serverNow": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/utc"
+    },
+    "requestId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{1,128}$"
+    }
+  },
+  "required": [
+    "data",
+    "requestId",
+    "serverNow"
+  ],
+  "additionalProperties": false
+}

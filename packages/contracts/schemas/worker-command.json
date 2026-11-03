@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dashboard.invalid/contracts/v1/worker-command.json",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "protocolVersion": {
+          "const": 1
+        },
+        "type": {
+          "const": "START"
+        },
+        "snapshot": {
+          "$ref": "https://dashboard.invalid/contracts/v1/execution-snapshot.json"
+        },
+        "inputArtifactRefs": {
+          "type": "array",
+          "items": {
+            "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "protocolVersion",
+        "type",
+        "snapshot",
+        "inputArtifactRefs"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "protocolVersion": {
+          "const": 1
+        },
+        "type": {
+          "enum": [
+            "CANCEL",
+            "DISPOSE"
+          ]
+        },
+        "taskId": {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+        },
+        "reason": {
+          "enum": [
+            "user",
+            "transfer",
+            "logout",
+            "revoke",
+            "dispose"
+          ]
+        }
+      },
+      "required": [
+        "protocolVersion",
+        "type",
+        "taskId",
+        "reason"
+      ],
+      "additionalProperties": false
+    }
+  ]
+}

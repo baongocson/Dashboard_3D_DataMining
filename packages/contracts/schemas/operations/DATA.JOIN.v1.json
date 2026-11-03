@@ -1,0 +1,7 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dashboard.invalid/contracts/v1/operations/DATA.JOIN.v1.json",
+  "title": "Unavailable config: DATA.JOIN",
+  "description": "B020 reserves one versioned schema. Method task must implement and version it before enabling.",
+  "not": {}
+}

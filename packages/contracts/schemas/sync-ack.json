@@ -1,0 +1,178 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dashboard.invalid/contracts/v1/sync-ack.json",
+  "type": "object",
+  "properties": {
+    "batchId": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+    },
+    "status": {
+      "enum": [
+        "committed",
+        "partial",
+        "rejected"
+      ]
+    },
+    "acknowledged": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "mutationId": {
+            "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+          },
+          "payloadHash": {
+            "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/sha256"
+          },
+          "entityIds": {
+            "type": "array",
+            "items": {
+              "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+            },
+            "uniqueItems": true
+          },
+          "artifactIds": {
+            "type": "array",
+            "items": {
+              "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+            },
+            "uniqueItems": true
+          },
+          "revisions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "entityId": {
+                  "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+                },
+                "revision": {
+                  "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/revision"
+                }
+              },
+              "required": [
+                "entityId",
+                "revision"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "outcome": {
+            "enum": [
+              "committed",
+              "conflictPreserved"
+            ]
+          },
+          "conflictRefs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "enum": [
+                    "branch",
+                    "copy"
+                  ]
+                },
+                "entityId": {
+                  "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+                },
+                "conflictOf": {
+                  "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+                }
+              },
+              "required": [
+                "kind",
+                "entityId",
+                "conflictOf"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "mutationId",
+          "payloadHash",
+          "entityIds",
+          "artifactIds",
+          "revisions",
+          "outcome",
+          "conflictRefs"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "pending": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "mutationId": {
+            "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+          },
+          "code": {
+            "$ref": "https://dashboard.invalid/contracts/v1/error-envelope.json#/properties/error/properties/code"
+          },
+          "retryable": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "mutationId",
+          "code",
+          "retryable"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "rejected": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "mutationId": {
+            "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+          },
+          "code": {
+            "$ref": "https://dashboard.invalid/contracts/v1/error-envelope.json#/properties/error/properties/code"
+          }
+        },
+        "required": [
+          "mutationId",
+          "code"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "cursor": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "serverGeneration": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+    },
+    "requestId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{1,128}$"
+    }
+  },
+  "required": [
+    "batchId",
+    "status",
+    "acknowledged",
+    "pending",
+    "rejected",
+    "cursor",
+    "serverGeneration",
+    "requestId"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,378 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dashboard.invalid/contracts/v1/project-manifest-types.json",
+  "$ref": "https://dashboard.invalid/contracts/v1/project-manifest-types.json#/$defs/row",
+  "$defs": {
+    "row": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "project"
+            },
+            "deleted": {
+              "type": "boolean"
+            },
+            "value": {
+              "$ref": "https://dashboard.invalid/contracts/v1/metadata-project.json"
+            }
+          },
+          "required": [
+            "type",
+            "deleted",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "dataset"
+            },
+            "deleted": {
+              "type": "boolean"
+            },
+            "value": {
+              "$ref": "https://dashboard.invalid/contracts/v1/metadata-types.json#/$defs/dataset"
+            }
+          },
+          "required": [
+            "type",
+            "deleted",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "version"
+            },
+            "deleted": {
+              "type": "boolean"
+            },
+            "value": {
+              "$ref": "https://dashboard.invalid/contracts/v1/metadata-version.json"
+            }
+          },
+          "required": [
+            "type",
+            "deleted",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "branch"
+            },
+            "deleted": {
+              "type": "boolean"
+            },
+            "value": {
+              "$ref": "https://dashboard.invalid/contracts/v1/metadata-branch.json"
+            }
+          },
+          "required": [
+            "type",
+            "deleted",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "artifact"
+            },
+            "deleted": {
+              "type": "boolean"
+            },
+            "value": {
+              "type": "object",
+              "properties": {
+                "descriptor": {
+                  "$ref": "https://dashboard.invalid/contracts/v1/artifact-descriptor.json"
+                },
+                "state": {
+                  "enum": [
+                    "declared",
+                    "verified",
+                    "ready"
+                  ]
+                },
+                "byteAvailability": {
+                  "const": "notChecked"
+                }
+              },
+              "required": [
+                "descriptor",
+                "state",
+                "byteAvailability"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type",
+            "deleted",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "reference"
+            },
+            "deleted": {
+              "type": "boolean"
+            },
+            "value": {
+              "type": "object",
+              "properties": {
+                "projectId": {
+                  "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+                },
+                "sourceEntityId": {
+                  "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+                },
+                "sourceRevision": {
+                  "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/revision"
+                },
+                "targetEntityId": {
+                  "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+                },
+                "targetEntityType": {
+                  "enum": [
+                    "version",
+                    "artifact"
+                  ]
+                },
+                "relation": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100
+                },
+                "strength": {
+                  "enum": [
+                    "hard",
+                    "historical"
+                  ]
+                },
+                "sourceOrder": {
+                  "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/revision"
+                }
+              },
+              "required": [
+                "projectId",
+                "sourceEntityId",
+                "sourceRevision",
+                "targetEntityId",
+                "targetEntityType",
+                "relation",
+                "strength",
+                "sourceOrder"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type",
+            "deleted",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "conflict"
+            },
+            "deleted": {
+              "type": "boolean"
+            },
+            "value": {
+              "type": "object",
+              "properties": {
+                "conflictId": {
+                  "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+                },
+                "projectId": {
+                  "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+                },
+                "mutationId": {
+                  "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+                },
+                "kind": {
+                  "const": "branch"
+                },
+                "conflictOf": {
+                  "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+                },
+                "serverRef": {
+                  "type": "object",
+                  "properties": {
+                    "branchId": {
+                      "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+                    },
+                    "versionId": {
+                      "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+                    }
+                  },
+                  "required": [
+                    "branchId",
+                    "versionId"
+                  ],
+                  "additionalProperties": false
+                },
+                "localCopyRef": {
+                  "type": "object",
+                  "properties": {
+                    "branchId": {
+                      "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+                    },
+                    "versionId": {
+                      "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+                    }
+                  },
+                  "required": [
+                    "branchId",
+                    "versionId"
+                  ],
+                  "additionalProperties": false
+                },
+                "baseRevision": {
+                  "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/revision"
+                },
+                "baseVersionId": {
+                  "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+                },
+                "serverRevision": {
+                  "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/revision"
+                },
+                "sourceSnapshot": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/sourceRef"
+                  }
+                },
+                "state": {
+                  "enum": [
+                    "unresolved",
+                    "resolved"
+                  ]
+                },
+                "serverGeneration": {
+                  "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+                },
+                "createdAt": {
+                  "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/utc"
+                }
+              },
+              "required": [
+                "conflictId",
+                "projectId",
+                "mutationId",
+                "kind",
+                "conflictOf",
+                "serverRef",
+                "localCopyRef",
+                "baseRevision",
+                "baseVersionId",
+                "serverRevision",
+                "sourceSnapshot",
+                "state",
+                "serverGeneration",
+                "createdAt"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type",
+            "deleted",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "tombstone"
+            },
+            "deleted": {
+              "type": "boolean"
+            },
+            "value": {
+              "type": "object",
+              "properties": {
+                "projectId": {
+                  "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+                },
+                "entityId": {
+                  "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+                },
+                "entityType": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 100
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "revision": {
+                  "anyOf": [
+                    {
+                      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/revision"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "deletedAt": {
+                  "anyOf": [
+                    {
+                      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/utc"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "projectId",
+                "entityId",
+                "entityType",
+                "revision",
+                "deletedAt"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type",
+            "deleted",
+            "value"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    }
+  }
+}

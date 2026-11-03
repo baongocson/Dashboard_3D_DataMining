@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dashboard.invalid/contracts/v1/local-sync-snapshot.json",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "batchId": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+    },
+    "serverGeneration": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+    },
+    "mutations": {
+      "type": "array",
+      "items": {
+        "$ref": "https://dashboard.invalid/contracts/v1/mutation-envelope.json"
+      },
+      "maxItems": 100,
+      "minItems": 1
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "$ref": "https://dashboard.invalid/contracts/v1/artifact-descriptor.json"
+      }
+    },
+    "atomicGroups": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "groupId": {
+            "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+          },
+          "mutationIds": {
+            "type": "array",
+            "items": {
+              "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+            },
+            "uniqueItems": true,
+            "minItems": 1,
+            "maxItems": 20
+          }
+        },
+        "required": [
+          "groupId",
+          "mutationIds"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "ownerId": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+    },
+    "localGeneration": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/revision"
+    },
+    "gateRevision": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/revision"
+    },
+    "snapshotHash": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/sha256"
+    },
+    "createdAtClient": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/utc"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "batchId",
+    "serverGeneration",
+    "mutations",
+    "artifacts",
+    "atomicGroups",
+    "ownerId",
+    "localGeneration",
+    "gateRevision",
+    "snapshotHash",
+    "createdAtClient"
+  ],
+  "additionalProperties": false
+}

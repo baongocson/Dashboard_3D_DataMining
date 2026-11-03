@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dashboard.invalid/contracts/v1/local-commit-marker.json",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+    },
+    "commitId": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+    },
+    "taskId": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+    },
+    "ownerId": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+    },
+    "projectId": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+    },
+    "versionId": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+    },
+    "branchId": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+    },
+    "artifactIds": {
+      "type": "array",
+      "items": {
+        "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+      },
+      "uniqueItems": true
+    },
+    "mutationId": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+    },
+    "payloadHash": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/sha256"
+    },
+    "createdAtClient": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/utc"
+    }
+  },
+  "required": [
+    "id",
+    "commitId",
+    "taskId",
+    "ownerId",
+    "projectId",
+    "versionId",
+    "branchId",
+    "artifactIds",
+    "mutationId",
+    "payloadHash",
+    "createdAtClient"
+  ],
+  "additionalProperties": false
+}

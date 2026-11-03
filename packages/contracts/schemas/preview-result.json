@@ -1,0 +1,217 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dashboard.invalid/contracts/v1/preview-result.json",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "previewId": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+    },
+    "sourceRefs": {
+      "type": "array",
+      "items": {
+        "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/sourceRef"
+      }
+    },
+    "configHash": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/sha256"
+    },
+    "fingerprint": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/sha256"
+    },
+    "planHash": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/sha256"
+    },
+    "profileHash": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/sha256"
+    },
+    "estimatorVersion": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100
+    },
+    "scope": {
+      "enum": [
+        "full",
+        "sample"
+      ]
+    },
+    "sampleMethod": {
+      "enum": [
+        "none",
+        "head",
+        "seededUniform"
+      ]
+    },
+    "sampleSeed": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "rowsExamined": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "effects": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "outputRowUpperBound": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "outputFeatureUpperBound": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "affectedRows": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            }
+          },
+          "required": [
+            "outputRowUpperBound",
+            "outputFeatureUpperBound",
+            "affectedRows"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "outputRowUpperBound": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "outputFeatureUpperBound": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "sampleAffectedRows": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            }
+          },
+          "required": [
+            "outputRowUpperBound",
+            "outputFeatureUpperBound",
+            "sampleAffectedRows"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 100
+      }
+    },
+    "errors": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 100
+      }
+    },
+    "estimate": {
+      "type": "object",
+      "properties": {
+        "totalBytes": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "maxDenseCells": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "maxSparseNnz": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "pairwiseComparisons": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "outputRowsMax": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "featureCount": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "profileVersion": {
+          "type": "string"
+        },
+        "assumptionVersion": {
+          "const": "policy-overhead-v1"
+        },
+        "measuredPeakRAM": {
+          "const": false
+        }
+      },
+      "required": [
+        "totalBytes",
+        "maxDenseCells",
+        "maxSparseNnz",
+        "pairwiseComparisons",
+        "outputRowsMax",
+        "featureCount",
+        "profileVersion",
+        "assumptionVersion",
+        "measuredPeakRAM"
+      ],
+      "additionalProperties": false
+    },
+    "createdAt": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/utc"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "previewId",
+    "sourceRefs",
+    "configHash",
+    "fingerprint",
+    "planHash",
+    "profileHash",
+    "estimatorVersion",
+    "scope",
+    "sampleMethod",
+    "sampleSeed",
+    "rowsExamined",
+    "effects",
+    "warnings",
+    "errors",
+    "estimate",
+    "createdAt"
+  ],
+  "additionalProperties": false
+}

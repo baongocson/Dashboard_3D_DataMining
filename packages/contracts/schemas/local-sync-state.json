@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dashboard.invalid/contracts/v1/local-sync-state.json",
+  "type": "object",
+  "properties": {
+    "id": {
+      "const": "sync"
+    },
+    "ownerId": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+    },
+    "network": {
+      "enum": [
+        "online",
+        "offline",
+        "unknown"
+      ]
+    },
+    "server": {
+      "enum": [
+        "reachable",
+        "unreachable",
+        "maintenance"
+      ]
+    },
+    "auth": {
+      "enum": [
+        "valid",
+        "expired",
+        "revoked",
+        "unknown"
+      ]
+    },
+    "syncGate": {
+      "enum": [
+        "auto",
+        "awaitingUser"
+      ]
+    },
+    "gateRevision": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/revision"
+    },
+    "sync": {
+      "enum": [
+        "idle",
+        "running",
+        "partial",
+        "failed",
+        "synced",
+        "conflict"
+      ]
+    },
+    "reconciliationRequired": {
+      "type": "boolean"
+    },
+    "activeBatchId": {
+      "anyOf": [
+        {
+          "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/uuid"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "required": [
+    "id",
+    "ownerId",
+    "network",
+    "server",
+    "auth",
+    "syncGate",
+    "gateRevision",
+    "sync",
+    "reconciliationRequired",
+    "activeBatchId"
+  ],
+  "additionalProperties": false
+}

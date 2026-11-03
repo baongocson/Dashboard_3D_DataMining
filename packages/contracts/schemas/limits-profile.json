@@ -1,0 +1,122 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dashboard.invalid/contracts/v1/limits-profile.json",
+  "type": "object",
+  "properties": {
+    "profileVersion": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100
+    },
+    "inputSourceMaxBytes": {
+      "const": 20000000
+    },
+    "metadataBodyMaxBytes": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "chunkMaxBytes": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "artifactMaxBytes": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "workerMemoryBudgetBytes": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "denseMatrixMaxCells": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "sparseMaxNnz": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "featureMaxCount": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "outputRowMaxCount": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "exactPairwiseMaxPairs": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "mutationsPerBatch": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "mutationsPerAtomicGroup": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "perAccountConcurrentUploads": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "perInstanceUploads": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "perProjectWriteTasks": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "perAccountAiRequests": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "stagingGraceMs": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "uploadExpiryMs": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    }
+  },
+  "required": [
+    "profileVersion",
+    "inputSourceMaxBytes",
+    "metadataBodyMaxBytes",
+    "chunkMaxBytes",
+    "artifactMaxBytes",
+    "workerMemoryBudgetBytes",
+    "denseMatrixMaxCells",
+    "sparseMaxNnz",
+    "featureMaxCount",
+    "outputRowMaxCount",
+    "exactPairwiseMaxPairs",
+    "mutationsPerBatch",
+    "mutationsPerAtomicGroup",
+    "perAccountConcurrentUploads",
+    "perInstanceUploads",
+    "perProjectWriteTasks",
+    "perAccountAiRequests",
+    "stagingGraceMs",
+    "uploadExpiryMs"
+  ],
+  "additionalProperties": false
+}

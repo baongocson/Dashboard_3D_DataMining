@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dashboard.invalid/contracts/v1/auth-login.json",
+  "type": "object",
+  "properties": {
+    "email": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 254
+    },
+    "password": {
+      "type": "string",
+      "minLength": 15,
+      "maxLength": 128
+    },
+    "deviceId": {
+      "$ref": "https://dashboard.invalid/contracts/v1/uuid.json"
+    }
+  },
+  "required": [
+    "email",
+    "password",
+    "deviceId"
+  ],
+  "additionalProperties": false
+}

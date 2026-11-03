@@ -1,0 +1,128 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dashboard.invalid/contracts/v1/error-envelope.json",
+  "type": "object",
+  "properties": {
+    "error": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "enum": [
+            "VALIDATION_FAILED",
+            "UNSUPPORTED_OPERATION",
+            "INVALID_SOURCE",
+            "AUTH_REQUIRED",
+            "SESSION_EXPIRED",
+            "SESSION_REVOKED",
+            "FORBIDDEN",
+            "RESOURCE_NOT_FOUND",
+            "CSRF_INVALID",
+            "REVISION_CONFLICT",
+            "IDEMPOTENCY_MISMATCH",
+            "DEPENDENCY_EXISTS",
+            "ACCOUNT_LIMIT_REACHED",
+            "RESOURCE_DELETED",
+            "CURSOR_EXPIRED",
+            "RECONCILIATION_REQUIRED",
+            "INPUT_FILE_TOO_LARGE",
+            "ARTIFACT_LIMIT_EXCEEDED",
+            "PAYLOAD_TOO_LARGE",
+            "OTP_INVALID",
+            "OTP_EXPIRED",
+            "OTP_ATTEMPTS_EXCEEDED",
+            "ARTIFACT_NOT_READY",
+            "HASH_MISMATCH",
+            "RATE_LIMITED",
+            "AI_QUOTA_EXCEEDED",
+            "STORAGE_CAPACITY_EXCEEDED",
+            "STORAGE_UNAVAILABLE",
+            "MAIL_UNAVAILABLE",
+            "AI_UNAVAILABLE",
+            "CLIENT_SCHEMA_UNSUPPORTED",
+            "LOCAL_QUOTA_EXCEEDED",
+            "WRITER_FENCE_LOST",
+            "PREVIEW_STALE",
+            "RESOURCE_LIMIT_EXCEEDED",
+            "OFFLINE_RESOURCE_MISSING",
+            "CONSENT_INVALID",
+            "LEDGER_UNAVAILABLE",
+            "UPSTREAM_UNAVAILABLE",
+            "MUTATION_NOT_REQUESTED",
+            "DEPENDENCY_NOT_READY"
+          ]
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1
+        },
+        "details": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string"
+            },
+            "field": {
+              "type": "string"
+            },
+            "scope": {
+              "enum": [
+                "field",
+                "source",
+                "resource",
+                "account",
+                "project"
+              ]
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "actualCount": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "entityIds": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+              }
+            },
+            "requiresReconciliation": {
+              "type": "boolean"
+            },
+            "requiresNewSnapshot": {
+              "type": "boolean"
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "retryable": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "retryable"
+      ],
+      "additionalProperties": false
+    },
+    "requestId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{1,128}$"
+    },
+    "serverNow": {
+      "$ref": "https://dashboard.invalid/contracts/v1/common.json#/$defs/utc"
+    }
+  },
+  "required": [
+    "error",
+    "requestId",
+    "serverNow"
+  ],
+  "additionalProperties": false
+}
